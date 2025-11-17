@@ -11,7 +11,7 @@ The ComponentSpec format is the standard specification for defining reusable mac
 
 A ComponentSpec defines a reusable component that can be executed as part of a machine learning pipeline. A container component follows this structure:
 
-<div className="language-yaml" style={{backgroundColor: '#f6f8fa', padding: '16px', overflow: 'auto', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.5'}}>
+<div className="component-spec-schema-block">
 <span style={{display: 'block'}}>&lt;<a href="#componentspec">ComponentSpec</a>&gt;:</span>
 <span style={{display: 'block', marginLeft: '20px'}}>name: string</span>
 <span style={{display: 'block', marginLeft: '20px'}}>description: string</span>

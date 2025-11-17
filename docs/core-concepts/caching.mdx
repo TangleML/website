@@ -4,6 +4,9 @@ sidebar_label: Caching
 description: Learn how TangleML's sophisticated caching system saves time and resources
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Understanding Caching in TangleML
 
 TangleML's caching system is one of its most powerful features, designed to dramatically reduce compute time and accelerate your ML pipeline iterations. Unlike traditional pipeline systems, TangleML implements sophisticated caching strategies that can save hours or even days of computation time.
@@ -131,35 +134,72 @@ After purging, you can still see:
 
 When you need fresh data despite caching:
 
-### 1. Date Parameters
+### 1. Cache Breaker Input (Nonce)
 
-For database queries, include cutoff dates:
-
-```python
-@component
-def fetch_user_data(end_date: str) -> Dataset:
-    # Changing end_date naturally breaks cache
-    ...
-```
-
-### 2. Cache Breaker Input
-
-For volatile sources without date control:
+The nonce is used to introduce non-determinicity to the component, ensuring that the component is re-executed even if the inputs haven't changed.
+Nonce can be a random string or the current time from the caller.
 
 ```python
 @component
-def search_web(query: str, cache_breaker: str = "") -> Results:
-    # Pass timestamp or random value to cache_breaker
+def search_web(
+    query: str, 
+    nonce=None,  # type: str | None
+    ) -> Results:
+    # Pass timestamp or random value to nonce parameter
     ...
 ```
 
-### 3. Disable Caching
+In case of scheduled runs, pipelines may use a placeholder for incoming timestamp.
+
+<Tabs>
+  <TabItem value="Template with placeholder">
+```yaml
+...
+inputs:
+  - name: Pipeline Creation Time
+    type: String
+    default: '{{CreationTime}}'
+...
+```
+</TabItem>
+
+<TabItem value="Pipeline with actual value">
+```yaml
+...
+inputs:
+  - name: Pipeline Creation Time
+    type: String
+    default: '2025-11-07 05:30:07.837468+00:00'
+...
+```
+</TabItem>
+</Tabs>
+
+This substituted input can be used to pass the cache breaker value to the component:
+
+```yaml
+...
+    arguments:
+          nonce:
+            graphInput:
+              inputName: Pipeline Creation Time
+```
+
+
+### 2. Disable Caching via `maxCacheStaleness`
 
 For components that should never cache:
 
 ```yaml
-caching_strategy:
-  max_cache_staleness: "P0D" # Disables caching
+...
+implementation:
+  graph:
+    tasks:
+      ...
+      Fill all missing values using Pandas on CSV data:
+        executionOptions:
+          cachingStrategy:
+            maxCacheStaleness: P0D
 ```
 
 <img src={require("./assets/Caching_DisableCache.png").default} alt="Disable Caching" />

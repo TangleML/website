@@ -19,6 +19,7 @@ const sidebars: SidebarsConfig = {
 
   docs: [
     'overview',
+    'install',
     {
       type: 'category',
       label: 'Getting Started',
@@ -28,7 +29,7 @@ const sidebars: SidebarsConfig = {
         'getting-started/core-concepts-and-terminology',
         'user-guide/studio-app-ui-overview',
         'getting-started/pipelines-persistence',
-        'component-development/adding-components',        
+        'component-development/adding-components',
       ],
     },
     {
@@ -46,6 +47,7 @@ const sidebars: SidebarsConfig = {
       label: 'Component Development',
       
       items: [
+       'component-development/creating-components-generic',
        'component-development/creating-components',
        'component-development/in-app-editor',
        'component-development/published-components-library',

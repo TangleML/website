@@ -1,0 +1,590 @@
+---
+title: Creating Components
+description: A comprehensive guide to building pipeline components using different programming languages
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem"; 
+
+# Creating Components
+
+Components are self-contained units of code that perform specific tasks in your ML workflow. This guide demonstrates how to create components using various programming languages including Python, R, Java, and Go.
+
+## Understanding Components
+
+:::info
+Learn more about the [Components](/docs/core-concepts/what-are-components).
+:::
+
+A component consists of two essential parts:
+- **Implementation**: Your executable code and the container image it runs in
+- **Specification**: A YAML file defining the component's interface (inputs/outputs) and metadata. [Learn more about the ComponentSpec](/docs/reference/schema).
+
+:::tip
+Components can be written in any language that runs in a container. The key is proper containerization and defining clear input/output interfaces.
+:::
+
+## Step 1. Designing a Component
+
+When TangleML executes a component, it starts a container image in a Kubernetes Pod. 
+Your component’s inputs are passed in as command-line arguments.
+You can pass small inputs — such as strings and numbers — by value.
+Larger inputs, like CSV, Parquet, etc., data, are passed as paths to files. 
+Note, that all input files are mounted as read-only disks and available as local files; and all output files are mounted as writeable disks and available as local files.
+When your component finishes running, its outputs are returned as files.
+
+When you design your component's code, consider the following:
+
+- Which inputs can be passed to your TangleML component by value?
+Examples of inputs that you can pass by value include numbers, booleans, and short strings.
+Any value that you could reasonably pass as a command-line argument can be passed to your TangleML component by value.
+All other inputs are passed to your TangleML component as a reference to the input's path.
+- To return an output from your TangleML component, the output's data must be stored as a file.
+When you define your component, you let TangleML know what outputs your component produces.
+When your pipeline runs, TangleML passes the paths that you use to store your component's outputs as inputs to your component.
+- Outputs are usually written to a single file.
+In some cases, you may need to return a directory of files as an output.
+In this case, create a directory at the output path and write the output files to that location.
+In both cases, it may be necessary to create parent directories if they do not exist.
+- Your TangleML component's goal may be to create a dataset in an external service, such as a BigQuery table.
+In this case, it may make sense for the component to output an identifier for the produced data, such as a table name, instead of the data itself.
+It is recommended that you use this pattern only when the data must be put into an external system instead of keeping it inside the TangleML system.
+- Since your inputs and output paths are passed in as command-line arguments, your component's code must be able to read inputs from the command line.
+If your component is built with Python, libraries such as [argparse](https://docs.python.org/3/library/argparse.html) and [absl.flags](https://abseil.io/docs/python/guides/flags) make it easier to read your component's inputs.
+- Your component's code can be implemented in any language, as long as it can run in a container image.
+
+### Component Design Principles
+
+So as a summary, when designing components, remember these core principles:
+
+1. **Composability** - Design your components with composability in mind:
+   - Think about upstream and downstream components
+   - What formats to consume as inputs from the upstream components
+   - What formats to use for output data so that downstream components can consume it
+
+2. **Pureness**
+    - Components must be pure - they must not use any outside data except data that comes through inputs (unless impossible). Everything should either be inside the container or come from inputs. 
+    - Network access is strongly discouraged unless that’s the explicit purpose of a component (for example, upload/download).
+
+3. **Input/Output Handling**: 
+    :::info
+    Learn more about the [Inputs and Outputs](/docs/core-concepts/understanding-inputs-outputs).
+    :::
+   - Small inputs (numbers, strings) can be passed by value.
+   - Large inputs (datasets, models) must be passed as file paths. Component code must use local files for input/output data.
+   - Outputs are always written to files.
+   - For Inputs and Outputs use only paths provided by TangleML thru [InputPath](/docs/reference/schema#inputpathplaceholder) and [OutputPath](/docs/reference/schema#outputpathplaceholder) placeholders.
+
+4. **CLI** - each [Container component](/docs/core-concepts/what-are-components#container-components) is just a CLI program.
+   - Your code must accept arguments from the command line.
+   - Use standard argument parsing libraries for your language.
+
+### Example Component Design
+
+TangleML supports any language that can run in a container. This example demonstrates how to create a component in multiple languages.
+This program reads from an input file and writes lines which pass a threshold to an output file.
+This means that this function accepts three command-line parameters:
+
+- The path to the input file.
+- The threshold for filtering.
+- The path to the output file.
+
+Example input file:
+```json
+[
+  { "name": "item1", "value": 5 },
+  { "name": "item2", "value": 15 },
+  { "name": "item3", "value": 8 },
+  { "name": "item4", "value": 25 },
+  { "name": "item5", "value": 2 }
+]
+```
+
+
+<Tabs>
+<TabItem value="Python">
+
+```python
+#!/usr/bin/env python3
+import argparse
+import json
+from pathlib import Path
+
+
+def process_data(input_path, output_path, threshold):
+    """Process input data and filter by threshold."""
+    with open(input_path, "r") as f:
+        data = json.load(f)
+
+    filtered_data = [item for item in data if item["value"] > threshold]
+
+    # Ensure output directory exists
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+    with open(output_path, "w") as f:
+        json.dump(filtered_data, f)
+
+    print(f"Processed {len(filtered_data)} items")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Data processor")
+    parser.add_argument(
+        "--input-path", type=str, required=True, help="Path to input data file"
+    )
+    parser.add_argument(
+        "--output-path", type=str, required=True, help="Path for output data file"
+    )
+    parser.add_argument(
+        "--threshold", type=float, default=0.5, help="Threshold for filtering"
+    )
+
+    args = parser.parse_args()
+    process_data(args.input_path, args.output_path, args.threshold)
+
+```
+
+If this program is saved as `program.py`, the command-line invocation of this
+program is:
+
+```bash
+python3 process_data.py --input-path input.json --output-path output.json --threshold 10
+```
+
+
+</TabItem>
+
+<TabItem value="TypeScript">
+
+```typescript
+#!/usr/bin/env -S npx ts-node
+import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { dirname } from 'path';
+import { parseArgs } from 'util';
+
+// Define the shape of our data
+interface DataItem {
+  name: string;
+  value: number;
+}
+
+function processData(inputPath: string, outputPath: string, threshold: number): void {
+  /**
+   * Process input data and filter by threshold.
+   */
+  
+  // Read and parse input data
+  const rawData = readFileSync(inputPath, 'utf-8');
+  const data: DataItem[] = JSON.parse(rawData);
+
+  // Filter data by threshold
+  const filteredData = data.filter(item => item.value > threshold);
+
+  // Ensure output directory exists
+  const outputDir = dirname(outputPath);
+  mkdirSync(outputDir, { recursive: true });
+
+  // Write filtered data to output file
+  writeFileSync(outputPath, JSON.stringify(filteredData, null, 2));
+
+  console.log(`Processed ${filteredData.length} items`);
+}
+
+function main(): void {
+  // Parse command-line arguments
+  const { values } = parseArgs({
+    options: {
+      'input-path': {
+        type: 'string',
+        short: 'i',
+      },
+      'output-path': {
+        type: 'string',
+        short: 'o',
+      },
+      threshold: {
+        type: 'string',
+        short: 't',
+      },
+      help: {
+        type: 'boolean',
+        short: 'h',
+      },
+    },
+  });
+
+  const inputPath = values['input-path'];
+  const outputPath = values['output-path'];
+  const threshold = values.threshold ? parseFloat(values.threshold) : 0.5;
+
+  // Process the data
+  try {
+    processData(inputPath, outputPath, threshold);
+  } catch (error) {
+    console.error('Error processing data:', error instanceof Error ? error.message : error);
+    process.exit(1);
+  }
+}
+
+// Run if this is the main module
+if (require.main === module) {
+  main();
+}
+
+// Export for potential module usage
+export { processData, DataItem };
+
+```
+
+If this program is saved as `program.ts`, the command-line invocation of this
+program is:
+
+```bash
+npx tsx program.ts --input-path input.json --output-path output.json --threshold 10
+```
+
+</TabItem>
+</Tabs>
+
+
+## Step 2. Containerize your component's code
+
+To run your component in TangleML, you must package your component as a Docker container image.
+You should then publish this image to a container registry that your TangleML Kubernetes cluster can access.
+The steps required to create a container image are not specific to TangleML.
+To make things easier for you, this section provides some guidelines on standard container creation.
+
+:::info
+You can skip building the container image eveyr time you make a code change by using the [Lightweight Python Components](/docs/component-development/creating-components).
+:::
+
+
+
+1.  Create a Dockerfile for your container. A Dockerfile
+    specifies:
+    - The base container image. For example, the operating system that your
+      code runs on.
+    - Any dependencies that need to be installed for your code to run.
+    - Files to copy into the container, such as the runnable code for this
+      component.
+
+    The following is an example Dockerfile.
+
+    <Tabs>
+    <TabItem value="Python">
+
+    ```dockerfile
+    FROM python:3.14
+    RUN python3 -m pip install keras
+    COPY ./src /pipelines/component/src
+    ```
+
+    In this example:
+    - The base container image is `python:3.14`.
+    - The `keras` Python package is installed in the container image.
+    - Files in your `./src` directory are copied into
+      `/pipelines/component/src` in the container image.
+
+    </TabItem>
+
+    <TabItem value="TypeScript">
+
+    ```dockerfile
+    FROM node:22-slim
+    RUN npm install -g tsx
+    COPY ./src /pipelines/component/src
+    ```
+
+    In this example:
+    - The base container image is `node:22-slim`.
+    - The `tsx` package is installed in the container image.
+    - Files in your `./src` directory are copied into
+      `/pipelines/component/src` in the container image.
+
+    </TabItem>
+    </Tabs>
+
+1.  Create a script named `build_image.sh` that uses Docker to build your
+    container image and push your container image to a container registry.
+    Your Kubernetes cluster must be able to access your container registry
+    to run your component. 
+
+    The following example builds a container image, pushes it to a container
+    registry, and outputs the strict image name. It is a best practice to use
+    the strict image name in your component specification to ensure that you
+    are using the expected version of a container image in each component
+    execution.
+
+    ```bash
+    #!/bin/bash -e
+    image_name=gcr.io/my-org/my-image
+    image_tag=latest
+    full_image_name=${image_name}:${image_tag}
+
+    cd "$(dirname "$0")"
+    docker build -t "${full_image_name}" .
+    docker push "$full_image_name"
+
+    # Output the strict image name, which contains the sha256 image digest
+    docker inspect --format="{{index .RepoDigests 0}}" "${full_image_name}"
+    ```
+
+    In the preceding example:
+    - The `image_name` specifies the full name of your container image in the
+      container registry.
+    - The `image_tag` specifies that this image should be tagged as
+      **latest**.
+
+    Save this file and run the following to make this script executable.
+
+    ```bash
+    chmod +x build_image.sh
+    ```
+
+1.  Run your `build_image.sh` script to build your container image and push it
+    to a container registry.
+
+1.  Use `docker run` to test your container image locally. If
+    necessary, revise your application and Dockerfile until your application
+    works as expected in the container.
+
+### Local Testing
+
+Test your component locally before deploying:
+
+```bash
+docker run -v $(pwd)/test-data:/data \
+  my-component:latest \
+  --input-path /data/input.json \
+  --output-path /data/output.json \
+  --threshold 0.5
+```
+
+## Step 3: Define Component Specification
+
+### Define Component Metadata
+
+Start your component specification by defining basic metadata. This helps users understand what your component does.
+
+```yaml
+name: Data Processor
+description: Processes and transforms input data according to specified parameters
+metadata:
+  annotations:
+    author: Data Team
+    version: "1.0.0"
+    category: preprocessing
+```
+
+:::tip
+Use clear, descriptive names that indicate the component's purpose. Include version information to track component evolution.
+:::
+
+### Define Component Inputs
+
+Inputs are the data and parameters your component needs to function. Each input must specify its name and can include type, description, and default values.
+
+:::info
+[Read more about the Full InputSpec schema](/docs/reference/schema#inputspec).
+:::
+
+#### Basic Input Definition
+
+```yaml
+inputs:
+  - name: input_data
+    description: Path to the input dataset
+    type: Data
+```
+
+#### Input with Default Value
+
+```yaml
+inputs:
+  - name: threshold
+    description: Minimum threshold for filtering
+    type: Float
+    default: 0.5
+```
+
+#### Optional Input
+
+```yaml
+inputs:
+  - name: config_file
+    description: Optional configuration file
+    type: String
+    optional: true
+```
+
+
+:::warning
+Large datasets should always be passed as [file paths](/docs/reference/schema#inputpathplaceholder), not as values. Only pass small data like numbers or short strings by value.
+:::
+
+### Define Component Outputs
+
+Outputs define what your component produces. Unlike inputs, outputs don't have default values, but they must specify where the component will write its results.
+
+#### Basic Output Definition
+
+```yaml
+outputs:
+  - name: processed_data
+    description: The processed dataset
+    type: Data
+```
+
+#### Multiple Outputs Example
+
+```yaml
+outputs:
+  - name: trained_model
+    description: The trained machine learning model
+    type: Model
+
+  - name: metrics
+    description: Training and validation metrics
+    type: Metrics
+
+  - name: visualization
+    description: Performance visualization plots
+    type: HTML
+
+  - name: model_metadata
+    description: Model configuration and parameters
+    type: Data
+```
+
+### Define Container Implementation
+
+The implementation section specifies how to execute your component. It includes the container image and the command to run.
+
+:::info
+[Read more about the Full ContainerImplementation schema](/docs/reference/schema#containerspec).
+:::
+
+#### Basic Container Implementation
+
+```yaml
+implementation:
+  container:
+    image: gcr.io/my-project/data-processor:v1.0.0
+    command: ["python", "/app/process.py"]
+```
+
+#### Container with Input/Output Placeholders
+
+The command section uses placeholders that are replaced at runtime with actual values:
+
+```yaml
+implementation:
+  container:
+    image: gcr.io/my-project/ml-trainer:v1.0.0
+    command:
+      [
+        "python",
+        "/app/train.py",
+        "--training-data",
+        { inputPath: training_data },
+        "--validation-data",
+        { inputPath: validation_data },
+        "--learning-rate",
+        { inputValue: learning_rate },
+        "--batch-size",
+        { inputValue: batch_size },
+        "--model-output",
+        { outputPath: trained_model },
+        "--metrics-output",
+        { outputPath: metrics },
+      ]
+```
+
+#### Understanding Placeholders
+
+There are three types of placeholders you can use in the command:
+
+1. **`{inputValue: <input-name>}`** - Replaced with the actual value of the input
+
+   ```yaml
+   command: [
+       "python",
+       "script.py",
+       "--threshold",
+       { inputValue: threshold }, # Becomes "--threshold", "0.5"
+     ]
+   ```
+
+2. **`{inputPath: <input-name>}`** - Replaced with the file path to the input data
+
+   ```yaml
+   command: [
+       "python",
+       "script.py",
+       "--input-file",
+       { inputPath: dataset }, # Becomes "--input-file", "/path/to/dataset"
+     ]
+   ```
+
+3. **`{outputPath: <output-name>}`** - Replaced with the path where output should be written
+   ```yaml
+   command: [
+       "python",
+       "script.py",
+       "--output-file",
+       { outputPath: results }, # Becomes "--output-file", "/path/for/results"
+     ]
+   ```
+
+:::tip
+The placeholder names must exactly match the input/output names defined in your component's interface.
+:::
+
+#### Container with Arguments
+
+Sometimes you need to separate the command from its arguments:
+
+```yaml
+implementation:
+  container:
+    image: gcr.io/my-project/processor:v1.0.0
+    command: ["python", "/app/main.py"]
+    args:
+      [
+        "--mode",
+        { inputValue: processing_mode },
+        "--input",
+        { inputPath: input_data },
+        "--output",
+        { outputPath: output_data },
+      ]
+```
+
+#### Container with Environment Variables
+
+You can also pass inputs through environment variables:
+
+```yaml
+implementation:
+  container:
+    image: gcr.io/my-project/analyzer:v1.0.0
+    command: ["./analyze.sh"]
+    env:
+      - name: INPUT_PATH
+        value: { inputPath: input_data }
+      - name: OUTPUT_PATH
+        value: { outputPath: results }
+      - name: PROCESSING_THREADS
+        value: { inputValue: num_threads }
+      - name: DEBUG_MODE
+        value: "false"
+```
+
+
+## Component Specification
+
+Regardless of the implementation language, all components share the same YAML specification format.
+
+:::info
+[Read more about the Full ComponentSpec schema](/docs/reference/schema).
+:::

@@ -107,7 +107,7 @@
 
 /* Navbar logo styling */
 .navbar__logo {
-  height: 3rem;
+  height: 2rem;
 }
 
 .navbar__title {
@@ -431,6 +431,42 @@ html[data-theme="dark"] {
 /* Navbar title spacing when logo is present */
 .navbar__brand .navbar__title {
   margin-left: 0.5rem;
+}
+
+/* Component Spec Schema Block */
+.component-spec-schema-block {
+  background-color: var(--ifm-color-emphasis-100);
+  color: var(--ifm-font-color-base);
+  padding: 16px;
+  overflow: auto;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: var(--ifm-code-border-radius);
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+[data-theme="dark"] .component-spec-schema-block {
+  background-color: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content);
+  border-color: var(--ifm-toc-border-color);
+}
+
+.component-spec-schema-block a {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
+}
+
+.component-spec-schema-block a:hover {
+  color: var(--ifm-color-primary-darker);
+}
+
+[data-theme="dark"] .component-spec-schema-block a {
+  color: var(--shop-brand-primary);
+}
+
+[data-theme="dark"] .component-spec-schema-block a:hover {
+  color: var(--ifm-color-primary-lighter);
 }
 
 /* Dark mode section transitions */
