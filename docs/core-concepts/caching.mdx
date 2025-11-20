@@ -106,18 +106,8 @@ Cache staleness uses RFC3339 duration format:
 - `PT1H` - 1 hour
 - `P0D` - Disable caching
 
-## Data Retention and Purging
-
-### Artifact Lifecycle
-
-| Stage       | Duration  | What Remains                             |
-| ----------- | --------- | ---------------------------------------- |
-| **Active**  | 0-30 days | Full artifact data and metadata          |
-| **Purged**  | >30 days  | Metadata only (size, hash, small values) |
-| **Deleted** | Never     | Execution records persist indefinitely   |
-
-:::warning
-Artifacts are automatically purged after 30 days due to data retention policies. URLs to purged artifacts will return 404 errors, but metadata remains visible.
+:::info
+Large artifacts are purged after 30 days due to [data retention policies](/docs/core-concepts/artifacts#data-retention-and-purging).
 :::
 
 ### What Survives Purging

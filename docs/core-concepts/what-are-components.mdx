@@ -191,8 +191,15 @@ Graph components orchestrate multiple other components (in scope of a Graph comp
 - Can contain both container and other graph components
 - Wire outputs from one component to inputs of another
 
-:::tip
-**Fun Fact**: A Pipeline in TangleML is technically just a Graph Component! It's the root graph component that gets sent for execution.
+:::tip Fun Fact
+A Pipeline in TangleML is technically just a Graph Component! It's the root graph component that gets sent for execution.
+
+Since pipelines are components, they can be:
+
+- Saved as ComponentSpec YAML files
+- Added to component libraries
+- Nested within other pipelines (creating hierarchical workflows)
+- Shared and versioned like any other component
 :::
 
 ```yaml

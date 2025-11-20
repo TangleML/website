@@ -1,0 +1,89 @@
+.ctaSection {
+  padding: 5rem 0;
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary) 0%,
+    var(--accent-blue) 100%
+  );
+  color: white;
+  text-align: center;
+}
+
+.ctaContent h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.ctaContent p {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.95;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctaButtons > * {
+  font-weight: 600;
+  min-width: 180px;
+}
+
+/* Button styles */
+.button {
+  display: inline-block;
+  padding: 0.875rem 2rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  text-align: center;
+}
+
+.buttonOutline {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.buttonOutline:hover {
+  background: var(--bg-white, white);
+  color: var(--accent-primary, #4a90e2);
+  border-color: var(--accent-primary, #4a90e2);
+  text-decoration: none;
+}
+
+.buttonPrimary {
+  background: var(--bg-white, white);
+  color: var(--accent-primary, #4a90e2);
+  border: 2px solid transparent;
+}
+
+.buttonPrimary:hover {
+  background: var(--bg-primary, #f0f4f8);
+  color: var(--accent-dark, #2c5282);
+  text-decoration: none;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .ctaButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ctaButtons > * {
+    width: 100%;
+    max-width: 300px;
+  }
+}

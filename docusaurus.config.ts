@@ -1,6 +1,7 @@
 import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
+import { DEMO_URL } from "./constants";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -120,6 +121,7 @@ const config: Config = {
           label: "Documentation",
         },
         // { to: "/updates", label: "Updates", position: "left" },
+        { to: DEMO_URL, label: "Demo", position: "left", className: "button button--primary button--lg" },
       ],
     },
     footer: {

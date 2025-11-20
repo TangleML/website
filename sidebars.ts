@@ -38,7 +38,9 @@ const sidebars: SidebarsConfig = {
       
       items: [
        'core-concepts/what-are-components',
+       'core-concepts/tasks-and-executions',
        'core-concepts/understanding-inputs-outputs',
+       'core-concepts/artifacts',
        'core-concepts/caching',
       ],
     },

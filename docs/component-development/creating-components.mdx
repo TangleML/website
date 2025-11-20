@@ -13,8 +13,11 @@ Learn more about the Oasis CLI tool in the [Oasis CLI Manual](/docs/component-de
 
 ## Lightweight Python Components
 
-As you learn in the [Creating Components](/docs/component-development/creating-components-generic) guide, you can create a component by writing a code and containerizing it. But this approach may be time-consuming.
-For Python function, you can use the Oasis CLI tool to generate a component specification from your function. Instead of rebuilding containers for every code change, the Python code goes **in the command line**, outside the container:
+Instead of [the conventional approach](/docs/component-development/creating-components-generic) where you write code, containerize it, publish to a registry, and manually create YAML configuration files, Oasis CLI tool automates this entire process. 
+You simply write your Python code and run a single command - the system automatically generates the YAML specification running code as a command, eliminating the need to manage Docker images or registries. 
+
+This approach called "Lightweight Python Components" and it dramatically reduces the time from code to component, allowing you to iterate faster and focus on the code logic rather than infrastructure.
+
 
 ```yaml
 implementation:
@@ -28,97 +31,6 @@ implementation:
             return model_path
         # Generated wrapper code handles I/O
 ```
-
-### The `InputPath` and `OutputPath` annotations
-
-The `text_path: InputPath()` annotation tells the system that the input data for the text input should be placed into some file and the path of that file should be given to the function as a value for the text_path function parameter.
-
-The `filtered_text_path: OutputPath()` annotation tells the system that it should generate and give the function a path (via the filtered_text_path parameter) where the function should write the output data. After the function finishes the execution, the system will take the output data written by the function, put it into storage and make it available for passing to other components.
-
-### Why do we need the `InputPath` parameter annotation?
-
-Not all data can be passed/received as a simple string. Examples: binary data, large data, directories. In all these cases, the code should read data from a file or directory pointed to by a path. This is why we have a text_path: InputPath() parameter and not text: str parameter (although the latter could still work for short texts). Another reason why the InputPath annotation is needed is that the component function code is executed inside a hermetic container. The text file needs to somehow be placed inside the container. Only the system can do that. The text_path: InputPath() annotation tells the system that the input data for the text input should be placed into some file and the path of that file should be given to the function as a value for the text_path function parameter.
-
-Similarly the filtered_text_path: OutputPath() parameter annotation is needed so that the system knows that it needs to get the output data out of the container when the function finishes its execution.
-
-### Default parameter values
-
-The `create_component_from_func` function supports functions with default parameter values. This results in the generated component inputs becoming optional.
-
-Path parameters annotated with `InputPath()` can have a default value of `None` which makes those file inputs optional.
-
-The default parameter values can use any Python built-in type. (Only the built-in types can be used because the function needs to remain self-contained).
-
-```python
-def some_func(
-    some_int: int = 3,
-    some_path: InputPath() = None,
-):
-    from pathlib import Path
-    if some_path:
-        Path(some_path).read_text()
-    ...
-```
-
-### Input and Output Types
-
-While low-level TangleML does not enforce any types, the Oasis CLI generator (`components.create_component_from_func`) provides support for six basic Python types:
-
-| Python Type | TangleML Type | Serialization                |
-| ----------- | ------------- | ---------------------------- |
-| `str`       | `String`      | Direct passing               |
-| `int`       | `Integer`     | String to int conversion     |
-| `float`     | `Float`       | String to float conversion   |
-| `bool`      | `Boolean`     | String to boolean conversion |
-| `list`      | `JsonArray`   | JSON serialization           |
-| `dict`      | `JsonObject`  | JSON serialization           |
-
-:::tip
-**Beyond the Basics**: You can use any type annotation (like `XGBoostModel`), but unsupported types will be passed as strings. The generator only adds serialization/deserialization for the six basic types.
-:::
-
-The function parameters (the parameter names and type annotations) are mapped to component inputs and outputs in a certain way. This example demonstrates all aspects of the mapping
-
-```python
-def my_func(
-    # Directly supported types:
-    # Mapped to input with name "some_string" and type "String"
-    some_string: str,
-    # Mapped to input with name "some_string" and type "Integer"
-    some_integer: int,
-    # Mapped to input with name "some_float" and type "Float"
-    some_float: float,
-    # Mapped to input with name "some_boolean" and type "Boolean"
-    some_boolean: bool,
-    # Mapped to input with name "some_list" and type "JsonArray"
-    some_list: list,
-    # Mapped to input with name "some_dict" and type "JsonObject"
-    some_dict: dict,
-
-    # Mapped to input with name "any_thing" and no type (compatible with any type. Will receive a string value at runtime!)
-    any_thing,
-
-    # Other types
-    # Mapped to input with name "some_uri" and type "Uri" (Will receive a string value at runtime!)
-    some_uri: "Uri",
-    # Mapped to input with name "some_uri" and type "BigInt" (Will receive a string value at runtime!)
-    some_uri: BigInt,
-
-    # Paths:
-    # Mapped to input with name "input1" (the "_path" suffix is removed)
-    input1_path: InputPath(""),
-    # Mapped to output with name "output1" and type "CSV" (the "_path" suffix is removed)
-    output1_path: OutputPath("CSV"),
-) -> typing.NamedTuple("Outputs", [
-    # Mapped to output with name "output_string" and type "String"
-    ("output_string", str),
-    # Mapped to output with name "output_uri" and type "Uri" (function needs to return a string)
-    ("output_uri", "Uri"),
-]):
-    ...
-    return ("Some string", "some-uri://...")
-```
-
 
 ## Tutorial: Creating a Lightweight Python Component
 
@@ -489,9 +401,10 @@ To use the component, drop it into your pipeline and configure the inputs. Click
 
 
 
-## Appendix
+### Appendix
 
-### Sample Data
+<details>
+<summary>Sample Data</summary>
 
 ```txt
 Employee Records - Confidential
@@ -534,8 +447,10 @@ Notes:
 - Server maintenance scheduled for 192.168.1.200
 - Update payment info for CC: 5432 1098 7654 3210
 ```
+</details>
 
-### Common Regex Patterns
+<details>
+<summary>Common Regex Patterns</summary>
 
 | Use Case                    | Pattern                                                | Example Replacement |
 | --------------------------- | ------------------------------------------------------ | ------------------- |
@@ -550,7 +465,10 @@ Notes:
 | **HTML Tags**               | `<[^>]+>`                                              | ` `                 |
 | **Code Comments (Python)**  | `#.*$`                                                 | ` `                 |
 
-### Regex Flags Reference
+</details>
+
+<details>
+<summary>Regex Flags Reference</summary>
 
 | Flag            | Value | Description                       | Use Case                        |
 | --------------- | ----- | --------------------------------- | ------------------------------- |
@@ -563,4 +481,98 @@ To combine flags, add their values:
 
 ```python
 flags = 2 + 8  # IGNORECASE + MULTILINE = 10
+```
+
+</details>
+
+## Afterthoughts
+
+### The `InputPath` and `OutputPath` annotations
+
+The `text_path: InputPath()` annotation tells the system that the input data for the text input should be placed into some file and the path of that file should be given to the function as a value for the text_path function parameter.
+
+The `filtered_text_path: OutputPath()` annotation tells the system that it should generate and give the function a path (via the filtered_text_path parameter) where the function should write the output data. After the function finishes the execution, the system will take the output data written by the function, put it into storage and make it available for passing to other components.
+
+### Why do we need the `InputPath` parameter annotation?
+
+Not all data can be passed/received as a simple string. Examples: binary data, large data, directories. In all these cases, the code should read data from a file or directory pointed to by a path. This is why we have a text_path: InputPath() parameter and not text: str parameter (although the latter could still work for short texts). Another reason why the InputPath annotation is needed is that the component function code is executed inside a hermetic container. The text file needs to somehow be placed inside the container. Only the system can do that. The text_path: InputPath() annotation tells the system that the input data for the text input should be placed into some file and the path of that file should be given to the function as a value for the text_path function parameter.
+
+Similarly the filtered_text_path: OutputPath() parameter annotation is needed so that the system knows that it needs to get the output data out of the container when the function finishes its execution.
+
+### Default parameter values
+
+The `create_component_from_func` function supports functions with default parameter values. This results in the generated component inputs becoming optional.
+
+Path parameters annotated with `InputPath()` can have a default value of `None` which makes those file inputs optional.
+
+The default parameter values can use any Python built-in type. (Only the built-in types can be used because the function needs to remain self-contained).
+
+```python
+def some_func(
+    some_int: int = 3,
+    some_path: InputPath() = None,
+):
+    from pathlib import Path
+    if some_path:
+        Path(some_path).read_text()
+    ...
+```
+
+### Input and Output Types
+
+While low-level TangleML does not enforce any types, the Oasis CLI generator (`components.create_component_from_func`) provides support for six basic Python types:
+
+| Python Type | TangleML Type | Serialization                |
+| ----------- | ------------- | ---------------------------- |
+| `str`       | `String`      | Direct passing               |
+| `int`       | `Integer`     | String to int conversion     |
+| `float`     | `Float`       | String to float conversion   |
+| `bool`      | `Boolean`     | String to boolean conversion |
+| `list`      | `JsonArray`   | JSON serialization           |
+| `dict`      | `JsonObject`  | JSON serialization           |
+
+:::tip
+**Beyond the Basics**: You can use any type annotation (like `XGBoostModel`), but unsupported types will be passed as strings. The generator only adds serialization/deserialization for the six basic types.
+:::
+
+The function parameters (the parameter names and type annotations) are mapped to component inputs and outputs in a certain way. This example demonstrates all aspects of the mapping
+
+```python
+def my_func(
+    # Directly supported types:
+    # Mapped to input with name "some_string" and type "String"
+    some_string: str,
+    # Mapped to input with name "some_string" and type "Integer"
+    some_integer: int,
+    # Mapped to input with name "some_float" and type "Float"
+    some_float: float,
+    # Mapped to input with name "some_boolean" and type "Boolean"
+    some_boolean: bool,
+    # Mapped to input with name "some_list" and type "JsonArray"
+    some_list: list,
+    # Mapped to input with name "some_dict" and type "JsonObject"
+    some_dict: dict,
+
+    # Mapped to input with name "any_thing" and no type (compatible with any type. Will receive a string value at runtime!)
+    any_thing,
+
+    # Other types
+    # Mapped to input with name "some_uri" and type "Uri" (Will receive a string value at runtime!)
+    some_uri: "Uri",
+    # Mapped to input with name "some_uri" and type "BigInt" (Will receive a string value at runtime!)
+    some_uri: BigInt,
+
+    # Paths:
+    # Mapped to input with name "input1" (the "_path" suffix is removed)
+    input1_path: InputPath(""),
+    # Mapped to output with name "output1" and type "CSV" (the "_path" suffix is removed)
+    output1_path: OutputPath("CSV"),
+) -> typing.NamedTuple("Outputs", [
+    # Mapped to output with name "output_string" and type "String"
+    ("output_string", str),
+    # Mapped to output with name "output_uri" and type "Uri" (function needs to return a string)
+    ("output_uri", "Uri"),
+]):
+    ...
+    return ("Some string", "some-uri://...")
 ```

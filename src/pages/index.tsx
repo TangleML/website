@@ -13,6 +13,7 @@ import {
   WEBSITE_URL,
 } from "../../constants";
 import HeroSection from "./components/HeroSection/HeroSection";
+import CTASection, { ctaStyles } from "../components/CTASection";
 
 function HomepageHeader() {
   return (
@@ -157,39 +158,38 @@ function FeaturesSection() {
   );
 }
 
-function CTASection() {
+function CTASectionContent() {
   return (
-    <section className={styles.ctaSection}>
-      <div className="container">
-        <div className={styles.ctaContent}>
-          <h2>Ready to Build Your First Pipeline?</h2>
-          <p>
-            Start creating machine learning workflows in minutes. Try our
-            example pipelines or dive straight into the documentation.
-          </p>
-          <div className={styles.ctaButtons}>
-            <Link
-              className={clsx(styles.button, styles.buttonOutline)}
-              to={APP_URL}
-            >
-              🚀 Get Started
-            </Link>
-            <Link
-              className={clsx(styles.button, styles.buttonOutline)}
-              to={DEMO_URL}
-            >
-              🎮 Try Example Pipelines
-            </Link>
-            <Link
-              className={clsx(styles.button, styles.buttonOutline)}
-              to={DOCS_URL}
-            >
-              📖 View Documentation
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
+    <CTASection
+      actions={
+        <>
+          <Link
+            className={clsx(ctaStyles.button, ctaStyles.buttonOutline)}
+            to={APP_URL}
+          >
+            🚀 Get Started
+          </Link>
+          <Link
+            className={clsx(ctaStyles.button, ctaStyles.buttonOutline)}
+            to={DEMO_URL}
+          >
+            🎮 Try Example Pipelines
+          </Link>
+          <Link
+            className={clsx(ctaStyles.button, ctaStyles.buttonOutline)}
+            to={DOCS_URL}
+          >
+            📖 View Documentation
+          </Link>
+        </>
+      }
+    >
+      <h2>Ready to Build Your First Pipeline?</h2>
+      <p>
+        Start creating machine learning workflows in minutes. Try our example
+        pipelines or dive straight into the documentation.
+      </p>
+    </CTASection>
   );
 }
 
@@ -224,7 +224,7 @@ function ContactSection() {
           <div className={styles.repoInfo}>
             <h3>Open Source</h3>
             <p>
-              Oasis is built on open-source foundations. Contribute, report
+              Tangle is built on open-source foundations. Contribute, report
               issues, or explore the codebase on GitHub.
             </p>
             <div className={styles.repoLinks}>
@@ -261,7 +261,7 @@ export default function Home() {
       <main>
         <DeveloperInfoBanner />
         <FeaturesSection />
-        <CTASection />
+        <CTASectionContent />
         <ContactSection />
       </main>
     </Layout>

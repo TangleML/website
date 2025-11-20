@@ -3,9 +3,19 @@ id: first-pipeline
 title: Building and troubleshooting your first pipeline
 ---
 
+import CTASection, { ctaStyles} from "@site/src/components/CTASection";
+import { DEMO_URL } from "@site/constants";
+import Link from "@docusaurus/Link";
+
+import clsx from "clsx";
+
 # Getting Started: Your First Pipeline in TangleML
 
 Build and run your first machine learning pipeline in under 10 minutes using the TangleML editor's drag-and-drop interface.
+
+<CTASection actions={<Link className={clsx(ctaStyles.button, ctaStyles.buttonOutline)} to={DEMO_URL}>🎮 Build and Run Your First Pipeline</Link>}>
+  <h2>Want to try it now?</h2>
+</CTASection>
 
 ## Overview
 

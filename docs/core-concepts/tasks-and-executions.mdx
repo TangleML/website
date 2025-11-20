@@ -1,0 +1,66 @@
+---
+id: tasks-and-executions
+title: Tasks and Executions
+description: Understanding the relationship between tasks and executions
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+
+## Tasks: Components in Action
+
+A **Task** is what you get when you drag a component onto the pipeline canvas. It's a configured instance of a component with:
+
+- A unique task ID within the pipeline
+- Specific argument values
+- Connections to other tasks
+- Execution options
+
+Technically, a Task is an item in `tasks` section [of a Graph component](/docs/reference/schema#graphspec).
+
+:::tip
+Think of the relationship this way: If a Component is like a function definition, then a Task is like calling that function with specific arguments.
+:::
+
+When you place the same component multiple times on the canvas, you create multiple tasks, each with its own configuration:
+
+```yaml
+# In a pipeline, tasks are instances of components
+tasks:
+  preprocess_train: # Task 1 using Data Preprocessor component
+    componentRef:
+      name: Data Preprocessor
+    arguments:
+      input_dataset:
+        taskOutput:
+            outputName: output
+            taskId: Task A
+
+  preprocess_test: # Task 2 using the same component
+    componentRef:
+      name: Data Preprocessor
+    arguments:
+      input_dataset:
+        taskOutput:
+            outputName: output
+            taskId: Task B
+```
+
+## Execution: Running the Task
+
+Executions is analogous to a "function call execution at runtime".
+
+<img 
+  src={require("./assets/PipelineRun.png").default} 
+  alt="Task screenshot" 
+  style={{ width: "100%", borderRadius: "6px",  }} 
+/>
+
+Execution = Task + actual input/outputs artifacts, execution metadata (start/end time, launcher-specific information), logs, program exit code etc
+
+Every execution may have logs, artifacts, and metadata. You can access the execution details in [the Pipeline Run page](/docs/user-guide/studio-app-ui-overview#pipeline-run-view).
+
+:::tip
+**The 1-to-Many Cascade**: One component can be used in many tasks (even multiple times in the same pipeline), and each task can have many executions (e.g., daily runs). This relationship is similar to database foreign keys.
+:::

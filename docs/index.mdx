@@ -4,133 +4,131 @@ title: Overview
 slug: /
 ---
 
-# Tangle
+import CTASection, { ctaStyles} from "@site/src/components/CTASection";
+import { DEMO_URL } from "@site/constants";
+import Link from "@docusaurus/Link";
 
-Tangle is a service and a Web app that allows the users to build and run Machine Learning pipelines using drag and drop without having to set up development environment.
+import clsx from "clsx";
+
+# Tangle: Getting Started
+
+Tangle is a service and Web app that allows users to build and run Machine Learning pipelines using drag and drop without having to set up a development environment.
+
+<CTASection actions={<>
+  <Link className={clsx(ctaStyles.button, ctaStyles.buttonOutline)} to={DEMO_URL}>🎮 Run Your First Pipeline In Seconds</Link>
+</>}>
+  <h2>Jump To Tangle</h2>
+  <p>
+  The experimental new version of the Tangle app is now available. 
+  <br/>No registration is required to experiment with building pipelines.
+  </p>
+</CTASection>
+
+## What does a pipeline system do?
+
+A pipeline system like Tangle:
+
+- **Orchestrates** distributed execution, scheduling, data passing, and caching
+- **Containerizes** tasks for isolation and reproducibility
+- **Uses command-line interfaces** as the true interface with user code
+- **Runs programs** (not functions passing shared in-memory objects)
+
+## Why Use Tangle
+
+### Key Benefits
 
 [![image](https://github.com/user-attachments/assets/0ce7ccc0-dad7-4f6a-8677-f2adcd83f558)](https://tangleml.com/tangle-ui)
 
-## What does a pipeline system do in a nutshell?
+Tangle offers unique advantages for both teams and individual ML engineers:
 
-A pipeline system like Tangle (also Cloud Pipelines/Vertex Pipelines/Kubeflow Pipelines):
+**Visual Pipeline Editor**
 
-- **Orchestrates** (distributed execution, scheduling, data passing, caching)
-- **Containerized** (isolated inside containers)
-- **Command-line** (the true interface with user code is command line)
-- **Programs** (e.g. not functions passing shared in-memory objects)
+- Unlike any other pipeline system, Tangle provides a powerful [drag-and-drop UI editor](/docs/user-guide/studio-app-ui-overview)
+- Iterate faster, create complex pipelines with ease
+- No coding required to build pipelines - perfect for non-engineers and rapid prototyping
+- [Jump seamlessly between visual editor and code when needed](/docs/component-development/in-app-editor)
 
-## What is a pipeline?
+**Advanced Execution Caching**
 
-Pipeline is a graph of tasks connected to each other (task outputs connected to task inputs).
-Tasks are instances of components.
-Components have name, inputs/outputs and implementation (a program).
+- [Content-based caching](/docs/core-concepts/caching) saves significant time and compute costs
+- When you modify a pipeline, only changed tasks are re-executed
+- Both upstream and downstream cached results are reused when possible
+- Can even reuse running executions, not just completed ones
 
-Pipeline can be submitted for execution as a pipeline run.
+**Tracking and Reproducibility**
 
-When tasks are executed, they read input data, process it, produce output data.
+- All [pipeline runs](/docs/user-guide/studio-app-ui-overview#pipeline-run-view) are automatically recorded with graphs, logs, and [artifact](/docs/core-concepts/artifacts) metadata
+- Intermediate data is immutable and never overwritten
+- Clone any pipeline run to reproduce exact results
+- Strict component versioning ensures reproducibility
 
-## Demo
+**Component Reusability**
 
-[Demo](https://tangleml-tangle.hf.space/#/quick-start)
+- Build a [library of reusable components](/docs/component-development/published-components-library) like Lego pieces
+- [Components are self-contained and language-agnostic](/docs/core-concepts/what-are-components) (Python, Java, Shell, Ruby, C++, JS/TS)
+- Compatible with existing Kubeflow and Vertex AI Pipeline components
+- Share components across teams and pipelines without dependency conflicts
 
-The experimental new version of the Tangle app is now available at [https://tangleml-tangle.hf.space/#/quick-start](https://tangleml-tangle.hf.space/#/quick-start). No registration is required to experiment with building pipelines. To be able to execute the pipelines, follow the [installation instructions](#installation).
+**Open Source and Flexible**
 
-Please check it out and report any bugs you find using [GitHub Issues](https://github.com/tangleml/tangle/issues).
+- Run on any cloud provider or locally
+- Own your data and infrastructure
+- No vendor lock-in
 
-The app is under active development, so expect some breakages as we work on the app and do not rely on the app for production.
+## How Tangle Compares
 
-## Why should a company use Tangle?
+### Tangle vs. Kubeflow Pipelines
 
-- Tracking and Reproducibility
-  - Pipeline runs are recorded. Graph, logs, artifact metadata (size) and small values like metrics.
-  - Intermediate data is immutable, never overwritten. This de-risks experimentation & sharing.
-  - Each pipeline run can be cloned and re-submitted, producing same results, same models.
-  - All components are strictly versioned.
-- Time and compute savings due to execution caching
-  - Pipeline tasks that were previously executed are reused, saving time and compute.
-- Sharing
-  - Team members can easily share pipeline runs. A user can easily investigate teammate's pipeline issue. A user can clone teammate’s pipeline, modify it and submit.
-- Component library
-  - Team can create a library of reusable components that can be used by all team members.
-- Ease of onboarding. Can be used by non-engineers.
-  - Users can create and run pipeline without writing code. No need to setup dev environment.
-  - PMs can examine pipeline runs, track metrics and even run their own experiments.
+Kubeflow Pipelines pioneered the component-based approach to ML workflows that Tangle builds upon. In fact, Tangle uses the same [ComponentSpec](/docs/reference/schema) format introduced in KFP v1, meaning components can be reused between systems.
 
-## Why should a single ML engineer use Tangle?
+Where Tangle differentiates itself is in user experience and efficiency. While Kubeflow requires writing Python code to define pipelines, Tangle offers a visual [drag-and-drop editor](/docs/user-guide/studio-app-ui-overview) that makes pipeline creation accessible to non-engineers. 
+Our [content-based caching](/docs/core-concepts/caching) is more advanced than Kubeflow's lineage-based approach - we cache globally across all pipelines and can even reuse running executions, whereas Kubeflow only caches successful executions within each pipeline. 
+This means significantly better resource utilization and faster iteration cycles.
 
-- Tracking and Reproducibility
-  - Even if you are on your own, automatic tracking and version control is useful.
-- Data passing, execution caching
-  - No need to tinker with manual data caching between data transformations.
-- Non-intrusive
-  - Components wrap what you already have. Any CLI program, any language, any container.
-- Components as re-usable bits of knowledge
-  - Like Lego pieces, components are self-contained and easy to reuse. Each component is like a simple to use function, not a complex framework/library full of classes.
-  - Can share components between multiple pipelines. Components are independent. No dependency hell. Can use different versions together if needed (e.g. to compare results).
-  - Connect different languages and frameworks together. Python, Java, Shell, Ruby, C++, JS/TS
-  - Forgot how to write a Tensorflow training loop? Just look at a 50-line “Train Tensorflow model” component, not a 1000-line end-to-end tutorial. Or just use that component as-is.
+Tangle is also designed to be cloud-agnostic from the ground up, while Kubeflow Pipelines requires Kubernetes infrastructure, which can be complex to set up and maintain.
 
-## Comparison: Tangle vs other systems
+### Tangle vs. Vertex AI Pipelines
 
-| Feature                           | Tangle                                           | Kubeflow Pipelines                            | Vertex Pipelines                                | Airflow       |
-| --------------------------------- | ------------------------------------------------ | --------------------------------------------- | ----------------------------------------------- | ------------- |
-| Code & license                    | Open-source                                      | Open-source                                   | Proprietary                                     | Open-source   |
-| Cloud support                     | Any cloud/local                                  | Any Kubernetes                                | Google Cloud only                               | Local, hosted |
-| Data passing                      | Good                                             | Good                                          | Yes. But Artifacts vs Properties friction.      | Rudimentary   |
-| Execution caching                 | Content based,<br/>Global,<br/>succeeded/running | Lineage-based,<br/>Global,<br/>succeeded only | Lineage-based, per-pipeline,<br/>succeeded only | No            |
-| No-code visual pipeline editor UI | Yes                                              | No                                            | No                                              | No            |
+Vertex AI Pipelines is Google Cloud's managed version of pipeline orchestration, deeply integrated with the Google Cloud ecosystem. 
+While this integration can be powerful for teams already on Google Cloud, it creates vendor lock-in that many organizations want to avoid.
 
-## Tangle vs. Kubeflow Pipelines/Vertex Pipelines
+Vertex Pipelines uses a similar component model but is proprietary and only available on Google Cloud. 
+Tangle, being **open source**, can run anywhere - on your laptop, on-premises, or on any cloud provider. 
+This flexibility is crucial for teams that need multi-cloud strategies or want to avoid dependency on a single vendor.
 
-- Same idea.
-- Uses same `ComponentSpec`/`component.yaml` format introduced in KFP v1.
-  This means that the components can be reused. The format has been stable since inception in 2018.
-  (Warning: KFP v2 went through many cross-incompatible component formats.)
-- Tangle has better execution caching: content-based, global, can reuse running execution. (vs. lineage-based, per-pipeline, succeeded executions only)
-- Tangle can support different execution systems (different clouds).
-  Kubeflow Pipelines can support any Kubernetes.
-  Vertex Pipelines only supports Google Cloud Vertex AI.
+Like Kubeflow, Vertex Pipelines uses lineage-based caching that's limited to successful executions within each pipeline. 
+Tangle's [content-based caching](/docs/core-concepts/caching) works globally across all pipelines and can reuse partial results, making experimentation more efficient. 
+Additionally, Vertex Pipelines lacks a [visual pipeline editor](/docs/user-guide/studio-app-ui-overview), requiring all pipeline definitions to be written in code.
 
-## Comparison: Tangle vs Airflow
+### Tangle vs. Apache Airflow
 
-| Feature                 | Tangle                                                                                                                                        | Airflow                                                                                                                  |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Component specification | Declarative. Can describe arbitrary CLI program.                                                                                              | Python operator class.<br/>Airflow-specific.                                                                              |
-| Component code runs     | Inside a container. <br/>Usually: remote, distributed.                                                                                         | Local Python. <br/>Local (but can call remote services)                                                                   |
-| Data passing            | Defined Inputs/Outputs. <br/>Explicit data connections. <br/>Arbitrary files/directories. Big data.<br/>System-managed data storage and passing. | No defined Inputs/Outputs. <br/>No task data connections. <br/>XComs. Small bag of JSON data. <br/>No managed data storage. |
-| Execution caching       | Content based. <br/>Global. <br/>Succeeded/running.                                                                                             | No                                                                                                                       |
+Apache Airflow comes from a different tradition - it was built for data engineering workflows rather than ML pipelines. 
+This shows in fundamental architectural differences that matter for ML use cases.
 
-## App features
+In Airflow, everything is code - you write Python operators that execute locally or call remote services. 
+This can be powerful for teams comfortable with code, but it lacks the visual interface that makes Tangle accessible to a broader audience. 
+More importantly, Airflow wasn't designed for the data passing requirements of ML workflows. 
+While Tangle provides explicit [input/output definitions](/docs/core-concepts/understanding-inputs-outputs) and manages data storage and passing automatically, Airflow relies on XComs which are limited to small JSON data and require manual data management for anything substantial.
 
-- Start building pipelines right away
-  - Intuitive visual drag and drop interface
-  - No registration required to build. You own your data.
-- Execute pipelines on your local machine or in Cloud
-  - Easily install the app on local machine or deploy to cloud
-  - Submit pipelines for execution with a single click.
-  - Easily monitor all pipeline task executions, view the artifacts, read the logs.
-- Fast iteration
-  - Clone any pipeline run and get a new editable pipeline
-  - Create pipeline -> Submit run -> Monitor run -> Clone run -> Edit pipeline -> Submit run ...
-- Automatic execution caching and reuse
-  - Save time and compute. Don't re-do what's done
-  - Successful and even running executions are re-used from cache
-- Reproducibility
-  - All your runs are kept forever (on your machine) - graph, logs, metadata
-  - Re-run an old pipeline run with just two clicks (Clone pipeline, Submit run)
-  - Containers and strict component versioning ensure reproducibility
-- Pipeline Components
-  - Time-proven `ComponentSpec`/`component.yaml` format
-  - A library of preloaded components
-  - Fast-growing public component ecosystem
-  - Add your own components (public or private)
-  - Easy to create your own components manually or using the Cloud Pipelines SDK
-  - Components can be written in [any language](https://github.com/Ark-kun/pipeline_components/tree/master/components/sample) (Python, Shell, R, Java, C#, etc).
-  - Compatible with [Google Cloud Vertex AI Pipelines](https://cloud.google.com/vertex-ai/docs/pipelines/introduction) and [Kubeflow Pipelines](https://www.kubeflow.org/docs/components/pipelines/introduction/)
-  - Lots of pre-built components on GitHub: [Ark-kun/pipeline_components](https://github.com/Ark-kun/pipeline_components/tree/master/components).
+Airflow also lacks execution caching entirely. Every time you run a workflow in Airflow, all tasks execute from scratch. 
+In contrast, Tangle's [content-based caching](/docs/core-concepts/caching) means you only pay for computation that actually needs to be redone, which can translate to **significant cost savings** in ML experimentation where pipeline iterations are common.
 
-We have many exciting features planned, but we want to prioritize the features based on the user feedback.
+The containerization model also differs significantly. Tangle runs each [task](/docs/core-concepts/tasks-and-executions) in an isolated container with clearly defined interfaces, ensuring reproducibility and eliminating dependency conflicts. 
+Airflow operators typically run in a shared Python environment, which can lead to the dependency management challenges familiar to any Python developer.
+
+## Key Features
+
+- **No-code Pipeline Creation**: Start building immediately with drag-and-drop interface
+- **Flexible Execution**: Run locally or deploy to any cloud
+- **Fast Iteration**: Clone, modify, and re-run pipelines with two clicks
+- **Automatic Caching**: Save time and compute with intelligent execution reuse
+- **Complete Tracking**: All runs preserved with logs, artifacts, and metadata
+- **Component Ecosystem**: Growing library of pre-built components plus easy custom component creation
+- **Cross-Language Support**: Components in any language that can run in a container
+- **Industry Compatibility**: Works with existing Kubeflow and Vertex AI components
 
 ## Credits
 
 The Tangle app is based on the [Pipeline Editor](https://cloud-pipelines.net/pipeline-editor) app created by [Alexey Volkov](https://github.com/Ark-kun) as part of the [Cloud Pipelines](https://github.com/Cloud-Pipelines) project.
+
+Please report any bugs you find using [GitHub Issues](https://github.com/tangleml/tangle/issues).

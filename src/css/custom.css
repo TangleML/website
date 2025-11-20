@@ -147,6 +147,25 @@ a {
   box-shadow: 0 4px 12px rgba(156, 131, 248, 0.25);
 }
 
+/* Fix Demo button text color in navbar */
+.navbar__item.button--primary {
+  color: white !important;
+}
+
+.navbar__item.button--primary:hover {
+  color: white !important;
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .navbar__item.button--primary {
+  color: white !important;
+}
+
+[data-theme="dark"] .navbar__item.button--primary:hover {
+  color: white !important;
+  opacity: 0.9;
+}
+
 .button--secondary {
   font-weight: 600;
   transition: all 0.2s ease-in-out;

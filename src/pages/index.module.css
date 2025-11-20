@@ -403,82 +403,6 @@ html[data-theme="dark"] .featureScreenshot {
   box-shadow: var(--shadow-xl);
 }
 
-/* CTA Section */
-.ctaSection {
-  padding: 5rem 0;
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary) 0%,
-    var(--accent-blue) 100%
-  );
-  color: white;
-  text-align: center;
-}
-
-.ctaContent h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: white;
-}
-
-.ctaContent p {
-  font-size: 1.2rem;
-  margin-bottom: 2.5rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  opacity: 0.95;
-}
-
-.ctaButtons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.ctaButtons .button {
-  font-weight: 600;
-  min-width: 180px;
-}
-
-.ctaButtons .button--primary {
-  background: var(--bg-white);
-  color: var(--accent-primary);
-  border: none;
-}
-
-.ctaButtons .button--primary:hover {
-  background: var(--bg-primary);
-  color: var(--accent-dark);
-}
-
-.ctaButtons .buttonOutline {
-  border-color: white;
-  color: white;
-
-  background: rgba(255, 255, 255, 0.1);
-
-  padding: 0.875rem 2rem;
-  color: white;
-  border: 2px solid var(--bg-secondary);
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.ctaButtons .buttonOutline:hover {
-  background: var(--bg-white);
-  color: var(--accent-primary);
-  border-color: var(--accent-primary);
-}
-
-.ctaButtons .buttonOutline a:hover {
-  text-decoration: none;
-}
-
 /* Contact Section */
 .contactSection {
   padding: 5rem 0;
@@ -695,16 +619,6 @@ html[data-theme="dark"] .repoLink:hover {
   .featureImageWrapper:hover .decorShape2,
   .featureImageWrapper:hover .decorShape3 {
     opacity: 0.12;
-  }
-
-  .ctaButtons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .ctaButtons .button {
-    width: 100%;
-    max-width: 300px;
   }
 
   .contactMethods,

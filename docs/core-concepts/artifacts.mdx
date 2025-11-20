@@ -1,0 +1,77 @@
+---
+title: Understanding Artifacts in TangleML
+sidebar_label: Artifacts
+description: Learn how TangleML's artifact system works
+---
+
+import {ImageAnnotation} from "@site/src/components/ImageAnnotation";
+
+Artifacts are the data produced by components (read: any output), stored in TangleML's artifact storage system:
+
+- **Blobs**: Nameless files (just data)
+- **Directories**: Nameless containers with named files inside
+
+<ImageAnnotation src={require('./assets/Artifacts.png').default} alt="Artifacts" >
+
+Artifacts can be accessed in the Pipeline Run page, in [the Artifacts tab](/docs/user-guide/studio-app-ui-overview#1-artifacts-tab).
+
+</ImageAnnotation>
+
+:::tip
+Small values may be stored in the TangleML database without putting any TTL on them.
+:::
+
+### Blob vs Directory Artifacts
+
+#### Blob Artifacts
+
+Blobs are nameless data files. Components always write to and read from a file named `data`:
+
+```python
+# Component writes blob
+with open("/tmp/outputs/model/data", "wb") as f:
+    pickle.dump(model, f)
+
+# Downstream component reads blob
+with open("/tmp/inputs/model/data", "rb") as f:
+    model = pickle.load(f)
+```
+
+This naming convention ensures compatibility - no component expects specific filenames.
+
+#### Directory Artifacts
+
+Directories are nameless containers, but files inside retain their names:
+
+```python
+# Component writes directory
+output_dir = "/tmp/outputs/dataset/data/"
+os.makedirs(output_dir, exist_ok=True)
+pd.DataFrame(...).to_parquet(f"{output_dir}/train.parquet")
+pd.DataFrame(...).to_parquet(f"{output_dir}/test.parquet")
+
+# Downstream component reads directory
+input_dir = "/tmp/inputs/dataset/data/"
+train = pd.read_parquet(f"{input_dir}/train.parquet")
+test = pd.read_parquet(f"{input_dir}/test.parquet")
+```
+
+### Artifact Attributes
+
+Every artifact has:
+
+- **Size**: Total bytes (for directories, cumulative size)
+- **Hash**: MD5 (Google Cloud) or SHA-256 (local) for content-based caching
+- **Is Directory**: Boolean flag
+- **URL**: Storage location (hidden from components, managed by system)
+
+### Storage and Retention
+
+| Artifact Type                 | Storage Duration  | What's Retained After TTL  |
+| ----------------------------- | ----------------- | -------------------------- |
+| **Large artifacts**           | 30 days (Shopify) | Metadata only (size, hash) |
+| **Small values**           | Permanent         | Full value in database     |
+
+:::warning Data Retention
+At Shopify, artifacts containing merchant or PII data are automatically deleted after 30 days due to compliance requirements. After deletion, you'll see metadata but get 404 errors when accessing the actual data.
+:::
