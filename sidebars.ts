@@ -30,6 +30,7 @@ const sidebars: SidebarsConfig = {
         'user-guide/studio-app-ui-overview',
         'getting-started/pipelines-persistence',
         'component-development/adding-components',
+        'user-guide/hugging-face-deployment',
       ],
     },
     {

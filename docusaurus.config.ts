@@ -121,7 +121,7 @@ const config: Config = {
           label: "Documentation",
         },
         // { to: "/updates", label: "Updates", position: "left" },
-        { to: DEMO_URL, label: "Demo", position: "left", className: "button button--primary button--lg" },
+        { to: DEMO_URL, label: "Playground", position: "left", className: "button button--primary button--lg" },
       ],
     },
     footer: {

@@ -1,0 +1,270 @@
+---
+id: hugging-face-deployment
+title: Running Tangle on Hugging Face
+---
+
+import { ImageAnnotation } from "@site/src/components/ImageAnnotation";
+import { HelpCircle, Info, Delete, Maximize2, PlusSquare, Copy, ListRestart } from "lucide-react";
+
+# Running Tangle on Hugging Face
+
+This guide covers everything you need to know about deploying and running TangleML on Hugging Face Spaces, from accessing the public playground to setting up your own team instance.
+
+## Accessing Tangle on Hugging Face
+
+There are two primary ways to access the Tangle application on Hugging Face:
+
+### Main Hugging Face Interface
+Navigate to the TangleML organization on Hugging Face at [https://huggingface.co/spaces/tangleml/tangle](https://huggingface.co/spaces/tangleml/tangle). Here you'll find the Tangle space where you can click to start using the application.
+
+<img src={require("./assets/HF_1.png").default} alt="Main Hugging Face Interface" style={{width: "100%", borderRadius: "6px"}} />
+
+
+This interface includes:
+- A header with access to files and community features
+- The main Tangle application embedded in an iframe
+- Options to duplicate the space or run locally
+
+<img src={require("./assets/HF_3.png").default} alt="Main Hugging Face Interface" style={{width: "200px", borderRadius: "6px"}} />
+
+
+### Embedded Full-Screen Version
+There's also an embedded version that provides a better user experience with:
+- More vertical screen space
+- Proper URLs for individual runs
+- No iframe limitations
+
+```html
+<iframe
+	src="https://tangleml-tangle.hf.space"
+	frameborder="0"
+	width="850"
+	height="450"
+></iframe>
+```
+
+Link to the embedded version: https://tangleml-tangle.hf.space/
+
+:::tip
+The embedded version is recommended when sharing run URLs or when you need maximum screen real estate for pipeline editing.
+:::
+
+## Multi-Tenant Architecture
+
+The main Tangle instance on Hugging Face operates as a **multi-tenant system**, where:
+
+- Each user works in complete isolation
+- Every user has their own database for runs, components, and metadata
+- Each user has separate data artifact storage
+- Users cannot see or access other users' work
+
+### Data Privacy and Storage
+
+When using the multi-tenant Tangle:
+
+- **Output artifacts** are stored in your personal Hugging Face dataset repository (e.g., `your-username/tangle-data`)
+- These repositories are **private by default**
+- You maintain full ownership of your artifacts
+- You can optionally make your data public through repository settings
+
+<img src={require("./assets/HF_2.png").default} alt="Data Privacy and Storage" style={{width: "100%", borderRadius: "6px"}} />
+
+:::warning
+The run database containing metadata is currently stored in Tangle's persistent storage, not in your personal repository. This may change in future updates.
+:::
+
+### Where Executions Run
+
+Pipeline executions run as **Hugging Face jobs** in your own account:
+- Jobs run under your username, not under tangleml/tangle
+- You can view and monitor job execution directly in Hugging Face
+- Each execution links to its corresponding Hugging Face job
+
+
+## Requirements and Costs
+
+### What You Need
+
+To use the shared Tangle instance on Hugging Face:
+
+1. **Hugging Face Account**: Create and log in to your account
+2. **Permissions**: Grant Tangle access to:
+   - Create repositories
+   - Write to repositories  
+   - Create jobs
+3. **Pro Subscription**: Required for job execution ($9/month for individuals)
+
+### Cost Breakdown
+
+:::tip
+**Free to try**: You can explore the interface and create pipelines without a subscription. You only need Pro status to actually run jobs.
+:::
+
+- **Pro Subscription**: $9/month (required for job execution)
+- **CPU Jobs**: Very affordable, almost negligible cost
+- **GPU Jobs**: More expensive, depending on hardware and duration
+- **Storage**: Your artifacts use your Hugging Face storage quota
+
+## Creating Your Own Tangle Instance
+
+Teams or individuals who want their own dedicated Tangle instance can duplicate the space.
+
+### How to Duplicate
+
+1. Navigate to the tangleml/tangle space
+2. Click the three-dots menu
+3. Select "Duplicate Space"
+
+<img src={require("./assets/HF_4.png").default} alt="Duplicate Space" style={{width: "100%", borderRadius: "6px"}} />
+
+### Configuration Options
+
+When duplicating, you'll need to configure:
+
+**Owner**: Choose your user account or organization
+
+**Space Name**: Name your Tangle instance
+
+**Visibility**: 
+- Private (default) - only invited users can access
+- Public - anyone can view runs (read-only)
+
+**Hardware**: 
+- CPU Basic is sufficient for most users
+- No GPU required for the space itself
+
+**Persistent Storage**:
+- Minimum 20GB recommended ($5/month)
+- Required to preserve runs and components
+
+:::warning
+**Avoid ephemeral mode!** Without persistent storage, you'll lose all data when the space restarts.
+:::
+
+**Hugging Face Token**: Create a token with permissions for:
+- Repository management ("manage repos" or "contribute repos")
+- Job submission ("jobs" permission)
+
+
+## Single-Tenant vs Multi-Tenant Differences
+
+Your duplicated space operates differently from the shared instance:
+
+### Authentication
+- Uses the configured token instead of individual user tokens
+- Allows fine-grained permission control
+- Can access private repositories if token has permissions
+
+### Multi-User Support
+- Multiple team members can use the same instance
+- "Initiated by" field shows different users
+- All users share the same runs database
+
+### Permissions Model
+User permissions in your Tangle instance mirror their organization roles:
+- **Read-only** org members → Read-only in Tangle
+- **Write** access → Can submit runs
+- **Admin** → Full Tangle admin capabilities
+
+:::tip
+If you duplicate to a personal account (not an organization), you'll automatically be the admin of your instance.
+:::
+
+### Data Storage
+- Artifacts stored in `your-space-name_data` repository
+- All team members share the same artifact storage
+- Database remains in the space's persistent storage
+
+## Subscription Requirements by Setup
+
+### Individual Users
+- **Shared Instance**: Pro subscription ($9/month)
+- **Personal Instance**: Pro subscription ($9/month) + storage costs
+
+### Teams and Organizations
+- **Organization Instance**: Team subscription ($20/user/month)
+- **Required for**: Running jobs in organization namespace
+- **Includes**: Collaboration features and shared resources
+
+## Limitations on Hugging Face
+
+### Storage Constraints
+
+The primary limitation is data storage:
+
+- **Only dataset repositories** available for artifact storage
+- No direct mounting of storage (unlike Kubernetes deployments)
+- All data must be committed via Git operations
+- Input/output requires explicit download/upload steps
+
+:::warning
+This adds overhead to pipeline execution as data must be downloaded before processing and uploaded after completion.
+:::
+
+### Container Compatibility
+
+Some technical requirements for containers:
+
+- Must support Python installation (for Hugging Face CLI)
+- Requires compatibility with uv package manager
+- Issues with very old Alpine images (4-5 years old)
+- Problems with musl-based containers vs glibc
+
+:::tip
+Most modern containers work without issues. Problems typically only occur with outdated or specialized minimal containers.
+:::
+
+### Component Considerations
+
+When creating components for Hugging Face deployment:
+
+**Data Import/Export**:
+- Use Hugging Face-specific upload/download components
+- Standard library components being developed for HF repositories
+- Web downloads work universally
+
+**Cross-Cloud Operations**:
+- Authentication challenges when accessing other clouds (GCS, AWS)
+- Requires credential management through private HF repositories
+- Private repos can act as secret managers for credentials
+
+**Cloud-Specific Services**:
+- BigQuery, Vertex AI, etc. require special authentication
+- Consider using Hugging Face native services (inference, serving)
+- Plan for credential distribution in multi-cloud scenarios
+
+## Public Space Access
+
+Making your duplicated space public enables:
+
+- Read-only access for non-authenticated users
+- Public viewing of runs and logs
+- Future: Artifact previews and visualizations
+- Shareable URLs for demonstrations
+
+:::warning
+Keep your space private if you're working with sensitive data. Public spaces allow anyone to view your pipeline runs.
+:::
+
+## Best Practices
+
+### For Individuals
+1. Start with the shared multi-tenant instance
+2. Upgrade to Pro only when ready to run jobs
+3. Monitor job costs, especially for GPU workloads
+
+### For Teams
+1. Duplicate to your organization namespace
+2. Configure appropriate persistent storage
+3. Set up team permissions before inviting members
+4. Consider data privacy requirements
+
+### For Component Development
+1. Test containers for Python/HF CLI compatibility
+2. Plan data flow considering HF repository constraints
+3. Handle credentials securely for cross-cloud operations
+4. Leverage Hugging Face native services where possible
+
+## Summary
+
+Hugging Face provides a flexible deployment option for Tangle with both shared and dedicated instance options. While there are some limitations around storage and container compatibility, the platform offers a cost-effective way to run ML pipelines with built-in collaboration features. The "write once, run everywhere" philosophy of Cloud Pipelines ensures your components remain portable across different deployment targets.
