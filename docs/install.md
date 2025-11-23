@@ -1,6 +1,7 @@
 ---
 id: install
 title: Installation
+description: Step-by-step instructions for installing and running TangleML locally on your machine or in Google Cloud Shell.
 ---
 
 ### Try on local machine

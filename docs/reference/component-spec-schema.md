@@ -1,6 +1,7 @@
 ---
 id: schema
 title: Component Schema Reference
+description: Complete TangleML ComponentSpec YAML schema reference including inputs, outputs, containers, and placeholder types.
 ---
 
 # ComponentSpec Reference Guide
