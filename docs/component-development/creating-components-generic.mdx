@@ -26,7 +26,7 @@ Components can be written in any language that runs in a container. The key is p
 
 ## Step 1. Designing a Component
 
-When TangleML executes a component, it starts a container image in a Kubernetes Pod. 
+When TangleML executes a Component, it starts a container image in a Kubernetes Pod. 
 Your component’s inputs are passed in as command-line arguments.
 You can pass small inputs — such as strings and numbers — by value.
 Larger inputs, like CSV, Parquet, etc., data, are passed as paths to files. 
@@ -53,9 +53,9 @@ It is recommended that you use this pattern only when the data must be put into 
 If your component is built with Python, libraries such as [argparse](https://docs.python.org/3/library/argparse.html) and [absl.flags](https://abseil.io/docs/python/guides/flags) make it easier to read your component's inputs.
 - Your component's code can be implemented in any language, as long as it can run in a container image.
 
-### Component Design Principles
+### Component design principles
 
-So as a summary, when designing components, remember these core principles:
+So as a summary, when designing Components, remember these core principles:
 
 1. **Composability** - Design your components with composability in mind:
    - Think about upstream and downstream components
@@ -79,9 +79,9 @@ So as a summary, when designing components, remember these core principles:
    - Your code must accept arguments from the command line.
    - Use standard argument parsing libraries for your language.
 
-### Example Component Design
+### Example Component design
 
-TangleML supports any language that can run in a container. This example demonstrates how to create a component in multiple languages.
+TangleML supports any language that can run in a container. This example demonstrates how to create a Component in multiple languages.
 This program reads from an input file and writes lines which pass a threshold to an output file.
 This means that this function accepts three command-line parameters:
 
@@ -247,9 +247,9 @@ npx tsx program.ts --input-path input.json --output-path output.json --threshold
 </Tabs>
 
 
-## Step 2. Containerize your component's code
+## Step 2. Containerize your Component's code
 
-To run your component in TangleML, you must package your component as a Docker container image.
+To run your Component in TangleML, you must package your Component as a Docker container image.
 You should then publish this image to a container registry that your TangleML Kubernetes cluster can access.
 The steps required to create a container image are not specific to TangleML.
 To make things easier for you, this section provides some guidelines on standard container creation.
@@ -348,9 +348,9 @@ You can skip building the container image eveyr time you make a code change by u
     necessary, revise your application and Dockerfile until your application
     works as expected in the container.
 
-### Local Testing
+### Local testing
 
-Test your component locally before deploying:
+Test your Component locally before deploying:
 
 ```bash
 docker run -v $(pwd)/test-data:/data \
@@ -360,9 +360,9 @@ docker run -v $(pwd)/test-data:/data \
   --threshold 0.5
 ```
 
-## Step 3: Define Component Specification
+## Step 3: Define Component specification
 
-### Define Component Metadata
+### Define Component metadata
 
 Start your component specification by defining basic metadata. This helps users understand what your component does.
 
@@ -382,13 +382,13 @@ Use clear, descriptive names that indicate the component's purpose. Include vers
 
 ### Define Component Inputs
 
-Inputs are the data and parameters your component needs to function. Each input must specify its name and can include type, description, and default values.
+Inputs are the data and parameters your Component needs to function. Each input must specify its name and can include type, description, and default values.
 
 :::info
 [Read more about the Full InputSpec schema](/docs/reference/schema#inputspec).
 :::
 
-#### Basic Input Definition
+#### Basic Input definition
 
 ```yaml
 inputs:
@@ -397,7 +397,7 @@ inputs:
     type: Data
 ```
 
-#### Input with Default Value
+#### Input with default value
 
 ```yaml
 inputs:
@@ -424,9 +424,9 @@ Large datasets should always be passed as [file paths](/docs/reference/schema#in
 
 ### Define Component Outputs
 
-Outputs define what your component produces. Unlike inputs, outputs don't have default values, but they must specify where the component will write its results.
+Outputs define what your Component produces. Unlike inputs, outputs don't have default values, but they must specify where the component will write its results.
 
-#### Basic Output Definition
+#### Basic Output definition
 
 ```yaml
 outputs:
@@ -435,7 +435,7 @@ outputs:
     type: Data
 ```
 
-#### Multiple Outputs Example
+#### Multiple Outputs example
 
 ```yaml
 outputs:
@@ -456,15 +456,15 @@ outputs:
     type: Data
 ```
 
-### Define Container Implementation
+### Define Container implementation
 
-The implementation section specifies how to execute your component. It includes the container image and the command to run.
+The implementation section specifies how to execute your Component. It includes the container image and the command to run.
 
 :::info
 [Read more about the Full ContainerImplementation schema](/docs/reference/schema#containerspec).
 :::
 
-#### Basic Container Implementation
+#### Basic Container implementation
 
 ```yaml
 implementation:
@@ -473,7 +473,7 @@ implementation:
     command: ["python", "/app/process.py"]
 ```
 
-#### Container with Input/Output Placeholders
+#### Container with Input/Output placeholders
 
 The command section uses placeholders that are replaced at runtime with actual values:
 
@@ -500,7 +500,7 @@ implementation:
       ]
 ```
 
-#### Understanding Placeholders
+#### Understanding placeholders
 
 There are three types of placeholders you can use in the command:
 
@@ -540,7 +540,7 @@ There are three types of placeholders you can use in the command:
 The placeholder names must exactly match the input/output names defined in your component's interface.
 :::
 
-#### Container with Arguments
+#### Container with arguments
 
 Sometimes you need to separate the command from its arguments:
 
@@ -560,9 +560,9 @@ implementation:
       ]
 ```
 
-#### Container with Environment Variables
+#### Container with environment variables
 
-You can also pass inputs through environment variables:
+You can also pass Inputs through environment variables:
 
 ```yaml
 implementation:
@@ -581,9 +581,9 @@ implementation:
 ```
 
 
-## Component Specification
+## Component specification
 
-Regardless of the implementation language, all components share the same YAML specification format.
+Regardless of the implementation language, all Components share the same YAML specification format.
 
 :::info
 [Read more about the Full ComponentSpec schema](/docs/reference/schema).

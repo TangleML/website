@@ -33,15 +33,15 @@ implementation:
         # Generated wrapper code handles I/O
 ```
 
-## Tutorial: Creating a Lightweight Python Component
+## Tutorial: Creating a lightweight Python Component
 
-This guide walks you through creating a TangleML component that performs regex-based text replacement. The component reads an input text file, replaces all substrings matching a given regex pattern, and writes the result to an output file.
+This guide walks you through creating a TangleML Component that performs regex-based text replacement. The component reads an input text file, replaces all substrings matching a given regex pattern, and writes the result to an output file.
 
 :::info
 To learn more about Components in TangleML, check the [Component Architecture](/docs/core-concepts/what-are-components) page.
 :::
 
-### Step 1: Create the Component Function
+### Step 1: Create the Component function
 
 :::info
 You may use a [quick start](/docs/component-development/oasis-cli-manual#quick-start) from the Oasis CLI Manual.
@@ -145,7 +145,7 @@ This notation is used by the Oasis CLI tool to generate the proper component spe
 
 <img src={require("./assets/CreatingComponent_Details.png").default} alt="Metadata" style={{width: "50%", borderRadius: "6px"}} />
 
-### Step 2: Generate the Component Specification
+### Step 2: Generate the Component specification
 
 Run the command:
 
@@ -385,7 +385,7 @@ Notice, that Oasis CLI tool generated additional code to handle component inputs
 
 ### Step 3: Running the Component
 
-To use the component, drop it into your pipeline and configure the inputs. Click "Submit Run" to execute the pipeline.
+To use the Component, drop it into your Pipeline and configure the Inputs. Click "Submit Run" to execute the pipeline.
 
 <video
   src={require("./assets/CreatingComponent_Running.mov").default}
@@ -519,7 +519,7 @@ def some_func(
     ...
 ```
 
-### Input and Output Types
+### Input and Output types
 
 While low-level TangleML does not enforce any types, the Oasis CLI generator (`components.create_component_from_func`) provides support for six basic Python types:
 

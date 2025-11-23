@@ -8,7 +8,7 @@ import {ImageAnnotation} from "@site/src/components/ImageAnnotation";
 
 This guide explains the essential concepts and terminology you'll encounter when working with Pipeline Studio. Understanding these fundamentals will help you build and manage ML pipelines more effectively.
 
-## The Building Blocks
+## The building blocks
 
 ### Components vs Tasks vs Execution
 
@@ -21,7 +21,7 @@ The relationship between Components and Tasks is fundamental to understanding Pi
 | [Execution](/docs/core-concepts/tasks-and-executions#execution-running-the-task) | A run of a task with actual input/outputs artifacts, execution metadata (start/end time, launcher-specific information), logs, program exit code etc | Like calling a function with actual arguments in a runtime |
 
 
-### Pipelines: Orchestrating Components
+### Pipelines: orchestrating Components
 
 A pipeline in TangleML is a special kind of component known as a "[graph component](/docs/core-concepts/what-are-components#2-graph-components)" Instead of acting as a standalone container, its main role is to orchestrate multiple tasks and manage how data flows between them. Pipelines are highly reusable—they can themselves be used as components in other pipelines, enabling flexible and hierarchical workflows. When a pipeline runs, it takes care of task dependencies and directs the flow of data, making sure everything happens in the right order.
 

@@ -30,7 +30,7 @@ Unlike systems like Airflow (Python classes) or Ray (Python functions), TangleML
 - **Clear isolation** - No shared memory or state between components.
 
 
-## Component Types
+## Component types
 
 Components come in two flavors, each suited for different use cases:
 
@@ -345,9 +345,9 @@ So the actual command line invocation would be:
 container_component --Table "/tmp/outputs/Table" --Select "tips,trip_seconds,..." --Where "trip_start_timestamp>=..." --Limit "1000" --Format "csv"
 ```
 
-## Language-Agnostic
+## Language-agnostic
 
-One of the most powerful features is that **components can be written in any programming language**. 
+One of the most powerful features is that **Components can be written in any programming language**. 
 
 You can choose any container image as the starting point for your component. 
 This means you're not restricted to the default language images - you can pick what works best for your needs. 
@@ -355,9 +355,9 @@ For example, you might use images with pre-installed machine learning libraries 
 This flexibility lets you run your code in exactly the right environment for your task.
 
 
-## The Optional Type System
+## The optional type system
 
-Like Python, TangleML uses optional typing - types are for humans and tools, not the execution system:
+Like Python, TangleML uses optional typing - types are for humans and tools, not the Execution system:
 
 - **Components declare types** for inputs/outputs (e.g., `Model`, `Dataset`, `Float`)
 - **The system doesn't enforce types** - it treats everything as blobs, directories, or strings
@@ -368,9 +368,9 @@ Like Python, TangleML uses optional typing - types are for humans and tools, not
 **Who validates a TensorFlow model?** Not TangleML! The system won't parse or validate your data formats. The component that consumes a "TensorFlow model" is the only real authority on whether the data is valid. This design choice enhances security (no parsing vulnerabilities) and flexibility (version compatibility).
 :::
 
-## Best Practices
+## Best practices
 
-### Design Pure Components
+### Design pure Components
 
 Components should be **deterministic**: same inputs → same outputs. This enables TangleML's powerful caching.
 

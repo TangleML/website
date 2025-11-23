@@ -56,16 +56,16 @@ train = pd.read_parquet(f"{input_dir}/train.parquet")
 test = pd.read_parquet(f"{input_dir}/test.parquet")
 ```
 
-### Artifact Attributes
+### Artifact attributes
 
-Every artifact has:
+Every Artifact has:
 
 - **Size**: Total bytes (for directories, cumulative size)
 - **Hash**: MD5 (Google Cloud) or SHA-256 (local) for content-based caching
 - **Is Directory**: Boolean flag
 - **URL**: Storage location (hidden from components, managed by system)
 
-### Storage and Retention
+### Storage and retention
 
 | Artifact Type                 | Storage Duration  | What's Retained After TTL  |
 | ----------------------------- | ----------------- | -------------------------- |

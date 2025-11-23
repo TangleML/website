@@ -11,9 +11,9 @@ import TabItem from "@theme/TabItem";
 
 TangleML's caching system is one of its most powerful features, designed to dramatically reduce compute time and accelerate your ML pipeline iterations. Unlike traditional pipeline systems, TangleML implements sophisticated caching strategies that can save hours or even days of computation time.
 
-## Why Caching Matters
+## Why caching matters
 
-Imagine you have a pipeline that runs for two days, involving data preprocessing, model training, and evaluation. Without caching:
+Imagine you have a Pipeline that runs for two days, involving data preprocessing, model training, and evaluation. Without caching:
 
 - Every pipeline run would start from scratch
 - Small changes would require complete re-execution
@@ -29,9 +29,9 @@ With TangleML's caching:
 A pipeline that took a full day to run initially might complete in minutes on subsequent runs if most components can use cached results!
 :::
 
-## How Caching Works
+## How caching works
 
-### The Cache Key
+### The cache key
 
 TangleML generates a unique cache key for each task execution based on:
 
@@ -40,7 +40,7 @@ TangleML generates a unique cache key for each task execution based on:
 
 When a task is about to execute, TangleML checks if an identical task has been run before by comparing cache keys.
 
-### Content-Based vs. Lineage-Based Hashing
+### Content-based vs. lineage-based hashing
 
 TangleML uses **content-based hashing**, which is superior to the lineage-based approach used by most other systems:
 
@@ -54,9 +54,9 @@ TangleML uses **content-based hashing**, which is superior to the lineage-based 
 Content-based hashing means that if a component produces the same output (same hash), all downstream components can still use their cached results, even if the upstream component was re-executed!
 :::
 
-### Reusing Running Executions
+### Reusing running Executions
 
-One of TangleML's unique features is the ability to reuse **still-running executions**. This is crucial for parallel pipeline submissions:
+One of TangleML's unique features is the ability to reuse **still-running Executions**. This is crucial for parallel Pipeline submissions:
 
 ```
 Pipeline 1: [Data Processing] → [Training A] → [Evaluation]
@@ -69,9 +69,9 @@ When submitted simultaneously:
 - **Other systems**: Launch 3 separate data processing tasks
 - **TangleML**: All pipelines share the same data processing execution
 
-## Cache Configuration
+## Cache configuration
 
-### Controlling Cache Behavior
+### Controlling cache behavior
 
 You can control caching behavior at the component task level:
 
@@ -97,7 +97,7 @@ implementation:
             maxCacheStaleness: P0D
 ```
 
-### Cache Staleness Format
+### Cache staleness format
 
 Cache staleness uses RFC3339 duration format:
 
@@ -110,7 +110,7 @@ Cache staleness uses RFC3339 duration format:
 Large artifacts are purged after 30 days due to [data retention policies](/docs/core-concepts/artifacts#data-retention-and-purging).
 :::
 
-### What Survives Purging
+### What survives purging
 
 After purging, you can still see:
 
@@ -120,11 +120,11 @@ After purging, you can still see:
 - Small values (metrics, parameters)
 - Execution status and timing
 
-## Cache Breaking Strategies
+## Cache breaking strategies
 
 When you need fresh data despite caching:
 
-### 1. Cache Breaker Input (Nonce)
+### 1. Cache breaker Input (nonce)
 
 The nonce is used to introduce non-determinicity to the component, ensuring that the component is re-executed even if the inputs haven't changed.
 Nonce can be a random string or the current time from the caller.
@@ -176,9 +176,9 @@ This substituted input can be used to pass the cache breaker value to the compon
 ```
 
 
-### 2. Disable Caching via `maxCacheStaleness`
+### 2. Disable caching via `maxCacheStaleness`
 
-For components that should never cache:
+For Components that should never cache:
 
 ```yaml
 ...

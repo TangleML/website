@@ -13,9 +13,9 @@ Understanding how data flows between components is fundamental to building effec
 
 <img src={require('./assets/PipelineRun.png').default} alt="Data Flow" />
 
-## How Data Actually Flows
+## How data actually flows
 
-Unlike systems like Airflow (Python classes) or Ray (Python functions), TangleML components are **command-line interface (CLI) programs**.
+Unlike systems like Airflow (Python classes) or Ray (Python functions), TangleML Components are **command-line interface (CLI) programs**.
 That means, that in a Pipeline, every task can be executed on different machines, at different times.
 So passing objects, like in a regular function call, is not possible.
 Instead all inputs are converted to command line arguments and outputs are stored to files. 
@@ -78,7 +78,7 @@ def filter_text(
 
 </Tabs>
 
-## Input and Output Types
+## Input and Output types
 
 From the system's low-level perspective, there are no types; everything is treated as blobs or directories. 
 Types in component specifications are primarily for human understanding and tooling (e.g., Python type checking, visual editors)
@@ -122,9 +122,9 @@ Additionally, debugging becomes more convenient—you can quickly test component
 To convert inputs into a proper data types, components must parse input values or read input files with appropriate language-specific tools.
 :::
 
-## Type Conversions and Edge Cases
+## Type conversions and edge cases
 
-What happens when you connect an output to an incompatible input? The launcher handles conversions automatically:
+What happens when you connect an Output to an incompatible Input? The launcher handles conversions automatically:
 
 | Scenario                        | What Happens                                                      |
 | ------------------------------- | ----------------------------------------------------------------- |
@@ -142,9 +142,9 @@ If the artifact is large, the launcher will return an error: `Artifact is too bi
 :::
 
 
-## Troubleshooting Data Flow Issues
+## Troubleshooting data flow issues
 
-### Common Errors and Solutions
+### Common errors and solutions
 
 | Error                                      | Cause                                                | Solution                                                       |
 | ------------------------------------------ | ---------------------------------------------------- | -------------------------------------------------------------- |
@@ -153,7 +153,7 @@ If the artifact is large, the launcher will return an error: `Artifact is too bi
 | **404 on artifact URL**                    | Artifact older than TTL (30 days)                    | Re-run pipeline or check metadata (size, hash still available) |
 | **"No such file or directory"**            | Hardcoded paths instead of placeholders              | Use OutputPath placeholders: `{OutputPath: model}`             |
 
-### Debugging Data Transfer
+### Debugging data transfer
 
 To debug data flow issues:
 

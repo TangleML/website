@@ -13,15 +13,15 @@ TangleML Studio provides a comprehensive web-based interface for building, manag
 
 ## Home Screen
 
-The Home screen serves as your dashboard for managing pipelines and monitoring runs across your TangleML instance.
+The home screen serves as your dashboard for managing pipelines and monitoring runs across your TangleML instance.
 
-### All Runs
+### All runs
 
-The "All Runs" section displays a comprehensive list of all pipeline runs on your TangleML instance. This centralized view helps you track execution history and monitor pipeline performance across your organization.
+The **All Runs** section displays a comprehensive list of all pipeline runs on your TangleML instance. This centralized view helps you track execution history and monitor pipeline performance across your organization.
 
 <img src={require("./assets/HomeScreen_AllRuns.png").default} alt="All Runs" style={{width: "100%", borderRadius: "6px"}} />
 
-**Key Features:**
+**Key features:**
 
 - **Navigation**: Browse through multiple pages of runs using Previous/Next page controls
 - **Filtering**: Filter runs by creator to find specific executions
@@ -34,7 +34,7 @@ When filtering by creator, use the **full name with exact match**. Partial match
 
 ### My Pipelines
 
-The "My Pipelines" section manages your draft pipelines stored locally in browser storage. This is your personal workspace for pipeline development before submission.
+The "My Pipelines" section manages your draft Pipelines stored locally in browser storage. This is your personal workspace for pipeline development before submission.
 
 <img src={require("./assets/HomeScreen_MyPipelines.png").default} alt="My Pipelines" style={{width: "100%", borderRadius: "6px"}} />
 
@@ -51,11 +51,11 @@ Since draft pipelines are stored in browser storage, they are specific to your c
 
 ## Editor
 
-The Editor is the heart of TangleML Studio, providing an intuitive drag-and-drop interface for building machine learning pipelines.
+The Editor is the heart of TangleML Studio, providing an intuitive drag-and-drop interface for building machine learning Pipelines.
 
 <img src={require("./assets/Editor_1.png").default} alt="Layout overview" style={{width: "100%", borderRadius: "6px"}} />
 
-### Layout Overview
+### Layout overview
 
 The Editor consists of three main areas:
 
@@ -63,11 +63,11 @@ The Editor consists of three main areas:
 2. **Canvas**: Central workspace for visual pipeline construction
 3. **Right Panel**: Context-sensitive information panel
 
-### Top Bar
+### Top bar
 
 The top bar provides quick access to essential functions:
 
-**Top Bar Elements:**
+**Top bar elements:**
 
 - **Pipeline Name:** Shows the current pipeline’s name. Click to edit and rename your pipeline.
 - **Import Pipeline:** Load a pipeline into the editor from a file or by pasting YAML content.
@@ -75,12 +75,12 @@ The top bar provides quick access to essential functions:
 - **Backend Status:** Check the status of your backend connection at a glance.
 - **Settings:** Access backend settings and adjust your personal preferences.
 
-### Left Panel
+### Left panel
 
-The left panel organizes pipeline management and component access.
+The left panel organizes Pipeline management and Component access.
 
 <ImageAnnotation src={require("./assets/LeftPanel.png").default} alt="Left Panel">
-    #### Pipeline Actions
+    #### Pipeline actions
 
     Access core pipeline operations:
 
@@ -89,33 +89,33 @@ The left panel organizes pipeline management and component access.
     - **Export Pipeline**: Downloads pipeline as YAML file
     - **Import Pipeline**: Load from file or paste YAML directly
 
-    #### Runs and Submission
+    #### Runs and submission
 
-    - **Submit Run**: Immediately schedules the current pipeline for execution
+    - **Submit Run**: Immediately schedules the current Pipeline for Execution
     - **Recent Pipeline Runs**: Displays popover with recent runs for quick access
 
-    #### Components Section
+    #### Components section
 
-    The Components section provides comprehensive access to your pipeline building blocks:
+    The Components section provides comprehensive access to your Pipeline building blocks:
 
-    **Search Functionality:**
+    **Search functionality:**
 
-    - Search by: name, input name, input type, output name, or output type
+    - Search by: name, Input name, Input type, Output name, or Output type
     - Toggle between partial match (default) and exact match
     - Example: Search "CSV" to find all CSV-related components
 
-    **Component Categories:**
+    **Component categories:**
 
-    1. **Used in Pipeline**: Shows all components currently in your pipeline
+    1. **Used in Pipeline**: Shows all Components currently in your Pipeline
     - Click any component to navigate directly to it on the canvas
-    2. **User Components**: Your personal component library
+    2. **User Components**: Your personal Component library
     - Components created or imported by you
     - Stored locally in browser storage
     - Can be deleted to free up local storage
 
-    3. **Special Components**: Input and Output nodes for pipeline parameters
+    3. **Special Components**: Input and Output nodes for Pipeline parameters
 
-    4. **Standard Library**: Hierarchical collection of standard components
+    4. **Standard Library**: Hierarchical collection of standard Components
     - Data manipulation tools for various formats
     - Machine learning frameworks (PyTorch, XGBoost, TensorFlow, TFX)
     - Common operations and transformations
@@ -132,15 +132,15 @@ Each component has an info icon (ⓘ) that opens a detailed dialog with three ta
 
 ### Canvas
 
-The Canvas is your infinite workspace for visual pipeline construction.
+The Canvas is your infinite workspace for visual Pipeline construction.
 
 - **Pan**: Click and drag to move around the canvas
 - **Zoom**: Scroll or use zoom controls to adjust view
 - **Mini-map**: Bottom-left corner shows your current position in the pipeline
 
-#### Canvas Toolbar
+#### Canvas toolbar
 
-The Canvas Toolbar provides a set of essential tools to manage and navigate your pipeline workspace:
+The Canvas Toolbar provides a set of essential tools to manage and navigate your Pipeline workspace:
 
 <ImageAnnotation src={require("./assets/GroupSelection.png").default} alt="Canvas Toolbar">
 
@@ -153,7 +153,7 @@ The Canvas Toolbar provides a set of essential tools to manage and navigate your
 
 </ImageAnnotation>
 
-#### Task Representation
+#### Task representation
 
 <ImageAnnotation src={require("./assets/Task.png").default} alt="Task Representation">
 
@@ -163,9 +163,9 @@ The Canvas Toolbar provides a set of essential tools to manage and navigate your
 
 </ImageAnnotation>
 
-#### Basic Operations
+#### Basic operations
 
-- **Add Component**: Drag from Component Library to canvas
+- **Add Component**: Drag from Component Library to Canvas
 - **Connect Tasks**: Click output handle and drag to input handle
 - **Move Tasks**: Click and drag to reposition
 - **Delete Connection**: Select connection and press Backspace
@@ -174,7 +174,7 @@ The Canvas Toolbar provides a set of essential tools to manage and navigate your
 Use the Undo/Redo buttons (bottom-right) to quickly revert or replay recent changes.
 :::
 
-#### Undo/Redo Controls
+#### Undo/redo controls
 
 :::info
 The Editor tracks changes only for the browser session. If you reload the page, the history of changes will be lost.
@@ -192,9 +192,9 @@ The editor tracks all your changes. Controls are located in the bottom-right cor
 
 <video src={require("./assets/UndoRedo.mov").default} autoPlay loop muted style={{ width: "100%" }} />
 
-#### Group Operations
+#### Group operations
 
-To activate group operations, select "Group Selection" in the canvas toolbar.
+To activate group operations, select "Group Selection" in the Canvas toolbar.
 
 When multiple nodes are selected, powerful batch operations become available:
 
@@ -213,11 +213,11 @@ Use Ctrl/Cmd+A to select all nodes, then deselect specific ones with Ctrl/Cmd+Cl
 
 ### Pipeline Context Panel
 
-When no task is selected, the panel shows pipeline-level information:
+When no Task is selected, the panel shows Pipeline-level information:
 
 <ImageAnnotation src={require("./assets/RightPanel_Pipeline.png").default} alt="Pipeline Context">
 
-**Pipeline Information:**
+**Pipeline information:**
 
 - Pipeline name with edit button
 - Creation and last update timestamps
@@ -240,7 +240,7 @@ When no task is selected, the panel shows pipeline-level information:
 
 ### Arguments Context Panel
 
-When a task is selected, the panel shows three tabs.
+When a Task is selected, the panel shows three tabs.
 
 <ImageAnnotation src={require("./assets/RightPanel_Arguments.png").default} alt="Task Context">
 - Complete list of task inputs and outputs
@@ -266,9 +266,9 @@ When configuring component inputs, you have several actions available through th
 | **Include Argument** | <PlusSquare />   | Re-includes a previously excluded input     | 
 
 
-#### Exclude/Include Argument
+#### Exclude/include argument
 
-When you use the "Exclude Argument" action, the input is removed from the execution parameters.
+When you use the "Exclude Argument" action, the input is removed from the Execution parameters.
 This is especially helpful for optional inputs that you do not need.
 The input field will become dimmed, but you can still edit its contents if you wish.
 
@@ -280,11 +280,11 @@ If the input was empty when you include it, it may automatically be filled in wi
 Empty input is not the same as excluded input. Excluded input is removed from the execution parameters, while empty input is still a value that will be passed to the task execution.
 :::
 
-#### Understanding Default Values
+#### Understanding default values
 
-Default values are specified in the component's YAML definition and serve as fallback values when an input is not explicitly provided. Authors specify default values in the component specification.
+Default values are specified in the Component's YAML definition and serve as fallback values when an input is not explicitly provided. Authors specify default values in the component specification.
 
-:::warning Default Value Divergence
+:::warning Default value divergence
 The default value shown in the UI comes from the component's YAML definition, but it may differ from what the actual component implementation uses. Here's why:
 :::
 
@@ -292,7 +292,7 @@ The default value shown in the UI comes from the component's YAML definition, bu
 ### Details Context Panel
 
 <ImageAnnotation src={require("./assets/RightPanel_Details.png").default} alt="Task Context">
-- Component information for selected task
+- Component information for selected Task
 - Access to component YAML
 - Action buttons:
   - Download YAML
@@ -305,11 +305,11 @@ The default value shown in the UI comes from the component's YAML definition, bu
 
 </ImageAnnotation>
 
-### Configuration Context Panel
+### Configuration context panel
 
 <ImageAnnotation src={require("./assets/RightPanel_Configuration.png").default} alt="Task Context">
 
-- You can disable cache for the task.
+- You can disable cache for the Task.
 - Configure compute resources:
   - CPU cores
   - Memory (GB)
@@ -329,21 +329,21 @@ You can collapse the task node. Just add a `w` and `h` field to your Node positi
 Tasks with validation errors will prevent pipeline execution. Check the validation section to identify and resolve issues before submitting runs.
 :::
 
-## Pipeline Run View
+## Pipeline Run view
 
-The Pipeline Run view provides detailed insights into pipeline execution, allowing you to monitor progress, inspect outputs, and debug issues.
+The Pipeline Run view provides detailed insights into Pipeline Execution, allowing you to monitor progress, inspect Outputs, and debug issues.
 
 <img src={require("./assets/RunView.png").default} alt="Pipeline Run View" style={{width: "100%", borderRadius: "6px"}} />
 
-### Run Overview
+### Run overview
 
-The main area displays the pipeline graph with execution status for each task:
+The main area displays the Pipeline graph with Execution status for each Task:
 
 - Visual indicators show task status (Pending, Running, Succeeded, Failed, Skipped)
 - Execution timeline and duration for completed tasks
 - Real-time updates for running pipelines
 
-### Run Actions
+### Run actions
 
 Available actions depend on run status:
 
@@ -357,11 +357,11 @@ Available actions depend on run status:
 Use the logs tab to debug failed tasks. Error messages and stack traces help identify issues quickly.
 :::
 
-### Context Panel
+### Context panel
 
-The right panel provides detailed information about the run or selected task.
+The right panel provides detailed information about the run or selected Task.
 
-#### Pipeline Run Details (No Task Selected)
+#### Pipeline Run details (no Task selected)
 
 When viewing the overall run:
 
@@ -372,26 +372,26 @@ When viewing the overall run:
 - Overall pipeline outputs
 
 
-#### Task Execution Details (Task Selected)
+#### Task Execution details (Task selected)
 
-When a specific task is selected, three tabs provide comprehensive execution information:
+When a specific Task is selected, three tabs provide comprehensive Execution information:
 
-#### 1. Artifacts Tab
+#### 1. Artifacts tab
 
 <ImageAnnotation src={require("./assets/RunView_Artifacts.png").default} alt="Pipeline Run View">
 
-- Output artifacts produced by the task
+- Output Artifacts produced by the Task
 - Download links for files
 - Preview for supported formats
 - Artifact metadata (size, type, location)
 </ImageAnnotation>
 
 
-#### 2. Details Tab
+#### 2. Details tab
 
 <ImageAnnotation src={require("./assets/RunView_Details.png").default} alt="Pipeline Run View">
 
-- Task execution metadata
+- Task Execution metadata
 - Start and completion times
 - Duration
 - Resource usage statistics
@@ -399,11 +399,11 @@ When a specific task is selected, three tabs provide comprehensive execution inf
 - Execution environment details
 </ImageAnnotation>
 
-#### 3. Logs Tab
+#### 3. Logs tab
 
 <ImageAnnotation src={require("./assets/RunView_Logs.png").default} alt="Pipeline Run View">
 
-- Complete execution logs
+- Complete Execution logs
 - Stdout and stderr output
 - System messages
 - Error traces for debugging
@@ -412,7 +412,7 @@ When a specific task is selected, three tabs provide comprehensive execution inf
 
 
 
-## Best Practices
+## Best practices
 
 1. **Save Frequently**: Use "Save Pipeline" regularly to preserve your work
 2. **Validate Before Running**: Check the validation panel for errors before submitting
@@ -420,7 +420,7 @@ When a specific task is selected, three tabs provide comprehensive execution inf
 4. **Organize Components**: Keep your User Components library organized by removing unused items
 5. **Monitor Runs**: Check the "All Runs" section to track pipeline performance over time
 
-## Keyboard Shortcuts & Hotkeys
+## Keyboard shortcuts & hotkeys
 
 | Shortcut                    | Action                                       |
 | --------------------------- | -------------------------------------------- |
@@ -439,7 +439,7 @@ When a specific task is selected, three tabs provide comprehensive execution inf
 
 ## Troubleshooting
 
-### Common Issues
+### Common issues
 
 **Pipeline won't run:**
 
