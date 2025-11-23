@@ -10,65 +10,36 @@ This guide explains the essential concepts and terminology you'll encounter when
 
 ## The building blocks
 
-### Components vs Tasks vs Execution
+### Components, tasks, and execution
 
 The relationship between components and tasks is fundamental to understanding Pipeline Studio:
 
 | Concept       | Definition                                                  | Analogy                                                       |
 | ------------- | ----------------------------------------------------------- | ------------------------------------------------------------- |
-| [Component](/docs/core-concepts/what-are-components) | Is a self-contained, reusable unit of functionality defined by a [ComponentSpec YAML file](/docs/reference/schema)| Like a recipe or function definition                             |
-| [Task](/docs/core-concepts/tasks-and-executions)      | An instance of a component specified in the pipeline and visible on the canvas             | Like cooking from a recipe or declaring a function call in code |
-| [Execution](/docs/core-concepts/tasks-and-executions#execution-running-the-task) | A run of a task with actual input/outputs artifacts, execution metadata (start/end time, launcher-specific information), logs, program exit code etc | Like calling a function with actual arguments in a runtime |
+| [Component](/docs/core-concepts/what-are-components) | A self-contained, reusable unit of functionality defined by a [ComponentSpec YAML file](/docs/reference/schema)| Like a recipe or function definition                             |
+| [Task](/docs/core-concepts/tasks-and-executions)      | An instance of a component specified in the pipeline and visible on the canvas.             | Like cooking from a recipe or declaring a function call in code |
+| [Execution](/docs/core-concepts/tasks-and-executions#execution-running-the-task) | A run of a task, which produces input/outputs artifacts, execution metadata (such as start/end time and launcher-specific information), logs, program exit codes, etc | Like calling a function with actual arguments in a runtime |
 
 
 ### Pipelines: Orchestrating components
 
-A pipeline in TangleML is a special kind of component known as a "[graph component](/docs/core-concepts/what-are-components#2-graph-components)" Instead of acting as a standalone container, its main role is to orchestrate multiple tasks and manage how data flows between them. Pipelines are highly reusable—they can themselves be used as components in other pipelines, enabling flexible and hierarchical workflows. When a pipeline runs, it takes care of task dependencies and directs the flow of data, making sure everything happens in the right order.
-
-:::warning
-Make sure you understand how [pipelines are persisted](/docs/getting-started/pipelines-persistence). Unless a pipeline is submitted as a run, it is stored in the browser's storage.
-:::
-
-## Inputs and Outputs
-
-:::info
-Read more about [Inputs and Outputs and Data Flow](/docs/core-concepts/understanding-inputs-outputs) section.
-:::
-
-**Inputs** define what data or parameters a component needs to operate. They serve as the component's interface for receiving information.
-
-Inputs can come in two main forms.
-Value inputs are simple parameters that are passed directly.
-Path inputs are used for file or directory location - for passing large artifacts.
-
-**Outputs** define what a component produces after execution. They allow components to pass results to downstream tasks.
+A pipeline in TangleML is a special kind of component known as a [graph component](/docs/core-concepts/what-are-components#2-graph-components). Instead of acting as a standalone container, its main role is to orchestrate multiple tasks and manage how data flows between them. Pipelines are highly reusable—they can themselves be used as components in other pipelines, enabling flexible and hierarchical workflows. When a pipeline runs, it takes care of task dependencies and directs the flow of data, making sure everything happens in the right order.
 
 :::tip
-Outputs from one task become available as inputs to connected downstream tasks, creating the data flow in your pipeline.
+While editing, pipelines are only stored locally in your browser. Once a pipeline is submitted, as a run, it's stored in the backend for all users. For more information, see [Pipelines Persistence](/docs/getting-started/pipelines-persistence).
 :::
+
+## Inputs and outputs
+
+A pipeline links together inputs and outputs:
+
+- **Inputs** define what data or parameters a component needs to operate. They serve as the component's interface for receiving information. Inputs have two forms: 
+  - **Value inputs** are simple parameters that are passed directly.
+  - **Path inputs** are used to pass large artifacts as files or directories.
+- **Outputs** define what a component produces after execution. They allow components to pass results to downstream tasks.
+
+Outputs from one task become available as inputs to connected downstream tasks, creating the data flow in your pipeline. For more information, see [Inputs and Outputs and Data Flow](/docs/core-concepts/understanding-inputs-outputs).
 
 ## Artifacts
 
-:::info
-Learn more about the [artifacts](/docs/core-concepts/artifacts).
-:::
-
-Artifacts are the data produced by components (read: any output), stored in TangleML's artifact storage system. It can be a Blob (nameless files) or a directory.
-Artifacts can be accessed in the **Pipeline Run** page, in [the **Artifacts** tab](/docs/user-guide/studio-app-ui-overview#artifacts-tab).
-
-
-## Summary
-
-Understanding these core concepts helps you work effectively with Pipeline Studio:
-
-:::tip
-**Quick reference:**
-
-- **Component**: Reusable template/blueprint
-- **Task**: Component instance on canvas
-- **Pipeline**: Graph component orchestrating tasks
-- **Input/output**: Data interface between tasks
-- **Artifact**: File-based data (datasets, models, etc.)
-  :::
-
-With these fundamentals in place, you're ready to start building powerful ML pipelines by combining components into tasks, connecting them through inputs and outputs, and managing data flow through artifacts.
+Artifacts are the data produced by components (read: any output), stored in TangleML's artifact storage system. Artifacts can be a blob (nameless files) or a directory. To view artifacts, go to the **Pipeline Run** page in [the **Artifacts** tab](/docs/user-guide/studio-app-ui-overview#artifacts-tab). For more information, see [Artifacts](/docs/core-concepts/artifacts).
