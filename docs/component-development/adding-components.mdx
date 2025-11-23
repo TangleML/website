@@ -11,14 +11,9 @@ import { ImageAnnotation } from "@site/src/components/ImageAnnotation";
 Components are the building blocks of your ML pipelines in TangleML. This guide covers the different methods to add components to your pipeline workspace.
 
 
-### 1. Upload component file
+### Upload component file
 
 Upload a YAML component file directly from your computer to add it to your user components library.
-
-:::tip
-Uploaded components are immediately available in your User Components library and can be reused across different pipelines.
-:::
-
 
 <ImageAnnotation src={require("./assets/AddingComponents_File.png").default} alt="Import from URL screenshot">
 
@@ -29,46 +24,40 @@ Uploaded components are immediately available in your User Components library an
 </ImageAnnotation>
 
 
-### 2. Import from URL
+### Import from URL
 
-Import Components from publicly accessible URLs, particularly useful for GitHub-hosted Components.
+Import components from publicly accessible URLs.
+
+<ImageAnnotation src={require("./assets/AddingComponents_URL.png").default} alt="Import from URL screenshot">
+
+
+1. Select the **URL** option.
+2. Enter the publicly accessible URL to the YAML file.
+3. The browser will automatically download and validate the component.
+4. If valid, it will be added to your user components library.
+
+</ImageAnnotation>
 
 :::tip
 This method works great with raw GitHub URLs, allowing you to import components directly from repositories.
 :::
 
-<ImageAnnotation src={require("./assets/AddingComponents_URL.png").default} alt="Import from URL screenshot">
+### In-app component editor
 
-
-1. Select the **URL** option
-2. Enter the publicly accessible URL to the YAML file
-3. The browser will automatically download and validate the component
-4. If valid, it will be added to your User Components library
-
-</ImageAnnotation>
-
-
-
-### 3. In-app component editor
-
-Create and edit Components directly in your browser using the built-in editor.
-
-:::info
-Learn more about the [In-App Component Editor](/docs/component-development/in-app-editor).
-:::
+Create and edit Components directly in your browser using the [In-App Component Editor](/docs/component-development/in-app-editor):
 
 <ImageAnnotation src={require("./assets/AddingComponents_New.png").default} alt="In-App Component Editor screenshot">
 
-1. Click on the **New** button in the "Add component" dialog
+1. Click on the **New** button in the **Add component** dialog
 2. Select the component template you want to use
 3. The editor will open and you can start editing the component
-4. Once you're done, click the **Save** button to save the component. The component will be added to your User Components library.
+4. Once you're done, click the **Save** button to save the component. The component will be added to your user components library.
 
 </ImageAnnotation>
 
 
 
-### 4. Drag and drop YAML files
+### Drag and drop YAML files
 
 Simply drag a YAML component file from your file system and drop it directly onto the canvas.
 
@@ -76,21 +65,17 @@ Simply drag a YAML component file from your file system and drop it directly ont
   Your browser does not support the video tag.
 </video>
 
-### 5. Import from other Pipelines
+### Import from other pipelines
 
-Reuse Components from your existing Pipelines by importing them into your User Components library.
+Reuse components from your existing pipelines by importing them into your user components library.
 
 <video src={require("./assets/AddingComponents_AddFromPipeline.mov").default} autoPlay loop muted playsInline style={{ width: "100%" }}>
   Your browser does not support the video tag.
 </video>
 
-### 6. Using standard library components
+### Using standard library components
 
-Access components from the standard library for tasks shared within the TangleML instance.
-
-:::tip
-All components in the standard library are well documented with implementation details you can inspect by clicking the component info dialog and checking the **Implementation** tab.
-:::
+Access components from the standard library for tasks shared within the TangleML instance:
 
 <ImageAnnotation src={require("./assets/AddingComponents_StandardLibrary.png").default} alt="Import from standard library screenshot">
 
@@ -98,12 +83,12 @@ All components in the standard library are well documented with implementation d
 2. Select the component you want to add.
 3. Drag the component onto the canvas.
 
+:::tip
+Components in the standard library are documented with implementation details you can inspect by clicking the component info dialog and checking the **Implementation** tab.
+:::
+
 </ImageAnnotation>
 
-### 7. Shared Components Library
+### Shared components library
 
-Access Components from the Shared Components Library for tasks shared within the TangleML instance.
-
-:::info
-Learn more about the [Shared Components Library](/docs/component-development/published-components-library).
-:::
+Access components from the [shared components library](/docs/component-development/published-components-library) for tasks shared within the TangleML instance.
