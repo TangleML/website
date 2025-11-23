@@ -14,7 +14,7 @@ import clsx from "clsx";
 
 Build and run your first machine learning pipeline in under 10 minutes using the TangleML editor's drag-and-drop interface.
 
-<CTASection actions={<Link className={clsx(ctaStyles.button, ctaStyles.buttonOutline)} to={DEMO_URL}>Build and Run Your First Pipeline</Link>}>
+<CTASection actions={<Link className={clsx(ctaStyles.button, ctaStyles.buttonOutline)} to={DEMO_URL}>Build and run your first pipeline</Link>}>
   <h2>Want to try it now?</h2>
 </CTASection>
 
@@ -29,19 +29,16 @@ This guide walks you through creating a complete XGBoost machine learning pipeli
 
 <img src={require("./assets/PipelinePreview.png").default} alt="First pipeline preview" style={{width: "100%", borderRadius: "6px"}} />
 
-> **Note:** This quickstart guide covers additional steps and tips - including how to troubleshoot common issues you might encounter as you build more advanced pipelines.
-
-
 ## Accessing standard library components
 
 The standard library provides pre-built components for common ML tasks. To access it:
 
-1. Click on **Standard Library Components** in the left panel
-2. Navigate to the **Quick Start** folder for beginner-friendly components
-3. Browse available components organized by category
+1. Click on **Standard Library Components** in the left panel.
+2. Navigate to the **Quick Start** folder for beginner-friendly components.
+3. Browse available components organized by category.
 
 :::tip
-Each component in the standard library is fully documented with implementation details you can inspect by clicking the component info dialog and checking the **Implementation** tab.
+Each component in the standard library is fully documented. To see implementation details, click the component info dialog and check the **Implementation** tab.
 :::
 
 ## Building your first pipeline
@@ -50,11 +47,10 @@ Each component in the standard library is fully documented with implementation d
 
 Start by adding the **Chicago Taxi Trips Dataset** component to your canvas:
 
-1. Find the component in the Quick Start folder
-2. Drag and drop it onto the canvas
-3. This component fetches data from Chicago's open API using a simple cURL command
+1. Find the component in the **Quick Start** folder.
+2. Drag and drop it onto the canvas.
+3. This component fetches data from Chicago's open API using a simple cURL command.
 
-:::tip
 You can run the pipeline at this point and check the results in the **Outputs** or **Artifacts** tab.
 
 <video
@@ -70,15 +66,13 @@ You can run the pipeline at this point and check the results in the **Outputs** 
   Your browser does not support the video tag.
 </video>
 
-:::
-
 ### Step 2: Add training and prediction components
 
 Next, add the ML components:
 
-1. Drag **Train XGBoost Model on CSV** onto the canvas
-2. Drag **XGBoost Predict on CSV** onto the canvas
-3. You'll now have three components ready to connect
+1. Drag **Train XGBoost Model on CSV** onto the canvas.
+2. Drag **XGBoost Predict on CSV** onto the canvas.
+3. You'll now have three components ready to connect.
 
 <video
   src={require("./assets/Tutorial1.mov").default}
@@ -101,12 +95,16 @@ Create the data flow by connecting component outputs to inputs:
 
 1. **Connect the dataset to training:**
 
-   - Drag from the `table` output of Chicago Taxi Trips Dataset
-   - Connect to the `training_data` input of Train XGBoost Model
+   - Drag from the `table` output of **Chicago Taxi Trips Dataset**.
+   - Connect to the `training_data` input of **Train XGBoost Model**.
 
 2. **Connect to prediction component:**
-   - Connect the same dataset `table` output to the prediction component's `data` input
-   - Connect the training component's `model` output to the prediction component's `model` input
+   - Connect the same dataset `table` output to the prediction component's `data` input.
+   - Connect the training component's `model` output to the prediction component's `model` input.
+
+:::tip
+You'll notice red dots on the map, which indicate required inputs that need configuration. The pipeline can't run until all validation errors are resolved. We'll fix these in the next step. 
+:::
 
 <video
   src={require("./assets/Tutorial2.mov").default}
@@ -122,19 +120,14 @@ Create the data flow by connecting component outputs to inputs:
   Your browser does not support the video tag.
 </video>
 
-
-:::tip
-Red dots indicate required inputs that need configuration. The pipeline cannot run until all validation errors are resolved.
-:::
-
 ### Step 4: Configure required parameters
 
 Some components need additional configuration:
 
-1. Click on the Train XGBoost Model component
-2. In the arguments editor, set the **Label Column Name** (e.g., "tips")
-3. Set the same label column name for the prediction component
-4. Red validation dots will disappear when properly configured
+1. Click on the **Train XGBoost Model** component.
+2. In the arguments editor, set the **Label Column Name** (for example, `tips`).
+3. Set the same label column name for the prediction component.
+4. Red validation dots will disappear when properly configured.
 
 <video
   src={require("./assets/Tutorial3.mov").default}
@@ -151,18 +144,18 @@ Some components need additional configuration:
 </video>
 
 :::tip
-TangleML automatically saves your canvas changes every time you make a change. You can verify auto-save status by looking for the "Last saved" timestamp in the pipeline actions section of the left panel.
+TangleML automatically saves your canvas changes every time you make a change. You can verify auto-save status by looking for the **Last saved** timestamp in the **Pipeline Actions** section of the left panel.
 :::
 
 ### Step 5: Running and troubleshooting your pipeline
 
 Now that all components are connected, let's run the pipeline:
 
-1. Click the **Submit Run** button on the left panel to submit your pipeline
+1. Click the **Submit Run** button on the left panel to submit your pipeline.
 2. Components will transition through states:
    - `Queued` → `Pending` → `Running` → `Succeeded` (or `Failed`)
 
-You may see, that the component failed. That's OK! We'll troubleshoot it.
+You'll see that the component failed. That's OK! Let's troubleshoot it.
 
 <img
   src={require("./assets/Tutorial5.png").default}
@@ -177,30 +170,25 @@ You may see, that the component failed. That's OK! We'll troubleshoot it.
 Tasks that are dependent on failed tasks will be immediately marked as "Skipped".
 :::
 
-**Handling pipeline failures:**
+#### Use logs to troubleshoot pipeline failures
 
 The most common way to troubleshoot a pipeline failure is to check the logs.
 
 1. Click on the failed component
 2. Select **View Logs** to see detailed error messages. 
+    * You can use **Fullscreen** button to see the logs in full screen mode. 
+    * Search the logs by pressing **CMD/CTRL + F** to search for specific text in the logs.
+    
+    Different components produce different error messages. You need to know specifics of the component to troubleshoot the pipeline failure.
+3. You'll see an error message related to our component:
+    ```
+    Check failed: valid: Label contains NaN, infinity or a value too large.
+    ```
+  
+    Looks like some of the rows in our dataset have empty values in the label column. 
+4. We'll fix this in the next step using a standard library component.
 
-:::tip
-You can use "Fullscreen" button to see the logs in full screen mode. Also you can use "Search" by pressing "CMD/CTRL + F" to search for specific text in the logs.
-:::
-
-:::note
-Different components produce different error messages. You need to know specifics of the component to troubleshoot the pipeline failure.
-:::
-
-We can detect the error message produces by the component:
-
-```
-Check failed: valid: Label contains NaN, infinity or a value too large.
-```
-
-It means, that some of the rows in the dataset have empty values in the label column. That's ok, we can fix it. Standard library provides a component for that - **Fill all missing values using Pandas on CSV data**.
-
-Get back to the Editor mode by clicking "Inspect" button in the right context panel. 
+To return to the editor mode, click the **Inspect** button in the right context panel. 
 
 <video
   src={require("./assets/Tutorial5.mov").default}
@@ -216,15 +204,15 @@ Get back to the Editor mode by clicking "Inspect" button in the right context pa
   Your browser does not support the video tag.
 </video>
 
-**Fix data quality issues:**
+#### Use components to fix data quality issues
 
-1. Search for and add the **Fill All Missing Values on CSV** component
-2. Drag it onto the canvas between your dataset and training components
+1. Search for and add the **Fill All Missing Values on CSV** component.
+2. Drag it onto the canvas between your dataset and training components.
 3. Redirect connections:
-     - Connect dataset `table` output → Fill Missing Values `data` input
-     - Connect Fill Missing Values `table` output → Training and Prediction `data` inputs
+     - Connect dataset `table` output → Fill Missing Values `data` input.
+     - Connect Fill Missing Values `table` output → Training and Prediction `data` inputs.
 
-4. Re-run the pipeline by clicking **Submit Run** button again
+4. Re-run the pipeline by clicking **Submit Run**.
 
 <video
   src={require("./assets/Tutorial5-2.mp4").default}
@@ -243,28 +231,28 @@ Get back to the Editor mode by clicking "Inspect" button in the right context pa
 
 
 :::note
-You may notice, that some tasks have been executed instantly. 
-TangleML caches deterministic component results. When you re-run a pipeline, any tasks with identical component digest and inputs will reuse cached outputs, dramatically speeding up iteration time. You'll see cached components complete instantly with a "Succeeded" status.
+Notice that some tasks executed instantly when you reran the pipeline. 
+TangleML caches deterministic component results. When you re-run a pipeline, any tasks with identical component digest and inputs will reuse cached outputs, dramatically speeding up iteration time. You'll see cached components complete instantly with a **Succeeded** status.
 :::
 
 
 
-### Step 6: Using Input nodes for repeated values
+### Step 6: Using input nodes for repeated values
 
-Avoid repetition and make your pipeline more maintainable by using Input nodes as variables:
+Avoid repetition and make your pipeline more maintainable by using input nodes as variables:
 
-1. **Add an Input node:**
-   - From the component panel, drag an **Input** node onto the canvas
-   - Name it descriptively (e.g., "label_column_name")
-   - Set its value to "tips" (or your label column name)
+1. **Add an input node:**
+   - From the component panel, drag an **Input** node onto the canvas.
+   - Name it descriptively (for example, `label_column_name`).
+   - Set its value to `tips` (or your label column name).
 
-2. **Connect the Input node:**
-   - Connect the Input node's output to both:
+2. **Connect the input node:**
+   - Connect the input node's output to both:
      - Train XGBoost Model's `label_column_name` parameter
      - XGBoost Predict's `label_column_name` parameter
 
 :::note
-Using Input nodes as pipeline-wide constants or variables is a great trick and has some benefits:
+Using input nodes as pipeline-wide constants or variables is a great trick and has some benefits:
    - Change the value once to update all connected components
    - Makes pipelines more readable and maintainable
    - Reduces configuration errors
