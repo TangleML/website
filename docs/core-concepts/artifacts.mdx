@@ -13,7 +13,7 @@ Artifacts are the data produced by components (read: any output), stored in Tang
 
 <ImageAnnotation src={require('./assets/Artifacts.png').default} alt="Artifacts" >
 
-Artifacts can be accessed in the Pipeline Run page, in [the Artifacts tab](/docs/user-guide/studio-app-ui-overview#1-artifacts-tab).
+Artifacts can be accessed in the **Pipeline Run** page, in [the **Artifacts** tab](/docs/user-guide/studio-app-ui-overview#1-artifacts-tab).
 
 </ImageAnnotation>
 
@@ -21,9 +21,9 @@ Artifacts can be accessed in the Pipeline Run page, in [the Artifacts tab](/docs
 Small values may be stored in the TangleML database without putting any TTL on them.
 :::
 
-### Blob vs Directory Artifacts
+### Blob vs directory artifacts
 
-#### Blob Artifacts
+#### Blob artifacts
 
 Blobs are nameless data files. Components always write to and read from a file named `data`:
 
@@ -39,12 +39,12 @@ with open("/tmp/inputs/model/data", "rb") as f:
 
 This naming convention ensures compatibility - no component expects specific filenames.
 
-#### Directory Artifacts
+#### Directory artifacts
 
 Directories are nameless containers, but files inside retain their names:
 
 ```python
-# Component writes directory
+# component writes directory
 output_dir = "/tmp/outputs/dataset/data/"
 os.makedirs(output_dir, exist_ok=True)
 pd.DataFrame(...).to_parquet(f"{output_dir}/train.parquet")
@@ -58,7 +58,7 @@ test = pd.read_parquet(f"{input_dir}/test.parquet")
 
 ### Artifact attributes
 
-Every Artifact has:
+Every artifact has:
 
 - **Size**: Total bytes (for directories, cumulative size)
 - **Hash**: MD5 (Google Cloud) or SHA-256 (local) for content-based caching

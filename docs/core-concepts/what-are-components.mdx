@@ -7,9 +7,9 @@ description: TangleML components are reusable, containerized building blocks for
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# What are Components?
+# What are components?
 
-A *Component* is a self-contained, reusable unit of functionality defined by a ComponentSpec YAML file, that performs a specific task, such as loading data, training a model, or evaluating results. Think of components as **reusable building blocks** for your machine learning pipelines - like LEGO pieces that you can snap together to build complex workflows.
+A *component* is a self-contained, reusable unit of functionality defined by a ComponentSpec YAML file, that performs a specific task, such as loading data, training a model, or evaluating results. Think of components as **reusable building blocks** for your machine learning pipelines - like LEGO pieces that you can snap together to build complex workflows.
 
 The ComponentSpec YAML file describes the component's interface, implementation, and metadata. That's why every component is:
 
@@ -34,7 +34,7 @@ Unlike systems like Airflow (Python classes) or Ray (Python functions), TangleML
 
 Components come in two flavors, each suited for different use cases:
 
-### 1. Container Components
+### 1. Container components
 
 Container components run code inside a container (usually a Docker container). They're perfect for:
 
@@ -182,16 +182,16 @@ implementation:
 </TabItem>
 </Tabs>
 
-### 2. Graph Components
+### 2. Graph components
 
-Graph components orchestrate multiple other components (in scope of a Graph component called "tasks"). They're ideal for:
+Graph components orchestrate multiple other components (in scope of a graph component called "tasks"). They're ideal for:
 
 - Define how data flows between components
 - Can contain both container and other graph components
 - Wire outputs from one component to inputs of another
 
 :::tip Fun Fact
-A Pipeline in TangleML is technically just a Graph Component! It's the root graph component that gets sent for execution.
+A pipeline in TangleML is technically just a graph component! It's the root graph component that gets sent for execution.
 
 Since pipelines are components, they can be:
 
@@ -257,7 +257,7 @@ implementation:
 
 Building a pipeline component via code is not simple,  since some complex workflows may reach multiple levels of nesting and thousands of lines. Because of this, TangleML provides a visual editor to build pipelines.
 
-## Inputs and Outputs
+## Inputs and outputs
 
 Components communicate through well-defined interface: inputs and outputs, creating a clear contract for data flow.
 
@@ -357,7 +357,7 @@ This flexibility lets you run your code in exactly the right environment for you
 
 ## The optional type system
 
-Like Python, TangleML uses optional typing - types are for humans and tools, not the Execution system:
+Like Python, TangleML uses optional typing - types are for humans and tools, not the execution system:
 
 - **Components declare types** for inputs/outputs (e.g., `Model`, `Dataset`, `Float`)
 - **The system doesn't enforce types** - it treats everything as blobs, directories, or strings
@@ -370,7 +370,7 @@ Like Python, TangleML uses optional typing - types are for humans and tools, not
 
 ## Best practices
 
-### Design pure Components
+### Design pure components
 
 Components should be **deterministic**: same inputs → same outputs. This enables TangleML's powerful caching.
 

@@ -13,7 +13,7 @@ TangleML's caching system is one of its most powerful features, designed to dram
 
 ## Why caching matters
 
-Imagine you have a Pipeline that runs for two days, involving data preprocessing, model training, and evaluation. Without caching:
+Imagine you have a pipeline that runs for two days, involving data preprocessing, model training, and evaluation. Without caching:
 
 - Every pipeline run would start from scratch
 - Small changes would require complete re-execution
@@ -54,14 +54,14 @@ TangleML uses **content-based hashing**, which is superior to the lineage-based 
 Content-based hashing means that if a component produces the same output (same hash), all downstream components can still use their cached results, even if the upstream component was re-executed!
 :::
 
-### Reusing running Executions
+### Reusing running executions
 
-One of TangleML's unique features is the ability to reuse **still-running Executions**. This is crucial for parallel Pipeline submissions:
+One of TangleML's unique features is the ability to reuse **still-running executions**. This is crucial for parallel pipeline submissions:
 
 ```
-Pipeline 1: [Data Processing] → [Training A] → [Evaluation]
-Pipeline 2: [Data Processing] → [Training B] → [Evaluation]
-Pipeline 3: [Data Processing] → [Training C] → [Evaluation]
+Pipeline 1: [Data processing] → [Training A] → [Evaluation]
+Pipeline 2: [Data processing] → [Training B] → [Evaluation]
+Pipeline 3: [Data processing] → [Training C] → [Evaluation]
 ```
 
 When submitted simultaneously:
@@ -124,7 +124,7 @@ After purging, you can still see:
 
 When you need fresh data despite caching:
 
-### 1. Cache breaker Input (nonce)
+### 1. Cache breaker input (nonce)
 
 The nonce is used to introduce non-determinicity to the component, ensuring that the component is re-executed even if the inputs haven't changed.
 Nonce can be a random string or the current time from the caller.
@@ -146,7 +146,7 @@ In case of scheduled runs, pipelines may use a placeholder for incoming timestam
 ```yaml
 ...
 inputs:
-  - name: Pipeline Creation Time
+  - name: pipeline creation time
     type: String
     default: '{{CreationTime}}'
 ...
@@ -178,7 +178,7 @@ This substituted input can be used to pass the cache breaker value to the compon
 
 ### 2. Disable caching via `maxCacheStaleness`
 
-For Components that should never cache:
+For components that should never cache:
 
 ```yaml
 ...

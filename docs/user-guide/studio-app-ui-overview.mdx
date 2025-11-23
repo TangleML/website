@@ -34,7 +34,7 @@ When filtering by creator, use the **full name with exact match**. Partial match
 
 ### My Pipelines
 
-The "My Pipelines" section manages your draft Pipelines stored locally in browser storage. This is your personal workspace for pipeline development before submission.
+The **My Pipelines** section manages your draft pipelines stored locally in browser storage. This is your personal workspace for pipeline development before submission.
 
 <img src={require("./assets/HomeScreen_MyPipelines.png").default} alt="My Pipelines" style={{width: "100%", borderRadius: "6px"}} />
 
@@ -240,7 +240,7 @@ When no Task is selected, the panel shows Pipeline-level information:
 
 ### Arguments Context Panel
 
-When a Task is selected, the panel shows three tabs.
+When a task is selected, the panel shows three tabs.
 
 <ImageAnnotation src={require("./assets/RightPanel_Arguments.png").default} alt="Task Context">
 - Complete list of task inputs and outputs
@@ -268,11 +268,11 @@ When configuring component inputs, you have several actions available through th
 
 #### Exclude/include argument
 
-When you use the "Exclude Argument" action, the input is removed from the Execution parameters.
+When you use the **Exclude Argument** action, the input is removed from the execution parameters.
 This is especially helpful for optional inputs that you do not need.
 The input field will become dimmed, but you can still edit its contents if you wish.
 
-Choosing the "Include Argument" action will re-add a previously excluded input.
+Choosing the **Include Argument** action will re-add a previously excluded input.
 This returns the input to its active state in the pipeline.
 If the input was empty when you include it, it may automatically be filled in with the default value.
 
@@ -282,10 +282,10 @@ Empty input is not the same as excluded input. Excluded input is removed from th
 
 #### Understanding default values
 
-Default values are specified in the Component's YAML definition and serve as fallback values when an input is not explicitly provided. Authors specify default values in the component specification.
+Default values are specified in the component's YAML definition and serve as fallback values when an input is not explicitly provided. Authors specify default values in the component specification.
 
 :::warning Default value divergence
-The default value shown in the UI comes from the component's YAML definition, but it may differ from what the actual component implementation uses. Here's why:
+The default value shown in the UI comes from the component's YAML definition, but it may differ from what the actual component implementation uses. 
 :::
 
 
@@ -331,13 +331,13 @@ Tasks with validation errors will prevent pipeline execution. Check the validati
 
 ## Pipeline Run view
 
-The Pipeline Run view provides detailed insights into Pipeline Execution, allowing you to monitor progress, inspect Outputs, and debug issues.
+The **Pipeline Run** view provides detailed insights into pipeline execution, allowing you to monitor progress, inspect outputs, and debug issues.
 
 <img src={require("./assets/RunView.png").default} alt="Pipeline Run View" style={{width: "100%", borderRadius: "6px"}} />
 
 ### Run overview
 
-The main area displays the Pipeline graph with Execution status for each Task:
+The main area displays the pipeline graph with execution status for each task:
 
 - Visual indicators show task status (Pending, Running, Succeeded, Failed, Skipped)
 - Execution timeline and duration for completed tasks
@@ -359,9 +359,9 @@ Use the logs tab to debug failed tasks. Error messages and stack traces help ide
 
 ### Context panel
 
-The right panel provides detailed information about the run or selected Task.
+The right panel provides detailed information about the run or selected task.
 
-#### Pipeline Run details (no Task selected)
+#### Pipeline Run details (no task selected)
 
 When viewing the overall run:
 
@@ -371,8 +371,7 @@ When viewing the overall run:
 - Input parameters used
 - Overall pipeline outputs
 
-
-#### Task Execution details (Task selected)
+#### Task Execution details (task selected)
 
 When a specific Task is selected, three tabs provide comprehensive Execution information:
 
@@ -380,7 +379,7 @@ When a specific Task is selected, three tabs provide comprehensive Execution inf
 
 <ImageAnnotation src={require("./assets/RunView_Artifacts.png").default} alt="Pipeline Run View">
 
-- Output Artifacts produced by the Task
+- Output artifacts produced by the Task
 - Download links for files
 - Preview for supported formats
 - Artifact metadata (size, type, location)
@@ -403,7 +402,7 @@ When a specific Task is selected, three tabs provide comprehensive Execution inf
 
 <ImageAnnotation src={require("./assets/RunView_Logs.png").default} alt="Pipeline Run View">
 
-- Complete Execution logs
+- Complete execution logs
 - Stdout and stderr output
 - System messages
 - Error traces for debugging
@@ -414,11 +413,11 @@ When a specific Task is selected, three tabs provide comprehensive Execution inf
 
 ## Best practices
 
-1. **Save Frequently**: Use "Save Pipeline" regularly to preserve your work
-2. **Validate Before Running**: Check the validation panel for errors before submitting
-3. **Use Descriptions**: Add meaningful descriptions to help others understand your pipeline
-4. **Organize Components**: Keep your User Components library organized by removing unused items
-5. **Monitor Runs**: Check the "All Runs" section to track pipeline performance over time
+1. **Save frequently**: Use **Save Pipeline** regularly to preserve your work
+2. **Validate before running**: Check the validation panel for errors before submitting
+3. **Use descriptions**: Add meaningful descriptions to help others understand your pipeline
+4. **Organize components**: Keep your **User Components** library organized by removing unused items
+5. **Monitor runs**: Check the **All Runs** section to track pipeline performance over time
 
 ## Keyboard shortcuts & hotkeys
 

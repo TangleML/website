@@ -16,7 +16,7 @@ Understanding how data flows between components is fundamental to building effec
 ## How data actually flows
 
 Unlike systems like Airflow (Python classes) or Ray (Python functions), TangleML Components are **command-line interface (CLI) programs**.
-That means, that in a Pipeline, every task can be executed on different machines, at different times.
+That means, that in a pipeline, every task can be executed on different machines, at different times.
 So passing objects, like in a regular function call, is not possible.
 Instead all inputs are converted to command line arguments and outputs are stored to files. 
 Some input values may be safely passed as command line arguments, while other input values may need to be passed as file paths.
@@ -78,7 +78,7 @@ def filter_text(
 
 </Tabs>
 
-## Input and Output types
+## Input and output types
 
 From the system's low-level perspective, there are no types; everything is treated as blobs or directories. 
 Types in component specifications are primarily for human understanding and tooling (e.g., Python type checking, visual editors)

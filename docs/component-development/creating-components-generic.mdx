@@ -24,9 +24,9 @@ A component consists of two essential parts:
 Components can be written in any language that runs in a container. The key is proper containerization and defining clear input/output interfaces.
 :::
 
-## Step 1. Designing a Component
+## Step 1. Designing a component
 
-When TangleML executes a Component, it starts a container image in a Kubernetes Pod. 
+When TangleML executes a component, it starts a container image in a Kubernetes Pod. 
 Your component’s inputs are passed in as command-line arguments.
 You can pass small inputs — such as strings and numbers — by value.
 Larger inputs, like CSV, Parquet, etc., data, are passed as paths to files. 
@@ -79,9 +79,9 @@ So as a summary, when designing Components, remember these core principles:
    - Your code must accept arguments from the command line.
    - Use standard argument parsing libraries for your language.
 
-### Example Component design
+### Example component design
 
-TangleML supports any language that can run in a container. This example demonstrates how to create a Component in multiple languages.
+TangleML supports any language that can run in a container. This example demonstrates how to create a component in multiple languages.
 This program reads from an input file and writes lines which pass a threshold to an output file.
 This means that this function accepts three command-line parameters:
 
@@ -247,9 +247,9 @@ npx tsx program.ts --input-path input.json --output-path output.json --threshold
 </Tabs>
 
 
-## Step 2. Containerize your Component's code
+## Step 2. Containerize your component's code
 
-To run your Component in TangleML, you must package your Component as a Docker container image.
+To run your component in TangleML, you must package your component as a Docker container image.
 You should then publish this image to a container registry that your TangleML Kubernetes cluster can access.
 The steps required to create a container image are not specific to TangleML.
 To make things easier for you, this section provides some guidelines on standard container creation.

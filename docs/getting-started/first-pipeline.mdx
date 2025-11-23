@@ -32,9 +32,9 @@ This guide walks you through creating a complete XGBoost machine learning pipeli
 > **Note:** This quickstart guide covers additional steps and tips - including how to troubleshoot common issues you might encounter as you build more advanced pipelines.
 
 
-## Accessing Standard Library Components
+## Accessing standard library components
 
-The Standard Library provides pre-built components for common ML tasks. To access it:
+The standard library provides pre-built components for common ML tasks. To access it:
 
 1. Click on **Standard Library Components** in the left panel
 2. Navigate to the **Quick Start** folder for beginner-friendly components
@@ -44,7 +44,7 @@ The Standard Library provides pre-built components for common ML tasks. To acces
 Each component in the standard library is fully documented with implementation details you can inspect by clicking the component info dialog and checking the **Implementation** tab.
 :::
 
-## Building your first Pipeline
+## Building your first pipeline
 
 ### Step 1: Add a data source
 
@@ -72,7 +72,7 @@ You can run the pipeline at this point and check the results in the **Outputs** 
 
 :::
 
-### Step 2: Add training and prediction Components
+### Step 2: Add training and prediction components
 
 Next, add the ML components:
 
@@ -95,9 +95,9 @@ Next, add the ML components:
 </video>
 
 
-### Step 3: Connect Components
+### Step 3: Connect components
 
-Create the data flow by connecting Component Outputs to Inputs:
+Create the data flow by connecting component outputs to inputs:
 
 1. **Connect the dataset to training:**
 
@@ -129,7 +129,7 @@ Red dots indicate required inputs that need configuration. The pipeline cannot r
 
 ### Step 4: Configure required parameters
 
-Some Components need additional configuration:
+Some components need additional configuration:
 
 1. Click on the Train XGBoost Model component
 2. In the arguments editor, set the **Label Column Name** (e.g., "tips")
@@ -151,12 +151,12 @@ Some Components need additional configuration:
 </video>
 
 :::tip
-TangleML automatically saves your canvas changes every time you make a change. You can verify auto-save status by looking for the "Last saved" timestamp in the Pipeline Actions section of the left panel.
+TangleML automatically saves your canvas changes every time you make a change. You can verify auto-save status by looking for the "Last saved" timestamp in the pipeline actions section of the left panel.
 :::
 
-### Step 5: Running and troubleshooting your Pipeline
+### Step 5: Running and troubleshooting your pipeline
 
-Now that all Components are connected, let's run the Pipeline:
+Now that all components are connected, let's run the pipeline:
 
 1. Click the **Submit Run** button on the left panel to submit your pipeline
 2. Components will transition through states:
@@ -177,7 +177,7 @@ You may see, that the component failed. That's OK! We'll troubleshoot it.
 Tasks that are dependent on failed tasks will be immediately marked as "Skipped".
 :::
 
-**Handling Pipeline Failures:**
+**Handling pipeline failures:**
 
 The most common way to troubleshoot a pipeline failure is to check the logs.
 
@@ -251,7 +251,7 @@ TangleML caches deterministic component results. When you re-run a pipeline, any
 
 ### Step 6: Using Input nodes for repeated values
 
-Avoid repetition and make your Pipeline more maintainable by using Input nodes as variables:
+Avoid repetition and make your pipeline more maintainable by using Input nodes as variables:
 
 1. **Add an Input node:**
    - From the component panel, drag an **Input** node onto the canvas

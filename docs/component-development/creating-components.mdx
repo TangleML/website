@@ -12,12 +12,12 @@ For Python developers, TangleML offers a special feature - **lightweight compone
 Learn more about the Oasis CLI tool in the [Oasis CLI Manual](/docs/component-development/oasis-cli-manual) section.
 :::
 
-## Lightweight Python Components
+## Lightweight Python components
 
 Instead of [the conventional approach](/docs/component-development/creating-components-generic) where you write code, containerize it, publish to a registry, and manually create YAML configuration files, Oasis CLI tool automates this entire process. 
 You simply write your Python code and run a single command - the system automatically generates the YAML specification running code as a command, eliminating the need to manage Docker images or registries. 
 
-This approach called "Lightweight Python Components" and it dramatically reduces the time from code to component, allowing you to iterate faster and focus on the code logic rather than infrastructure.
+This approach called "Lightweight Python components" and it dramatically reduces the time from code to component, allowing you to iterate faster and focus on the code logic rather than infrastructure.
 
 
 ```yaml
@@ -33,15 +33,15 @@ implementation:
         # Generated wrapper code handles I/O
 ```
 
-## Tutorial: Creating a lightweight Python Component
+## Tutorial: Creating a lightweight Python component
 
-This guide walks you through creating a TangleML Component that performs regex-based text replacement. The component reads an input text file, replaces all substrings matching a given regex pattern, and writes the result to an output file.
+This guide walks you through creating a TangleML component that performs regex-based text replacement. The component reads an input text file, replaces all substrings matching a given regex pattern, and writes the result to an output file.
 
 :::info
-To learn more about Components in TangleML, check the [Component Architecture](/docs/core-concepts/what-are-components) page.
+To learn more about components in TangleML, check the [component architecture](/docs/core-concepts/what-are-components) page.
 :::
 
-### Step 1: Create the Component function
+### Step 1: Create the component function
 
 :::info
 You may use a [quick start](/docs/component-development/oasis-cli-manual#quick-start) from the Oasis CLI Manual.
@@ -145,7 +145,7 @@ This notation is used by the Oasis CLI tool to generate the proper component spe
 
 <img src={require("./assets/CreatingComponent_Details.png").default} alt="Metadata" style={{width: "50%", borderRadius: "6px"}} />
 
-### Step 2: Generate the Component specification
+### Step 2: Generate the component specification
 
 Run the command:
 
@@ -383,9 +383,9 @@ Notice, that Oasis CLI tool generated additional code to handle component inputs
 ```
 
 
-### Step 3: Running the Component
+### Step 3: Running the component
 
-To use the Component, drop it into your Pipeline and configure the Inputs. Click "Submit Run" to execute the pipeline.
+To use the component, drop it into your pipeline and configure the inputs. Click "Submit Run" to execute the pipeline.
 
 <video
   src={require("./assets/CreatingComponent_Running.mov").default}
