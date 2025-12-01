@@ -1,14 +1,14 @@
 import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
-import { DEMO_URL } from "./constants";
+import { APP_NAME, APP_URL, DEMO_URL, GITHUB_BACKEND_REPO_URL, PRIVACY_POLICY } from "./constants";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: "Tangle",
+  title: APP_NAME,
   tagline:
-    "Tangle is a web app that allows the users to build and run Machine Learning pipelines using drag and drop without having to set up development environment.",
+    `${APP_NAME} is a web app that allows the users to build and run Machine Learning pipelines using drag and drop without having to set up development environment.`,
   favicon: "img/favicon.ico",
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -53,7 +53,7 @@ const config: Config = {
         //     type: ["rss", "atom"],
         //     xslt: true,
         //   },
-        //   blogSidebarTitle: "Tangle Product Updates",
+        //   blogSidebarTitle: `${APP_NAME} Product Updates`,
         //   blogSidebarCount: "ALL",
         //   // Useful options to enforce blogging best practices
         //   onInlineTags: "warn",
@@ -106,12 +106,12 @@ const config: Config = {
     colorMode: {
       defaultMode: "dark",
     },
-    image: "img/logo.png",
+    image: "img/icon.png",
     navbar: {
-      title: "Tangle",
       logo: {
-        alt: "Tangle Logo",
-        src: "img/logo.png",
+        alt: `${APP_NAME} Logo`,
+        src: "img/tangle_black.png",
+        srcDark: "img/tangle_white.png",
       },
       items: [
         {
@@ -128,16 +128,42 @@ const config: Config = {
       style: "dark",
       links: [
         {
+          title: "Tangle",
+          items: [
+            {
+              label: "Demo",
+              to: DEMO_URL,
+            },
+            {
+              label: "Explore",
+              to: APP_URL,
+            },
+            {
+              label: "Build",
+              to: GITHUB_BACKEND_REPO_URL,
+            },
+          ],
+        },
+        {
           title: "Docs",
           items: [
             {
-              label: "Tutorial",
+              label: "Installation",
+              to: "/docs/install",
+            },
+            {
+              label: "Guides",
               to: "/docs",
+            },
+            {
+              label: "Privacy Policy",
+              to: PRIVACY_POLICY,
             },
           ],
         },
       ],
-      // copyright: `Copyright © ${new Date().getFullYear()} The Tangle authors.`,
+      // copyright: "Developed by Shopify",
+      
     },
     prism: {
       theme: prismThemes.github,

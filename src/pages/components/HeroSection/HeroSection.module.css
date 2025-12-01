@@ -1,9 +1,9 @@
 /* CSS Variables */
 :root {
   /* Electric Purple accent colors */
-  --accent-primary: #8b5cf6;
-  --accent-dark: #7c3aed;
-  --accent-light: #a78bfa;
+  --accent-primary: #5B2DF4;
+  --accent-dark: #4D1FE0;
+  --accent-light: #7349F6;
   --accent-ultralight: #c4b5fd;
 
   /* Secondary accent colors for gradients */
@@ -35,13 +35,11 @@
   background: var(--bg-primary);
   display: flex;
   align-items: center;
-  padding: 6rem 0 2rem;
 }
 
 .heroContainer {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 8rem;
   width: 100%;
 }
 
@@ -55,6 +53,12 @@
 /* Left side - Text content */
 .heroContent {
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .heroTitle {
@@ -63,18 +67,7 @@
   line-height: 1.1;
   color: var(--text-primary);
   margin-bottom: 1.5rem;
-}
-
-.gradientText {
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary) 0%,
-    var(--accent-pink) 50%,
-    var(--accent-blue) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  text-wrap: balance;
 }
 
 .heroDescription {
@@ -82,6 +75,7 @@
   line-height: 1.7;
   color: var(--text-secondary);
   margin-bottom: 2.5rem;
+  text-wrap: balance;
 }
 
 .heroButtons {
@@ -92,11 +86,7 @@
 
 .btnPrimary {
   padding: 0.875rem 2rem;
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary) 0%,
-    var(--accent-blue) 100%
-  );
+  background: var(--accent-primary);
   color: white;
   border: none;
   border-radius: 10px;
@@ -165,8 +155,8 @@
 /* Right side - Geometric abstraction */
 .heroVisual {
   position: relative;
-  height: 600px;
-  perspective: 1200px;
+  height: 1028px;
+  perspective: 2056px;
   transform-style: preserve-3d;
 }
 
@@ -174,52 +164,10 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1.15);
-  width: 100%;
+  transform: translate(-50%, -50%) scale(1.1);
+  width: 90%;
   height: 100%;
   transform-style: preserve-3d;
-}
-
-/* 3D Orbital carousel for panels */
-.panelsOrbit {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 300px;
-  height: 200px;
-  transform: translate(-50%, -50%);
-  transform-style: preserve-3d;
-}
-
-/* Orbit controls */
-.orbitControls {
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 0.75rem;
-  z-index: 20;
-}
-
-.orbitDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(139, 92, 246, 0.3);
-  border: 2px solid rgba(139, 92, 246, 0.5);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.orbitDot.active {
-  background: var(--accent-primary);
-  transform: scale(1.2);
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
-}
-
-.orbitDot:hover {
-  background: rgba(139, 92, 246, 0.6);
 }
 
 /* Connection lines background */
@@ -274,15 +222,10 @@
 /* Geometric shapes - inside the orbital sphere */
 .geometricShape {
   position: absolute;
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary) 0%,
-    var(--accent-blue) 100%
-  );
+  background: var(--bg-primary);
   border-radius: 20px;
   box-shadow: var(--shadow-lg);
   animation: float 6s ease-in-out infinite, glowPulse 3s ease-in-out infinite;
-  opacity: 0.9;
   transform: translate(-50%, -50%);
   z-index: 2;
   border: 2px solid rgba(139, 92, 246, 0.3);
@@ -301,11 +244,7 @@
   height: 104px;
   top: 30%;
   left: 75%;
-  background: linear-gradient(
-    135deg,
-    var(--accent-pink) 0%,
-    var(--accent-primary) 100%
-  );
+  background: var(--bg-primary);
   animation-delay: 1s, 0.6s;
 }
 
@@ -314,11 +253,7 @@
   height: 104px;
   top: 55%;
   left: 30%;
-  background: linear-gradient(
-    135deg,
-    var(--accent-blue) 0%,
-    var(--accent-primary) 100%
-  );
+  background: var(--bg-primary);
   animation-delay: 2s, 1.2s;
   border-radius: 16px;
 }
@@ -328,11 +263,7 @@
   height: 81px;
   top: 70%;
   left: 70%;
-  background: linear-gradient(
-    135deg,
-    var(--accent-light) 0%,
-    var(--accent-pink) 100%
-  );
+  background: var(--bg-primary);
   animation-delay: 3s, 1.8s;
 }
 
@@ -341,11 +272,7 @@
   height: 127px;
   top: 45%;
   left: 50%;
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary) 0%,
-    var(--accent-ultralight) 100%
-  );
+  background: var(--bg-primary);
   animation-delay: 4s, 0.3s;
   opacity: 0.85;
   z-index: 3;
@@ -356,9 +283,10 @@
 /* Mini shapes for depth */
 .miniShape {
   position: absolute;
-  background: var(--accent-ultralight);
+  background: var(--bg-primary);
   border-radius: 8px;
   opacity: 0.4;
+  border: 2px solid rgba(139, 92, 246, 0.3);
 }
 
 .mini1 {
@@ -423,122 +351,6 @@
   }
 }
 
-/* Glass panels */
-.glassPanel {
-  position: absolute;
-  width: 280px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow-xl);
-  overflow: hidden;
-  backface-visibility: hidden;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  -webkit-font-smoothing: subpixel-antialiased;
-}
-
-/* Position-based styling for orbital effect */
-.glassPanel.position-center {
-  opacity: 1;
-  transform: rotateY(0deg) translateZ(300px) scale(1.048); /* 1.048 give the best approx to font size reducing blurring effect */
-  filter: blur(0);
-  z-index: 10;
-}
-
-.glassPanel.position-right {
-  opacity: 0.5;
-  transform: rotateY(65deg) translateZ(200px) translateX(150px);
-  filter: blur(0.5px);
-  z-index: 5;
-}
-
-.glassPanel.position-left {
-  opacity: 0.5;
-  transform: rotateY(-65deg) translateZ(200px) translateX(-150px);
-  filter: blur(0.5px);
-  z-index: 5;
-}
-
-.glassPanel.position-farRight {
-  opacity: 0;
-  transform: rotateY(90deg) translateZ(100px) translateX(200px);
-  z-index: 1;
-}
-
-.glassPanel.position-farLeft {
-  opacity: 0;
-  transform: rotateY(-90deg) translateZ(100px) translateX(-200px);
-  z-index: 1;
-}
-
-.glassPanel.position-back {
-  opacity: 0;
-  transform: rotateY(180deg) translateZ(0px);
-  z-index: 0;
-}
-
-/* Hover effect for center panel */
-.glassPanel.position-center:hover {
-  transform: rotateY(0deg) translateZ(310px) scale(1.15);
-  box-shadow: 0 30px 60px -15px rgba(139, 92, 246, 0.45);
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.panelTitle {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--accent-primary);
-  margin-bottom: 0.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.panelContent {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  position: relative;
-  z-index: 1;
-}
-
-.panelNodes {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  position: relative;
-  z-index: 1;
-}
-
-.node {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary) 0%,
-    var(--accent-blue) 100%
-  );
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 12px;
-  font-weight: 600;
-}
-
 /* Responsive design */
 @media (max-width: 1024px) {
   .heroGrid {
@@ -576,5 +388,67 @@
   .btnSecondary {
     width: 100%;
     justify-content: center;
+  }
+}
+
+.screenshotContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 900px;
+  z-index: 10;
+  animation: fadeInScale 1s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heroScreenshot {
+  width: 90%;
+  height: auto;
+  border-radius: 16px;
+  border: 2px solid rgba(91, 45, 244, 0.5);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(91, 45, 244, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.heroScreenshot:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(91, 45, 244, 0.2),
+    0 0 40px rgba(91, 45, 244, 0.3);
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .screenshotContainer {
+    width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .screenshotContainer {
+    width: 90%;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin-top: 2rem;
   }
 }

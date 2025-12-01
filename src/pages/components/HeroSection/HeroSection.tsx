@@ -1,40 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import clsx from "clsx";
+import React from "react";
 import styles from "./HeroSection.module.css";
-import { DEMO_URL } from "../../../../constants";
-
-// Panel data
-const panels = [
-  {
-    title: "Visual Pipeline Editor",
-    content:
-      "Build complex ML workflows with drag-and-drop simplicity. Connect components visually and see your pipeline come to life.",
-  },
-  {
-    title: "Real-time Execution",
-    content:
-      "Watch your pipelines run in real-time. Monitor progress, view logs, and get instant feedback on performance.",
-  },
-  {
-    title: "Rich Component Library",
-    content:
-      "Access pre-built components for data processing, model training, evaluation, and deployment. Customize or create your own.",
-  },
-  {
-    title: "Cloud Native",
-    content:
-      "Deploy anywhere - from local development to production clusters. Scale automatically based on your workload needs.",
-  },
-
-  {
-    title: "Version Control",
-    content:
-      "Track changes, compare versions, and collaborate seamlessly. Every pipeline is versioned and reproducible.",
-  },
-];
+import { APP_URL } from "../../../../constants";
 
 // Define node positions for connection lines
-// These match the CSS positions of the geometric shapes
 const nodePositions = [
   { id: "shape1", x: 15, y: 20 }, // top-left
   { id: "shape2", x: 75, y: 30 }, // top-right
@@ -54,77 +22,6 @@ const connections = [
 ];
 
 const HeroSection: React.FC = () => {
-  const TRANSITION_DURATION = 5500;
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Calculate position class for each panel
-  const getPanelPositionClass = (panelIndex: number) => {
-    const diff = (panelIndex - currentIndex + panels.length) % panels.length;
-
-    // Center panel
-    if (diff === 0) return "center";
-    // Right side panel
-    if (diff === 1) return "right";
-    // Left side panel
-    if (diff === panels.length - 1) return "left";
-    // Far panels, required to visualize smooth rotation
-    if (diff === panels.length - 2) return "farLeft";
-    if (diff === panels.length - 3) return "farRight";
-
-    return "back";
-  };
-
-  // Handle panel click
-  const handlePanelClick = (index: number) => {
-    setCurrentIndex(index);
-  };
-
-  // Handle dot click
-  const handleDotClick = (index: number) => {
-    setCurrentIndex(index);
-
-    // Reset the rotation interval
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-
-    // Start a new interval
-    intervalRef.current = setInterval(() => {
-      if (!isHovering) {
-        setCurrentIndex((prev) => (prev + 1) % panels.length);
-      }
-    }, TRANSITION_DURATION);
-  };
-
-  // Automatic rotation
-  useEffect(() => {
-    const startRotation = () => {
-      intervalRef.current = setInterval(() => {
-        if (!isHovering) {
-          setCurrentIndex((prev) => (prev + 1) % panels.length);
-        }
-      }, TRANSITION_DURATION);
-    };
-
-    startRotation();
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isHovering]);
-
-  const handlePanelHover = (index: number, hovering: boolean) => {
-    // Handle hover on central panel
-    if (index === currentIndex) {
-      setIsHovering(hovering);
-    }
-  };
-
   return (
     <>
       {/* Hero Section */}
@@ -134,22 +31,16 @@ const HeroSection: React.FC = () => {
             {/* Left side - Text content */}
             <div className={styles.heroContent}>
               <h1 className={styles.heroTitle}>
-                Build & Run
-                <br />
-                <span className={styles.gradientText}>ML Pipelines</span>
-                <br />
-                in Your Browser
+                Build ML and data pipelines collaboratively
               </h1>
               <p className={styles.heroDescription}>
-                No setup required. Design, test, and deploy machine learning
-                workflows with an intuitive visual interface. Transform your
-                experiments into production pipelines in minutes, not hours.
+                Tangle is an open source, platform-agnostic experimentation platform with a powerful drag-and-drop editor – no setup required.
               </p>
 
               <div className={styles.heroButtons}>
                 <button
                   className={styles.btnPrimary}
-                  onClick={() => (window.location.href = DEMO_URL)}
+                  onClick={() => (window.location.href = APP_URL)}
                 >
                   Start Building
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -162,11 +53,10 @@ const HeroSection: React.FC = () => {
                     />
                   </svg>
                 </button>
-                {/* <button className={styles.btnSecondary}>Watch Demo</button> */}
               </div>
             </div>
 
-            {/* Right side - Geometric abstraction */}
+            {/* Right side - Geometric abstraction with screenshot */}
             <div className={styles.heroVisual}>
               <div className={styles.geometricContainer}>
                 {/* Connection lines SVG */}
@@ -294,40 +184,18 @@ const HeroSection: React.FC = () => {
                 <div className={`${styles.miniShape} ${styles.mini3}`}></div>
               </div>
 
-              {/* Orbital carousel of glass panels */}
-              <div className={styles.panelsOrbit}>
-                {panels.map((panel, index) => {
-                  const positionClass = getPanelPositionClass(index);
-                  return (
-                    <div
-                      key={index}
-                      className={clsx(
-                        styles.glassPanel,
-                        styles[`position-${positionClass}`]
-                      )}
-                      data-index={index}
-                      onClick={() => handlePanelClick(index)}
-                      onMouseEnter={() => handlePanelHover(index, true)}
-                      onMouseLeave={() => handlePanelHover(index, false)}
-                    >
-                      <div className={styles.panelTitle}>{panel.title}</div>
-                      <div className={styles.panelContent}>{panel.content}</div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Orbit controls */}
-              <div className={styles.orbitControls}>
-                {[0, 1, 2, 3, 4].map((index) => (
-                  <div
-                    key={index}
-                    className={`${styles.orbitDot} ${
-                      currentIndex === index ? styles.active : ""
-                    }`}
-                    onClick={() => handleDotClick(index)}
-                  />
-                ))}
+              {/* Hero image in center */}
+              <div className={styles.screenshotContainer}>
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className={styles.heroScreenshot}
+                >
+                  <source src="/video/hero-tangle-demo.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
           </div>

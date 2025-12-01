@@ -1,10 +1,6 @@
 .ctaSection {
   padding: 5rem 0;
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary) 0%,
-    var(--accent-blue) 100%
-  );
+  background: var(--accent-primary);
   color: white;
   text-align: center;
 }
@@ -61,6 +57,21 @@
   color: var(--accent-primary, #4a90e2);
   border-color: var(--accent-primary, #4a90e2);
   text-decoration: none;
+}
+
+.buttonIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+.buttonOutline .buttonIcon {
+  filter: brightness(0) invert(1);
+}
+
+.buttonOutline:hover .buttonIcon {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(98%) saturate(3217%) hue-rotate(239deg) brightness(98%) contrast(94%);
 }
 
 .buttonPrimary {

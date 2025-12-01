@@ -3,17 +3,17 @@
 /* Shop Brand Colors */
 :root {
   /* Light mode colors */
-  --shop-brand-primary: #5433eb;
+  --shop-brand-primary: #9c83f8;
   --shop-brand-background: #ffffff;
 
   /* Primary color shades for light mode */
-  --ifm-color-primary: #5433eb;
-  --ifm-color-primary-dark: #4227d9;
-  --ifm-color-primary-darker: #3d24ce;
-  --ifm-color-primary-darkest: #321da9;
-  --ifm-color-primary-light: #6645fd;
-  --ifm-color-primary-lighter: #7151fd;
-  --ifm-color-primary-lightest: #8e71fe;
+  --ifm-color-primary: #5B2DF4;
+  --ifm-color-primary-dark: #4D1FE0;
+  --ifm-color-primary-darker: #481DD4;
+  --ifm-color-primary-darkest: #3B17AF;
+  --ifm-color-primary-light: #7349F6;
+  --ifm-color-primary-lighter: #8055F7;
+  --ifm-color-primary-lightest: #9D7BF9;
 
   /* Core colors */
   --ifm-background-color: #ffffff;
@@ -28,8 +28,8 @@
   /* Footer styling */
   --ifm-footer-background-color: #f5f6f7;
   --ifm-footer-color: var(--ifm-color-emphasis-700);
-  --ifm-footer-link-color: var(--ifm-color-emphasis-600);
-  --ifm-footer-link-hover-color: var(--ifm-color-primary);
+  --ifm-footer-link-color: var(--ifm-color-primary);
+  --ifm-footer-link-hover-color: var(--ifm-color-primary-lighter);
   --ifm-footer-title-color: var(--ifm-color-emphasis-900);
 
   /* DocSearch theming (if using Algolia DocSearch) */
@@ -48,13 +48,13 @@
   --shop-brand-background: #121212;
 
   /* Primary color shades for dark mode */
-  --ifm-color-primary: #9c83f8;
-  --ifm-color-primary-dark: #8165f6;
-  --ifm-color-primary-darker: #7456f5;
-  --ifm-color-primary-darkest: #5129f2;
-  --ifm-color-primary-light: #b7a1fa;
-  --ifm-color-primary-lighter: #c4b0fb;
-  --ifm-color-primary-lightest: #e0d7fd;
+  --ifm-color-primary: #5B2DF4;
+  --ifm-color-primary-dark: #4D1FE0;
+  --ifm-color-primary-darker: #481DD4;
+  --ifm-color-primary-darkest: #3B17AF;
+  --ifm-color-primary-light: #7349F6;
+  --ifm-color-primary-lighter: #8055F7;
+  --ifm-color-primary-lightest: #c4b5fd;
 
   /* Core dark mode colors */
   --ifm-background-color: #121212;
@@ -416,8 +416,8 @@ html[data-theme="dark"] {
 
 /* Footer link color fix for light mode */
 .footer {
-  --ifm-footer-link-color: var(--ifm-color-emphasis-700);
-  --ifm-footer-link-hover-color: var(--ifm-color-primary);
+  --ifm-footer-link-color: var(--shop-brand-primary);
+  --ifm-footer-link-hover-color: var(--ifm-color-primary-lighter);
 }
 
 [data-theme="dark"] .footer {
