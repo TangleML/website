@@ -106,7 +106,7 @@ const config: Config = {
     colorMode: {
       defaultMode: "dark",
     },
-    image: "img/icon.png",
+    image: "img/tangle_black.png",
     navbar: {
       logo: {
         alt: `${APP_NAME} Logo`,
