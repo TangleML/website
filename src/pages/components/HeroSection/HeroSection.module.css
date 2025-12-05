@@ -443,6 +443,11 @@
 }
 
 @media (max-width: 768px) {
+  .heroContainer {
+    padding-top: 2rem;
+    overflow: hidden;
+  }
+  
   .screenshotContainer {
     width: 90%;
     position: relative;

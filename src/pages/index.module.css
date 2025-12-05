@@ -547,17 +547,22 @@ html[data-theme="dark"] .repoLink:hover {
   }
 
   /* Adjust decoration for mobile */
+  .geometricDecoration {
+    overflow: hidden;
+    inset: -4rem -1rem;
+  }
+  
   .decorShape1 {
     width: 100px;
     height: 100px;
-    top: -5px;
+    top: 50px;
     right: -10px;
   }
 
   .decorShape2 {
     width: 80px;
     height: 80px;
-    bottom: -10px;
+    bottom: 40px;
     left: -15px;
   }
 
