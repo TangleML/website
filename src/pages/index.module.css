@@ -735,10 +735,14 @@ html[data-theme="dark"] .repoLink:hover {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .geometricDecoration {
+    display: none;
+  }
+
   .lightbox {
     padding: 1rem;
   }
-  
+
   .lightboxClose {
     top: -40px;
   }

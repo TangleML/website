@@ -30,11 +30,13 @@
 
 /* Hero Section */
 .hero {
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
   position: relative;
   background: var(--bg-primary);
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 
 .heroContainer {
@@ -67,7 +69,6 @@
   line-height: 1.1;
   color: var(--text-primary);
   margin-bottom: 1.5rem;
-  text-wrap: balance;
 }
 
 .heroDescription {
@@ -155,8 +156,9 @@
 /* Right side - Geometric abstraction */
 .heroVisual {
   position: relative;
-  height: 1028px;
-  perspective: 2056px;
+  height: calc(100vh - 120px);
+  max-height: 800px;
+  perspective: 1600px;
   transform-style: preserve-3d;
 }
 
@@ -164,8 +166,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1.1);
-  width: 90%;
+  transform: translate(-50%, -50%);
+  width: 100%;
   height: 100%;
   transform-style: preserve-3d;
 }
@@ -353,13 +355,20 @@
 
 /* Responsive design */
 @media (max-width: 1024px) {
+  .hero {
+    height: auto;
+    min-height: 100vh;
+  }
+
   .heroGrid {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2rem;
+    padding: 0;
   }
 
   .heroVisual {
-    height: 400px;
+    height: 50vh;
+    max-height: 500px;
   }
 
   .heroTitle {
@@ -368,6 +377,12 @@
 }
 
 @media (max-width: 768px) {
+
+  .heroContent {
+    max-width: 100%;
+    padding: 0;
+  }
+
   .heroTitle {
     font-size: 2rem;
   }
@@ -382,6 +397,7 @@
 
   .heroButtons {
     flex-direction: column;
+    margin-bottom: 0;
   }
 
   .btnPrimary,
@@ -397,7 +413,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-  max-width: 900px;
+  max-width: 700px;
   z-index: 10;
   animation: fadeInScale 1s ease-out;
   display: flex;
@@ -408,9 +424,11 @@
 .heroScreenshot {
   width: 90%;
   height: auto;
+  max-height: calc(100vh - 200px);
+  object-fit: contain;
   border-radius: 16px;
   border: 2px solid rgba(91, 45, 244, 0.5);
-  box-shadow: 
+  box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.2),
     0 0 0 1px rgba(91, 45, 244, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -418,7 +436,7 @@
 
 .heroScreenshot:hover {
   transform: scale(1.05);
-  box-shadow: 
+  box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.25),
     0 0 0 1px rgba(91, 45, 244, 0.2),
     0 0 40px rgba(91, 45, 244, 0.3);
