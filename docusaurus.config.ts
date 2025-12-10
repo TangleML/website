@@ -63,6 +63,10 @@ const config: Config = {
         theme: {
           customCss: "./src/css/custom.css",
         },
+        gtag: {
+          trackingID: 'G-LV5VBTDSV8',
+          anonymizeIP: true,
+        },
       } satisfies Preset.Options,
     ],
   ],
@@ -101,7 +105,7 @@ const config: Config = {
   },
 
   themes: ['docusaurus-theme-openapi-docs', '@docusaurus/theme-mermaid'],
-/*  
+/*
   headTags: [
     {
       tagName: 'meta',
@@ -184,8 +188,6 @@ const config: Config = {
           ],
         },
       ],
-      // copyright: "Developed by Shopify",
-      
     },
     prism: {
       theme: prismThemes.github,
