@@ -50,6 +50,12 @@
     ]
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20.0"
+  },
+  "overrides": {
+    "docusaurus-theme-openapi-docs": {
+      "react-redux": "^9.2.0",
+      "@reduxjs/toolkit": "^2.5.0"
+    }
   }
 }

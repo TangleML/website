@@ -104,6 +104,10 @@ cd tangle && backend/start_local.sh
 
 We have many exciting features planned, but we want to prioritize the features based on the user feedback.
 
+## Contributing to the docs
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for information on contributing to the docs.
+
 ## Credits
 
 The Tangle app is based on the [Pipeline Editor](https://cloud-pipelines.net/pipeline-editor) app created by [Alexey Volkov](https://github.com/Ark-kun) as part of the [Cloud Pipelines](https://github.com/Cloud-Pipelines) project.
