@@ -97,7 +97,37 @@ const config: Config = {
         ],
         useAllContextsWithNoSearchContext: true,
       },
-    ]
+    ],
+     [
+      '@sablier/docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        
+        llmsTxtFilename: 'docs/llms.txt',
+        llmsFullTxtFilename: 'docs/llms-full.txt',
+        
+        excludeImports: true,
+        removeDuplicateHeadings: true,
+        
+        ignoreFiles: [
+          'privacy_policy.md',  // Has incomplete description
+        ],
+        
+        // Document ordering following sidebar structure
+        includeOrder: [
+          'overview.mdx',
+          'install.md',
+          'getting-started/*',
+          'core-concepts/*',
+          'component-development/*',
+          'user-guide/*',
+          'reference/*',
+        ],
+        
+        description: 'Tangle is a service and web app that allows users to build and run machine learning pipelines using drag and drop without having to set up a development environment.',
+      },
+    ],
   ],
 
   markdown: {
