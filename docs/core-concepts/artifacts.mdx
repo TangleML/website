@@ -73,5 +73,36 @@ Every artifact has:
 | **Small values**           | Permanent         | Full value in database     |
 
 :::warning Data Retention
-At Shopify, artifacts containing merchant or PII data are automatically deleted after 30 days due to compliance requirements. After deletion, you'll see metadata but get 404 errors when accessing the actual data.
+Artifacts containing sensitive or regulated data may be subject to your organization's data retention policies. After deletion, metadata (size, hash) remains visible but the underlying data is no longer accessible — requests for the artifact content will return 404 errors.
+:::
+
+### Artifact visualization
+
+The **Artifacts** tab in the Pipeline Run UI can display artifact contents inline for supported file types (images, text files, CSVs, and others). This requires the backend to generate a short-lived signed URL for the artifact's storage location so your browser can fetch the file directly.
+
+#### Requirements for GCS-backed deployments
+
+When Tangle is backed by Google Cloud Storage and deployed on GKE, the backend service account must be able to sign URLs on its own behalf via the [IAM Sign Blob API](https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/signBlob). This avoids the need for a long-lived service account JSON key.
+
+Grant `iam.serviceAccounts.signBlob` to the backend service account on itself. The minimal way to do this is with a custom IAM role containing only that permission:
+
+```hcl
+resource "google_organization_iam_custom_role" "gcs_url_signer" {
+  org_id      = "<your-org-id>"
+  role_id     = "gcsUrlSigner"
+  title       = "GCS URL Signer"
+  permissions = ["iam.serviceAccounts.signBlob"]
+}
+
+resource "google_service_account_iam_member" "backend_self_sign" {
+  service_account_id = "projects/<project>/serviceAccounts/<backend-sa>@<project>.iam.gserviceaccount.com"
+  role               = google_organization_iam_custom_role.gcs_url_signer.id
+  member             = "serviceAccount:<backend-sa>@<project>.iam.gserviceaccount.com"
+}
+```
+
+Using a custom role rather than the predefined `roles/iam.serviceAccountTokenCreator` limits the permission to signing only, without granting the ability to generate arbitrary access tokens or forge JWTs on behalf of the service account.
+
+:::note
+The backend uses the GCE instance metadata server to obtain credentials for signing, so this approach requires the backend to be running on a GCE or GKE instance. Workload Identity is supported.
 :::
