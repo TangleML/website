@@ -185,6 +185,10 @@ const config: Config = {
               label: "Privacy Policy",
               to: PRIVACY_POLICY,
             },
+            {
+              label: "Trademarks",
+              to: "/img/trademarks.pdf",
+            },
           ],
         },
       ],
