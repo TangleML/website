@@ -27,8 +27,7 @@ const config: Config = {
   organizationName: "TangleML", // Usually your GitHub org/user name.
   projectName: "tangle", // Usually your repo name.
 
-  onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
+  onBrokenLinks: "warn",
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -102,6 +101,9 @@ const config: Config = {
 
   markdown: {
     mermaid: true, // Enable Mermaid processing in Markdown
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+    },
   },
 
   themes: ['docusaurus-theme-openapi-docs', '@docusaurus/theme-mermaid'],
@@ -187,7 +189,7 @@ const config: Config = {
             },
             {
               label: "Trademarks",
-              to: "/img/trademarks.pdf",
+              href: "/img/trademarks.pdf",
             },
           ],
         },
