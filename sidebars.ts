@@ -43,6 +43,7 @@ const sidebars: SidebarsConfig = {
        'core-concepts/understanding-inputs-outputs',
        'core-concepts/artifacts',
        'core-concepts/caching',
+       'core-concepts/secrets',
       ],
     },
     {

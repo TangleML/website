@@ -235,6 +235,13 @@ If the input was empty when you include it, it may automatically be filled in wi
 Empty input is not the same as excluded input. Excluded input is removed from the execution parameters, while empty input is still a value that will be passed to the task execution.
 :::
 
+#### Dynamic data arguments
+
+For arguments that require sensitive or runtime-generated values, click the **dynamic data** button (database icon) next to an argument field to switch from a static value to a dynamic data source. Two categories are available:
+
+- **Secrets**: Bind the argument to a named secret stored on the TangleML backend. The secret value is injected at execution time and never stored in the pipeline YAML. See [Managing Secrets](/docs/user-guide/secrets).
+- **System data**: Use runtime-provided values such as the pipeline run ID, pipeline name, or current timestamp — useful for generating unique output paths without hardcoding values.
+
 #### Understanding default values
 
 Default values are specified in the component's YAML definition and serve as fallback values when an input is not explicitly provided. Authors specify default values in the component specification.
@@ -335,10 +342,12 @@ When a specific Task is selected, three tabs provide comprehensive Execution inf
 <ImageAnnotation src={require("./assets/RunView_Artifacts.png").default} alt="Pipeline Run View">
 
 - Output artifacts produced by the Task
-- Download links for files
-- Preview for supported formats
-- Artifact metadata (size, type, location)
+- Inline viewer for supported formats (text, JSON, CSV/TSV, Apache Parquet, images) — click the fullscreen button to expand
+- Download links for all artifacts
+- Artifact metadata (size, type, storage location)
 </ImageAnnotation>
+
+See [Understanding Artifacts](/docs/core-concepts/artifacts) for a full list of supported viewer formats.
 
 
 #### 2. Details tab
