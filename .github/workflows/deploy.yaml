@@ -23,11 +23,14 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24.x
-          cache: npm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Build
-        run: npm run build
+        run: pnpm run build
       # 👆 Build steps
       - name: Setup Pages
         uses: actions/configure-pages@v3
