@@ -72,6 +72,17 @@ Every artifact has:
 | **Large artifacts**           | 30 days (Shopify) | Metadata only (size, hash) |
 | **Small values**           | Permanent         | Full value in database     |
 
-:::warning Data Retention
-At Shopify, artifacts containing merchant or PII data are automatically deleted after 30 days due to compliance requirements. After deletion, you'll see metadata but get 404 errors when accessing the actual data.
-:::
+
+### Inline artifact viewer
+
+The run view includes an inline artifact viewer that renders artifact contents directly in the browser. The viewer activates automatically based on the artifact's content type:
+
+| Format | Display |
+|--------|---------|
+| **Text / plain text** | Syntax-highlighted code viewer |
+| **JSON** | Collapsible tree view for objects and arrays |
+| **CSV / TSV** | Scrollable table with column headers |
+| **Apache Parquet** | Rendered as a scrollable table |
+| **Images** (PNG, JPEG, GIF, WebP, etc.) | Displayed inline |
+
+Click the **fullscreen** button to expand the viewer to fill the screen. For artifact types that cannot be rendered inline, a download link is shown instead.
