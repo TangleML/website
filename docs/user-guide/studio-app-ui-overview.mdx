@@ -9,15 +9,53 @@ import { HelpCircle, Info, Delete, Maximize2, PlusSquare, Copy, ListRestart } fr
 
 # TangleML Studio UI Guide
 
-TangleML Studio provides a comprehensive web-based interface for building, managing, and running machine learning pipelines. This guide walks you through the main areas of the application: Home screen, Editor, Pipeline Run, and Settings.
+TangleML Studio provides a comprehensive web-based interface for building, managing, and running machine learning pipelines. This guide walks you through the main areas of the application: Dashboard, Editor, Pipeline Run, and Settings.
 
-## Home screen
+## Dashboard
 
-The home screen serves as your dashboard for managing pipelines and monitoring runs across your TangleML instance.
+The Dashboard is your home base for navigating pipelines, runs, and components across your TangleML instance. A persistent sidebar on the left lets you switch between views without leaving the dashboard layout.
 
-### All runs
+### Sidebar navigation
 
-The **All Runs** section displays a comprehensive list of all pipeline runs on your TangleML instance.
+The dashboard sidebar contains the following entries:
+
+- **My Dashboard** — overview of favorites, recently viewed items, recently used components, and your runs.
+- **My Pipelines** — your draft pipelines, with a preview of favorited pipelines on top.
+- **All Runs** — every pipeline run on your TangleML instance, with a filter bar for narrowing results.
+- **Components** — a searchable browser for User Components, the Standard Library, and Published Components.
+- **Favorites** — every pipeline and run you've starred, in a single grid with search and pagination.
+- **Recently Viewed** — the pipelines and runs you've most recently opened.
+
+The bottom of the sidebar provides quick links to the documentation, the Settings page, and the application footer (About, Give feedback, Privacy policy, version).
+
+### My Dashboard
+
+The **My Dashboard** view is the landing page when you visit the dashboard. It surfaces the things you're most likely to want to come back to:
+
+- **Favorites** — up to five most recently starred pipelines or runs. Hover a row to reveal an inline **X** button that removes the item from favorites without leaving the page.
+- **Recently Viewed** — up to five most recently opened pipelines or runs, with a relative timestamp showing when you last viewed each one.
+- **Recently Used Components** — up to five most recently opened components from the Components view.
+- **My Runs** — a compact list of up to ten runs you created, ordered by most recent first.
+
+Each preview block has a **View all →** link in the heading that takes you to the full view for that section.
+
+### My Pipelines
+
+The **My Pipelines** view manages your draft pipelines stored locally in browser storage.
+
+<img src={require("./assets/HomeScreen_MyPipelines.png").default} alt="My Pipelines" style={{width: "100%", borderRadius: "6px"}} />
+
+- **Favorite Pipelines preview**: When you have one or more favorited pipelines, a preview block appears at the top of the view with up to five of them. The block is hidden automatically when you have no favorited pipelines so it doesn't take up space.
+- **Local storage**: All draft pipelines are stored in your browser's local storage. For more on local vs shared storage, see [Pipelines Persistence](/docs/getting-started/pipelines-persistence).
+- **Filter and search**: Use the filter bar to search pipelines by name. Matching text is highlighted in search results. Sort by name or last modified date.
+- **Tags**: Pipelines with tags display them directly in the list row for quick identification.
+- **Bulk operations**: Select multiple pipelines using checkboxes for bulk delete operations.
+- **Run history**: Pipelines with existing runs display a "runs" popover showing execution history.
+- **Quick actions**: Edit, duplicate, or delete pipelines directly from the list.
+
+### All Runs
+
+The **All Runs** view displays a comprehensive list of all pipeline runs on your TangleML instance.
 
 <img src={require("./assets/HomeScreen_AllRuns.png").default} alt="All Runs" style={{width: "100%", borderRadius: "6px"}} />
 
@@ -31,18 +69,25 @@ The runs list includes a filter bar with the following controls:
 - **Run status**: View the current status of each run (**Running**, **Succeeded**, **Failed**, **Cancelled**).
 - **Quick access**: Click on any run to view detailed execution information.
 
-### My Pipelines
+### Components
 
-The **My Pipelines** section manages your draft pipelines stored locally in browser storage.
+The **Components** view is a two-pane browser for every component available to your TangleML instance:
 
-<img src={require("./assets/HomeScreen_MyPipelines.png").default} alt="My Pipelines" style={{width: "100%", borderRadius: "6px"}} />
+- **Left pane**: A collapsible list grouped into **User Components**, **Library Components** (the standard library, organised as a folder tree when you're not searching), and **Published Components** (components published to the connected backend). Use the search box at the top to filter all three groups by name or author.
+- **Right pane**: When you select a component, this pane shows its name, author, digest, description, GitHub source links (when available), inputs and outputs, and a sticky source-code viewer with the full YAML definition.
 
-- **Local storage**: All draft pipelines are stored in your browser's local storage. For more on local vs shared storage, see [Pipelines Persistence](/docs/getting-started/pipelines-persistence).
-- **Filter and search**: Use the filter bar to search pipelines by name. Matching text is highlighted in search results. Sort by name or last modified date.
-- **Tags**: Pipelines with tags display them directly in the list row for quick identification.
-- **Bulk operations**: Select multiple pipelines using checkboxes for bulk delete operations.
-- **Run history**: Pipelines with existing runs display a "runs" popover showing execution history.
-- **Quick actions**: Edit, duplicate, or delete pipelines directly from the list.
+The selected component is reflected in the URL, so you can share a link to a specific component with collaborators.
+
+### Favorites
+
+The **Favorites** view shows every pipeline and run you've starred as a card grid. Each card displays the item's type, name, and ID, and reveals an **X** button on hover for removing the item from favorites.
+
+- **Search**: Filter favorites by name or ID. The search field clears search state with the inline **X** button.
+- **Pagination**: Favorites are paginated 20 per page, with previous/next controls beneath the grid when there is more than one page.
+
+### Recently Viewed
+
+The **Recently Viewed** view lists the pipelines and runs you've most recently opened, as a card grid with relative timestamps. Items are paginated 20 per page. Components are tracked separately and surface in **Recently Used Components** on My Dashboard, not in this list.
 
 ## Editor
 
@@ -197,7 +242,7 @@ When no Task is selected, the panel shows pipeline-level information:
 **Tags:**
 
 - Add up to 10 tags to a pipeline for categorisation and search.
-- Click **Add tag** to create a new tag. Tags appear in the pipeline list on the Home screen.
+- Click **Add tag** to create a new tag. Tags appear in the pipeline list on **My Pipelines** in the dashboard.
 - Click an existing tag to edit or remove it.
 
 **Pipeline inputs/outputs:**
@@ -439,7 +484,7 @@ To use a secret in a task argument, open the argument's dynamic data dropdown an
 - **Use descriptions**: Add meaningful descriptions to help others understand your pipeline
 - **Use tags**: Tag pipelines with project names or status labels to make them easier to find in the pipeline list
 - **Organize components**: Keep your **User Components** library organized by removing unused items
-- **Monitor runs**: Check the **All Runs** section to track pipeline performance over time
+- **Monitor runs**: Check the **All Runs** view in the dashboard to track pipeline performance over time
 
 ## Keyboard shortcuts & hotkeys
 
