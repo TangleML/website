@@ -72,6 +72,16 @@ Every artifact has:
 | **Large artifacts**           | 30 days (Shopify) | Metadata only (size, hash) |
 | **Small values**           | Permanent         | Full value in database     |
 
+The retention period for large artifacts is configured per deployment. When a retention period is configured, the run view displays an **Artifact Storage** warning at the top of the artifact section reminding you that artifacts older than the retention period may no longer be available in remote storage. The notice includes the configured number of days. If your deployment does not configure a retention period, this notice is suppressed.
+
+### When artifacts are no longer available
+
+Artifacts may become unavailable after their retention period has elapsed, or because of a transient storage error. When the inline viewer cannot load an artifact, an inline notice replaces the preview:
+
+- **Artifact unavailable** — the artifact could not be found in storage (HTTP 404). When a retention period is configured, the notice mentions that the artifact may have expired and includes the retention window.
+- **Failed to load artifact** — an unexpected error occurred while fetching the artifact. The HTTP status code and message are included to help diagnose the issue.
+
+Artifact metadata such as size and hash remains visible even when the underlying data is no longer available.
 
 ### Inline artifact viewer
 
