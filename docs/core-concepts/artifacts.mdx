@@ -96,3 +96,26 @@ The run view includes an inline artifact viewer that renders artifact contents d
 | **Images** (PNG, JPEG, GIF, WebP, etc.) | Displayed inline |
 
 Click the **fullscreen** button to expand the viewer to fill the screen. For artifact types that cannot be rendered inline, a download link is shown instead.
+
+#### Tabular viewer (CSV, TSV, Parquet)
+
+Tabular artifacts share a common viewer with paging and sticky headers:
+
+- **Initial load**: the first **100 rows** are rendered. The footer shows _"Showing first 100 rows"_.
+- **Load more**: click **Load more** to append another 100 rows. The viewer continues paging up to a **1,000-row preview limit**, after which the footer changes to _"Showing first 1000 rows (preview limit reached)"_.
+- **Load all**: click **Load all** to jump straight to the preview limit without paging.
+- **Sticky column headers**: headers remain visible while you scroll the table vertically. The table also scrolls horizontally when columns overflow the viewport.
+- **Column types**: when the artifact's schema is available (such as for Parquet files), each column header shows the column type below the name. Nullable columns are marked with a trailing `?` (for example `int64?`).
+
+Use the standalone artifact preview page (below) when you need to share a view of an artifact or browse it on its own dedicated page — the tabular viewer there behaves the same way but uses the full window height.
+
+### Standalone artifact preview page
+
+Every artifact has a dedicated, shareable preview page at `/artifact/<artifact-id>`. The page renders the same inline viewer as the run view but fills the browser window, which is useful for inspecting large tables or sharing a specific artifact with a collaborator.
+
+There are two ways to open the page from the run view:
+
+- **Cmd/Ctrl + click the fullscreen button** in the artifact visualizer dialog. The standalone page opens in a new browser tab.
+- **Click the Share button** in the artifact visualizer header. The full preview URL is copied to your clipboard and a "Link copied to clipboard" toast confirms the copy. Paste the link to share it with another user, or open it later.
+
+The preview URL accepts optional `type` and `name` query parameters so the page can pick the right viewer and display label without round-tripping to the run view. Anyone with access to the same TangleML backend can open the link; if the artifact has aged out of remote storage, the page shows the same **Artifact unavailable** notice described above.

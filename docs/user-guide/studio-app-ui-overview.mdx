@@ -409,12 +409,14 @@ When a specific Task is selected, three tabs provide comprehensive execution inf
 <ImageAnnotation src={require("./assets/RunView_Artifacts.png").default} alt="Pipeline Run View">
 
 - Output artifacts produced by the Task
-- Inline viewer for supported formats (text, JSON, CSV/TSV, Apache Parquet, images) — click the fullscreen button to expand
+- Inline viewer for supported formats (text, JSON, CSV/TSV, Apache Parquet, images) — click the fullscreen button to expand, or **Cmd/Ctrl + click** the fullscreen button to open the artifact on its own dedicated page in a new tab
+- **Share** button in the viewer header copies the artifact's preview URL to the clipboard so you can share or bookmark a direct link to the artifact
+- Tabular artifacts (CSV, TSV, Parquet) page in batches of 100 rows up to a 1,000-row preview limit; column headers stay sticky while scrolling, and Parquet columns show their type (with `?` marking nullable columns)
 - Download links for all artifacts
 - Artifact metadata (size, type, storage location)
 </ImageAnnotation>
 
-See [Understanding Artifacts](/docs/core-concepts/artifacts) for a full list of supported viewer formats.
+See [Understanding Artifacts](/docs/core-concepts/artifacts) for a full list of supported viewer formats and details on the standalone artifact preview page.
 
 #### 2. Details tab
 
