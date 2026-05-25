@@ -67,6 +67,7 @@ The runs list includes a filter bar with the following controls:
 - **Annotation filters**: Add key/value annotation predicates to filter runs by custom metadata attached at submission time.
 - **Active filter chips**: Active filters appear as removable chips below the filter controls. Click **Clear all** to reset.
 - **Run status**: View the current status of each run (**Running**, **Succeeded**, **Failed**, **Cancelled**).
+- **Run origin**: A small icon at the end of each row indicates where the run was submitted from — a window icon for the Tangle web app, a bot icon for programmatic submissions (CLI or AI), and a question-mark icon when the origin is unknown. Hover the icon for a tooltip describing the source.
 - **Quick access**: Click on any run to view detailed execution information.
 
 ### Components
@@ -397,6 +398,7 @@ When viewing the overall run:
 - Total duration
 - Input parameters used
 - Overall pipeline outputs
+- **Run origin**: An icon next to the **Run Info** heading shows where this run was submitted from — the Tangle web app, a programmatic source (CLI or AI), or an unknown source. Hover the icon for a tooltip describing the origin.
 
 Output nodes in the graph display their artifact values inline when the run has completed.
 
