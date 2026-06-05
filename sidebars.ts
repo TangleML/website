@@ -28,6 +28,7 @@ const sidebars: SidebarsConfig = {
         'getting-started/first-pipeline',
         'getting-started/core-concepts-and-terminology',
         'user-guide/studio-app-ui-overview',
+        'user-guide/learning-hub',
         'getting-started/pipelines-persistence',
         'component-development/adding-components',
         'user-guide/hugging-face-deployment',
