@@ -6,7 +6,7 @@ description: Find guides, FAQs, ready-made example pipelines, and tips for getti
 
 # Learning Hub
 
-The **Learning Hub** is an in-app starting point for learning TangleML. It collects documentation links, answers to common questions, ready-made example pipelines you can import in one click, and a library of tips — so you can get unstuck without leaving the app.
+The **Learning Hub** is an in-app starting point for learning TangleML. It collects documentation links, answers to common questions, ready-made example pipelines you can import in one click, interactive guided tours, and a library of tips — so you can get unstuck without leaving the app.
 
 Open it from the **Learning Hub** entry in the dashboard sidebar.
 
@@ -18,8 +18,11 @@ The Learning Hub home page brings the most useful resources together in one view
 - **Quick links** — shortcuts to key documentation pages, including Getting started, Components, Pipelines, Secrets & auth, Running pipelines, and the Schema reference, plus a link to the full docs.
 - **Tip of the day** — a single rotating tip drawn from the tips library. The tip changes each day. Use **Browse all tips** to jump to the full [Tips & Tricks](#tips--tricks) library.
 - **Featured examples** — a selection of example pipelines you can import and run (see [Example pipelines](#example-pipelines)).
+- **Featured tours** — a shortcut to a few interactive walkthroughs you can start right away (see [Guided tours](#guided-tours)).
 - **Frequently asked** — an expandable list of common questions and answers. Click a question to reveal its answer.
 - **Need more help?** — links to ask the community in GitHub Discussions or report a bug.
+
+While you are still getting set up, the home page also shows a [getting started checklist](#getting-started-checklist) that tracks your first steps.
 
 ## Example pipelines
 
@@ -34,3 +37,55 @@ Imported pipelines are saved as local draft pipelines in your browser, the same 
 The **Tips & Tricks** page is a browsable library of short tips covering keyboard shortcuts, features, and best practices. Tips are grouped into categories so you can scan for the area you're interested in.
 
 The same tips power the **Tip of the day** shown on the Learning Hub home page and in the dashboard sidebar.
+
+## Guided tours
+
+**Guided Tours** are interactive, step-by-step walkthroughs that run directly inside the editor. Each tour highlights the relevant part of the interface and explains what to do, so you learn features in context instead of from a static page.
+
+Open them from **Guided Tours** in the Learning Hub, or start one from the **Featured tours** on the Learning Hub home.
+
+### Browsing tours
+
+Tours are grouped by difficulty:
+
+- **Beginner** — start here; no prior knowledge required.
+- **Intermediate** — workflows that build on the basics.
+- **Advanced** — complex features and edge cases worth knowing.
+
+Each tour card shows its title, a short description, the area it covers, and an estimated duration. Tours you have finished are marked with a **completed** badge, and you can replay any of them with **Restart**.
+
+The tours available today are:
+
+| Tour | Level | Duration | What you'll learn |
+| --- | --- | --- | --- |
+| Build your first pipeline | Beginner | 10 min | Drag components from the library, wire tasks together, and submit your first run. |
+| Find your way around the editor | Beginner | 3 min | Get oriented with the canvas, dockable panels, properties view, canvas tools, and menu bar. |
+| Use secrets without leaking credentials | Intermediate | 5 min | Create a secret, reference it from a task, and confirm it never lands in the pipeline YAML. |
+| Group tasks into reusable subgraphs | Intermediate | 5 min | Step into a nested pipeline, navigate with breadcrumbs, and pack tasks into a subgraph. |
+
+### Taking a tour
+
+Click **Start tour** to begin. TangleML opens the editor on a temporary practice pipeline and steps you through the interface with a popover at each step. You can move forward and back at your own pace, and your position is kept in the page URL, so you can refresh or share a link to a specific step.
+
+The practice pipeline lives only in your browser and is kept separate from your own pipelines. If you want to keep what you built during a tour, you can save it as a new pipeline. Finishing a tour marks it complete and ticks the **Take a guided tour** item in the [getting started checklist](#getting-started-checklist).
+
+For the concepts behind individual tours, see [Secrets](/docs/core-concepts/secrets).
+
+## Getting started checklist
+
+New workspaces include a short onboarding flow that helps you get from zero to your first pipeline run.
+
+When you first open TangleML with a connected backend, you land on a **Welcome** screen with a link into the Learning Hub. From then on, an **Onboarding** control in the top navigation shows your progress (for example, _Onboarding · 1/4_). Open it to see the checklist:
+
+1. **Read the documentation** — skim the docs to get familiar with Tangle's core concepts.
+2. **Take a guided tour** — follow an interactive walkthrough right inside the editor.
+3. **Create a pipeline** — edit an existing pipeline or create a new one from scratch.
+4. **Run a pipeline** — execute a pipeline and watch it run end to end.
+
+Each item completes automatically as you do it — visiting the docs, finishing any [guided tour](#guided-tours), saving a pipeline, or completing a run. Your progress is stored on your backend, so it follows you across browsers.
+
+The checklist also appears on the Learning Hub home while onboarding is in progress. You can hide it at any time with **Dismiss onboarding** and pick it back up later from the Learning Hub.
+
+:::tip
+Onboarding only appears while it's relevant — once every step is complete, or after you dismiss it, the checklist and its navigation control go away.
+:::
