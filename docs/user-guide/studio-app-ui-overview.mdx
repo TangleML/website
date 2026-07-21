@@ -24,7 +24,7 @@ The dashboard sidebar contains the following entries:
 - **All Runs** — every pipeline run on your TangleML instance, with a filter bar for narrowing results.
 - **Components** — a searchable browser for User Components, the Standard Library, and Published Components.
 - **Favorites** — every pipeline and run you've starred, in a single grid with search and pagination.
-- **Recently Viewed** — the pipelines and runs you've most recently opened.
+- **Recently Viewed** — the pipelines, runs, components, and guided tours you've most recently opened.
 - **Learning Hub** — guides, FAQs, ready-made example pipelines, and tips for getting the most out of TangleML. See [Learning Hub](/docs/user-guide/learning-hub).
 
 The bottom of the sidebar provides quick links to the documentation, the Settings page, and the application footer (About, Give feedback, Privacy policy, version). A rotating **Tip of the day** also appears near the bottom of the sidebar.
@@ -34,7 +34,7 @@ The bottom of the sidebar provides quick links to the documentation, the Setting
 The **My Dashboard** view is the landing page when you visit the dashboard. It surfaces the things you're most likely to want to come back to:
 
 - **Favorites** — up to five most recently starred pipelines or runs. Hover a row to reveal an inline **X** button that removes the item from favorites without leaving the page.
-- **Recently Viewed** — up to five most recently opened pipelines or runs, with a relative timestamp showing when you last viewed each one.
+- **Recently Viewed** — up to five most recently opened items — pipelines, runs, components, or guided tours — with a relative timestamp showing when you last viewed each one.
 - **Recently Used Components** — up to five most recently opened components from the Components view.
 - **My Runs** — a compact list of up to ten runs you created, ordered by most recent first.
 
@@ -89,7 +89,9 @@ The **Favorites** view shows every pipeline and run you've starred as a card gri
 
 ### Recently Viewed
 
-The **Recently Viewed** view lists the pipelines and runs you've most recently opened, as a card grid with relative timestamps. Items are paginated 20 per page. Components are tracked separately and surface in **Recently Used Components** on My Dashboard, not in this list.
+The **Recently Viewed** view lists the items you've most recently opened — pipelines, runs, components, and guided tours — as a card grid with relative timestamps. Each card shows a coloured type pill identifying what the item is. Items are paginated 20 per page. Clicking a card takes you back to the item: pipelines open in the editor, runs open in the Pipeline Run view, components open in the Components browser with that component selected, and tours open the guided tour.
+
+**Recently Used Components** on My Dashboard is a separate list. It tracks components you've *used* in a pipeline, as distinct from components you've *viewed* in the Components browser — so a component can appear in both lists for different reasons.
 
 ## Editor
 
