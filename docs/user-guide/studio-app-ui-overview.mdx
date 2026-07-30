@@ -534,6 +534,12 @@ To use a secret in a task argument, open the argument's dynamic data dropdown an
 - Check for circular dependencies
 - Ensure required inputs are satisfied
 
+**Stuck on a loading screen:**
+
+- If a view is still loading after about 8 seconds, a **Return home** button appears beneath the spinner, under a "Stuck loading?" prompt
+- Click **Return home** to leave the loading screen and go back to your dashboard
+- This is an escape hatch for the rare cases where a large pipeline or a slow backend connection keeps a view loading longer than expected
+
 :::warning
 Remember that browser local storage has size limits. Export and backup important pipelines regularly to avoid data loss.
 :::
