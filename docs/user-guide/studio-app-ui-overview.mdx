@@ -69,6 +69,7 @@ The runs list includes a filter bar with the following controls:
 - **Active filter chips**: Active filters appear as removable chips below the filter controls. Click **Clear all** to reset.
 - **Run status**: View the current status of each run (**Running**, **Succeeded**, **Failed**, **Cancelled**).
 - **Run origin**: A small icon at the end of each row indicates where the run was submitted from — a window icon for the Tangle web app, a bot icon for programmatic submissions (CLI or AI), and a question-mark icon when the origin is unknown. Hover the icon for a tooltip describing the source.
+- **Share Run**: A share icon at the end of each row copies a direct link to that run to your clipboard, confirmed by a "Link copied to clipboard" toast. Paste the link to send a collaborator straight to the run without having to find it in the list first.
 - **Quick access**: Click on any run to view detailed execution information.
 
 ### Components
@@ -418,7 +419,8 @@ When a specific Task is selected, three tabs provide comprehensive execution inf
 - Output artifacts produced by the Task
 - Inline viewer for supported formats (text, JSON, CSV/TSV, Apache Parquet, images) — click the fullscreen button to expand, or **Cmd/Ctrl + click** the fullscreen button to open the artifact on its own dedicated page in a new tab
 - **Share** button in the viewer header copies the artifact's preview URL to the clipboard so you can share or bookmark a direct link to the artifact
-- Tabular artifacts (CSV, TSV, Parquet) page in batches of 100 rows up to a 1,000-row preview limit; column headers stay sticky while scrolling, and Parquet columns show their type (with `?` marking nullable columns)
+- Tabular artifacts (CSV, TSV, Parquet) show the artifact's exact total row and column counts in the header, and page in batches of 100 rows via **Load more** / **Load max**. The preview is bounded by a 50,000-cell budget rather than a fixed row count, so wide tables stop at fewer rows than narrow ones. Once the limit is reached, a **Download full dataset** link appears
+- Column headers stay sticky while scrolling, and Parquet columns show their type (with `?` marking nullable columns). Parquet previews also offer a **Download schema** button and are read in pages straight from storage, so large Parquet files open quickly and are not blocked by the inline preview size limit
 - Download links for all artifacts
 - Artifact metadata (size, type, storage location)
 </ImageAnnotation>

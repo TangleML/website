@@ -79,6 +79,7 @@ The retention period for large artifacts is configured per deployment. When a re
 Artifacts may become unavailable after their retention period has elapsed, or because of a transient storage error. When the inline viewer cannot load an artifact, an inline notice replaces the preview:
 
 - **Artifact unavailable** — the artifact could not be found in storage (HTTP 404). When a retention period is configured, the notice mentions that the artifact may have expired and includes the retention window.
+- **Too large to preview** — the artifact exceeds the 50 MB inline preview limit. Parquet artifacts are exempt from this limit (see [Parquet artifacts](#parquet-artifacts) below).
 - **Failed to load artifact** — an unexpected error occurred while fetching the artifact. The HTTP status code and message are included to help diagnose the issue.
 
 Artifact metadata such as size and hash remains visible even when the underlying data is no longer available.
@@ -92,20 +93,49 @@ The run view includes an inline artifact viewer that renders artifact contents d
 | **Text / plain text** | Syntax-highlighted code viewer |
 | **JSON** | Collapsible tree view for objects and arrays |
 | **CSV / TSV** | Scrollable table with column headers |
-| **Apache Parquet** | Rendered as a scrollable table |
+| **Apache Parquet** | Scrollable table, read in pages directly from storage |
 | **Images** (PNG, JPEG, GIF, WebP, etc.) | Displayed inline |
 
 Click the **fullscreen** button to expand the viewer to fill the screen. For artifact types that cannot be rendered inline, a download link is shown instead.
 
 #### Tabular viewer (CSV, TSV, Parquet)
 
-Tabular artifacts share a common viewer with paging and sticky headers:
+Tabular artifacts share a common viewer with paging, sticky headers, and a download escape hatch.
 
-- **Initial load**: the first **100 rows** are rendered. The footer shows _"Showing first 100 rows"_.
-- **Load more**: click **Load more** to append another 100 rows. The viewer continues paging up to a **1,000-row preview limit**, after which the footer changes to _"Showing first 1000 rows (preview limit reached)"_.
-- **Load all**: click **Load all** to jump straight to the preview limit without paging.
+The header reports the artifact's **exact total row and column counts** — for example `1,250,000 rows · 32 columns`. These counts describe the whole artifact, not the loaded preview: Parquet reads them from the file's metadata, and CSV/TSV counts every row with a streaming parse while retaining only the preview rows in memory.
+
+- **Initial load**: the first **100 rows** are rendered. The footer shows _"Showing first 100 of 1,250,000 rows"_, or _"Showing all N rows"_ when the entire artifact fits within the preview limit.
+- **Load more**: click **Load more** to append another 100 rows.
+- **Load max**: click **Load max** to jump straight to the preview limit without paging through it.
 - **Sticky column headers**: headers remain visible while you scroll the table vertically. The table also scrolls horizontally when columns overflow the viewport.
 - **Column types**: when the artifact's schema is available (such as for Parquet files), each column header shows the column type below the name. Nullable columns are marked with a trailing `?` (for example `int64?`).
+
+##### Preview limit
+
+The preview table renders every cell into the page, so its cost scales with **rows × columns** rather than rows alone. The viewer is therefore bounded by a **50,000-cell budget** instead of a fixed row count: the row limit is `floor(50,000 / column count)`, with an absolute backstop of **10,000 rows** so that a very narrow table still cannot flood the page. Rows are atomic — the budget is floored to whole rows, so partial rows are never shown.
+
+| Columns | Preview row limit |
+| ------- | ----------------- |
+| ≤ 5     | 10,000 (backstop) |
+| 10      | 5,000             |
+| 20      | 2,500             |
+| 100     | 500               |
+
+The same limit applies to Parquet and to CSV/TSV.
+
+##### Downloading the full dataset
+
+When the preview limit is reached and the artifact still holds more rows than are displayed, the footer shows _"Preview limit reached"_ next to a **Download full dataset** link. Use it when you need the complete data rather than a preview — remote artifacts are fetched from their signed URL and saved locally, and inline CSV/TSV values are saved directly.
+
+#### Parquet artifacts
+
+Parquet previews read the file in pages using range requests rather than downloading it up front. The viewer pulls the file's metadata plus the first rows, and each **Load more** or **Load max** fetches only the range it still needs — rows already loaded are never re-read, and the whole file is never downloaded.
+
+This has a few consequences worth knowing:
+
+- **Large Parquet files open quickly, at any size.** Because the viewer never downloads the whole file, Parquet previews are not subject to the 50 MB inline preview limit that applies to other artifact types. If the storage backend serving the artifact does not support range requests, the viewer falls back to a whole-file read and reports **Too large to preview** for files above that limit.
+- **Row and column counts are exact from the start**, because they come from the file's metadata rather than from the rows that have loaded so far.
+- **Download schema**: a **Download schema** button in the viewer header saves the file's column layout — names, types, and nullability — as a `schema.json` file.
 
 Use the standalone artifact preview page (below) when you need to share a view of an artifact or browse it on its own dedicated page — the tabular viewer there behaves the same way but uses the full window height.
 
