@@ -1,7 +1,7 @@
 ---
 id: run-view
 title: Run View
-description: Monitor pipeline runs in TangleML Studio — run tools, run details, task inspection, and subgraph drill-down.
+description: Monitor pipeline runs in TangleML Studio — run tools, run details, task artifacts and logs, and subgraph drill-down.
 ---
 
 # Run View
@@ -14,6 +14,8 @@ This page describes the current run view, which is the default for all users. A 
 
 ## Menu bar
 
+The menu bar spans the top of the run view with the TangleML logo, the pipeline's name, and the menus below it.
+
 ### Run
 
 | Item                 | Availability                                          |
@@ -25,25 +27,23 @@ This page describes the current run view, which is the default for all users. A 
 | **Cancel Run**       | While the run is in progress, and only for the user who created it |
 | **Rerun Pipeline**   | Once the run has finished                              |
 
+**Cancel Run** asks for confirmation first: the run is scheduled for cancellation, and that cannot be undone.
+
 ### View
 
-**Auto-layout** re-arranges the execution graph using the same algorithms as the editor.
+**Auto-layout** re-arranges the execution graph using the same algorithms as the editor — **Sugiyama**, **Sugiyama Centered**, **Compact**, and **Spread**.
 
 ### Windows
 
-As in the editor, the **Windows** menu toggles individual windows and offers a **Views** submenu with **Default** and **Minimal** presets.
+As in the editor, the **Windows** menu toggles individual windows and offers a **Views** submenu. The run view has two presets: **Default**, which puts **Run Tools** on the left and **Run Details** on the right, and **Minimal**, which hides every panel and leaves only the graph.
 
 ## Windows
 
 | Window                  | Contents                                                                                     |
 | ----------------------- | -------------------------------------------------------------------------------------------- |
 | **Run Tools**           | The run's actions as a set of buttons — see [Run tools](#run-tools)                            |
-| **Run Details**         | Run-level metadata: status, timings, and the pipeline's inputs and outputs                     |
+| **Run Details**         | Run-level metadata, notes, arguments, and outputs — see [Run details](#run-details)            |
 | **Properties**          | Details for the selected task — see [Task inspection](#task-inspection)                        |
-| **Task Annotations**    | Annotations set on the task by whoever authored or submitted the pipeline                      |
-| **System annotations**  | Annotations added by the execution system itself                                                |
-
-Task annotations are split into two windows deliberately: the values you set are kept separate from the bookkeeping the platform adds, so a long list of system metadata does not bury your own.
 
 Windows behave the same way as in the editor — drag to dock or float, and use the header buttons to minimize, maximize, or hide. See [Windows](/docs/user-guide/pipeline-editor#windows).
 
@@ -60,11 +60,29 @@ The **Run Tools** window collects the actions available for the run:
 
 When the window is floating it lays the tools out in a row; docked, it stacks them vertically.
 
+## Run details
+
+The **Run Details** window opens on the pipeline's name, followed by a status bar summarising how many of the run's tasks have succeeded, failed, or are still running. Beside the status sit a **View YAML** button and an overflow menu carrying the same actions as the **Run** menu — **Inspect Pipeline**, **Clone Pipeline**, **Export YAML**, and, depending on the run's state, **Cancel Run** or **Rerun Pipeline**.
+
+The rest of the window is organised into collapsible sections:
+
+- **Run Info** — run id, execution id, who created the run, and when. Where the platform knows how the run was started, a line explains its origin.
+- **Details** — the pipeline's description, its tags, and any annotations that are not platform bookkeeping.
+- **Notes** — the pipeline's own notes, plus a **Run Notes** field for this run specifically. Run notes are editable by whoever created the run and read-only for everyone else, so you can record what a run was for without touching the pipeline.
+- **Arguments** — the values this run was submitted with.
+- **Outputs** — what the run produced.
+
 ## Task inspection
 
-Click a task in the graph to fill the **Properties** window with that task's execution detail — its status, timings, arguments, output artifacts, and logs.
+Click a task in the graph to fill the **Properties** window with that task's execution detail. The panel header shows the task name and a status icon, followed by three tabs:
 
-Output nodes in the graph show a preview of their artifact directly on the node once the run has produced one, so you can read a result without opening a panel. For the full set of supported preview formats, see [Understanding Artifacts](/docs/core-concepts/artifacts).
+- **Artifacts** — the task's inputs and output artifacts. For the preview formats supported here, see [Understanding Artifacts](/docs/core-concepts/artifacts).
+- **Details** — the component behind the task, its description and interface, and its annotations. Annotations you or the pipeline author set appear under **Task Annotations**; the ones the execution system adds are kept in a separate, collapsed **System annotations** section, so a long list of platform metadata does not bury your own.
+- **Logs** — the task's container logs, alongside its execution events. **Pop out** moves the logs into their own window you can dock or resize, and a second control opens them in a new browser tab. Subgraph tasks have no logs of their own, so the tab is not shown for them.
+
+Output nodes in the graph show a preview of their artifact directly on the node once the run has produced one, so you can read a result without opening a panel.
+
+Selecting several nodes at once shows a small toolbar with **Copy**, which copies the selection so you can paste it into a pipeline in the editor. `Cmd/Alt` + `C` does the same from the keyboard.
 
 ## Subgraphs
 

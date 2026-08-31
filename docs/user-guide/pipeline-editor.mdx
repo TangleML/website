@@ -1,7 +1,7 @@
 ---
 id: pipeline-editor
 title: Pipeline Editor
-description: Build pipelines in the TangleML Studio editor using the menu bar, dockable windows, and view presets.
+description: Build pipelines in the TangleML Studio editor using the menu bar, dockable windows, canvas tools, and validation fixes.
 ---
 
 # Pipeline Editor
@@ -60,12 +60,16 @@ The **Windows** menu lists every editor window with a checkbox, so you can show 
 
 ### Node
 
-Enabled when a task is selected on the canvas:
+The **Node** menu appears only while something is selected on the canvas, and its items depend on what that something is:
 
-- **Duplicate Task**
-- **Arrange** — **Move Forward**, **Move Backward**, **Bring to Front**, **Send to Back**
-- **Unpack Subgraph** — replace a subgraph node with its constituent tasks
-- **Delete Task**
+| Item                 | Available for                                                      |
+| -------------------- | ------------------------------------------------------------------ |
+| **Duplicate Task**   | Tasks                                                               |
+| **Arrange**          | Any node — **Move Forward**, **Move Backward**, **Bring to Front**, **Send to Back** |
+| **Unpack Subgraph**  | Subgraph nodes — replaces the node with its constituent tasks         |
+| **Delete Task**      | Tasks                                                               |
+
+**Arrange** controls stacking order, which matters when nodes overlap — most often when a sticky note sits behind or in front of the tasks it annotates.
 
 ### Run controls
 
@@ -73,6 +77,26 @@ At the right of the menu bar:
 
 - **Submit Run** — a quick-run button. It is accompanied by a **Submit run with arguments** option. When the pipeline has validation problems, the button reports them — either **Pipeline has validation errors** (which blocks submission) or **Pipeline has validation warnings**.
 - **Auto-save indicator** — shows **Auto-save enabled** normally and **Saving…** while a save is in flight, so you can tell your work has been persisted without saving manually.
+
+## Keyboard shortcuts
+
+Shortcuts use **Cmd** on macOS and **Alt** elsewhere; either modifier works, so the tables below write it as `Cmd/Alt`.
+
+| Shortcut             | Action                                                     |
+| -------------------- | ---------------------------------------------------------- |
+| `Cmd/Alt` + `/`      | Toggle focus mode                                           |
+| `Cmd/Alt` + `Shift` + `L` | Auto-layout the graph                                  |
+| `Cmd/Alt` + `C`      | Copy the current selection                                  |
+| `Cmd/Alt` + `V`      | Paste at the pointer                                        |
+| `Cmd/Alt` + `Z`      | Undo                                                        |
+| `Cmd/Alt` + `Shift` + `Z` | Redo                                                   |
+| `Cmd/Alt` + `Y`      | Redo (alternative)                                          |
+| `Ctrl` + `O`         | Open a pipeline                                             |
+| `Ctrl` + `Shift` + `M` | Maximize the arguments editor in the **Properties** window |
+| `Delete` or `Backspace` | Delete the current selection                              |
+| `Esc`                | Dismiss the topmost overlay, or clear the canvas selection   |
+
+`Esc` works in layers: if a dialog, popover, or menu is open it closes that first, and only clears your canvas selection once nothing is stacked on top.
 
 ## Windows
 
@@ -99,9 +123,10 @@ Drag a window by its header to move it. Dragging toward the left or right edge d
 | **Recent Runs**       | Recent runs for this pipeline, for quick navigation                                                        |
 | **Pipeline Details**  | Pipeline-level information: name, timestamps, digest, validation status, tags, and inputs and outputs. When you are inside a subgraph the window is titled **Subgraph Details** and describes that subgraph instead |
 | **Properties**        | Context panel for the current selection. See [Task properties](#task-properties)                            |
-| **Pipeline Structure** | A tree view of the pipeline, including nested subgraphs                                                    |
-| **History**           | The undo/redo history for this editing session                                                              |
-| **Minimap**           | Canvas navigation controls and an overview map of the whole graph                                            |
+| **Pipeline Structure** | A tree view of the pipeline, including nested subgraphs and per-entity issue badges. See [Pipeline Structure](#pipeline-structure) |
+| **Fix Issues**        | Guided fixes for validation problems, one issue at a time. See [Validation and fixing issues](#validation-and-fixing-issues) |
+| **History**           | The undo/redo history for this editing session. See [History](#history)                                     |
+| **Minimap**           | An overview map of the whole graph plus zoom, fit-view, and lock controls                                     |
 | **Tip of the Day**    | A rotating usage tip                                                                                        |
 | **Debug Panel**       | Diagnostic information about editor state, useful when reporting a problem. Hidden in the **Default** view; show it from the **Windows** menu or the **All** view |
 
@@ -113,21 +138,151 @@ Alongside task nodes, the editor supports pipeline **input** and **output** node
 
 Use the **Minimap** window for navigation and the **View → Auto-layout** menu to tidy up the graph.
 
+### Adding to the canvas
+
+There are several ways to get something onto the canvas:
+
+- Drag a component from the **Component Search** window.
+- Drop a component YAML file straight onto the canvas. The component is added to the canvas and to your user component library at the same time.
+- Paste a copied selection with `Cmd/Alt` + `V`; it lands at the pointer.
+- Drag **Sticky Note**, **Input**, or **Output** out of the **Component Search** window's browse view — see [Component Search](/docs/user-guide/component-search#the-editor-window).
+
+### Replacing a task's component
+
+Drop a component onto an existing task node to swap out its component reference. Before anything changes, a **Replace Task?** dialog shows which inputs and outputs the new component adds, keeps, or removes. If any input or output disappears, the dialog warns that their connections will be lost. **Continue** applies the swap; **Cancel** leaves the task untouched.
+
+### Working with a multiple selection
+
+Hold `Shift` and drag to draw a selection box, or hold `Cmd`/`Ctrl` and click nodes to add them one at a time. A small toolbar appears next to the selection:
+
+| Button               | Effect                                                            |
+| -------------------- | ----------------------------------------------------------------- |
+| **Duplicate**        | Copy the selected nodes in place                                   |
+| **Copy**             | Copy the selection to the clipboard                                |
+| **Create Subgraph**  | Collapse the selection into a subgraph — shown for two or more tasks |
+| **Delete**           | Remove the selected nodes                                          |
+
+**Create Subgraph** opens a small form asking for a subgraph name before it collapses anything.
+
+With a multiple selection active, the **Properties** window switches to a batch view showing how many nodes are selected, a list of them, and:
+
+- **Task color** — recolor every selected task at once.
+- **Common Arguments** — arguments that all the selected tasks share. Editing one applies to the whole selection; where the tasks currently disagree, the field reads `mixed` and hovering it explains that values differ across tasks.
+- **Auto Layout Selection** — re-arrange just the selected nodes, leaving the rest of the graph alone.
+- **Create Subgraph** — the same action as the floating toolbar.
+
+### Sticky notes
+
+Sticky notes are annotation nodes that carry no execution meaning — use them to label regions of a graph or leave a note for a collaborator. Drag **Sticky Note** from the **Canvas Tools** folder in the **Component Search** window's browse view.
+
+Select a note to edit it in the **Properties** window:
+
+- **Title** and **content**, each with its own font size.
+- **Background colour** and **border colour**.
+- A **lock** toggle that freezes the note's text and colours so you cannot edit it by accident.
+- Read-only **Layout** (size, position, z-index) and **Metadata** (id, created timestamp, author) values, each copyable.
+
+Notes are resizable by dragging their edges, and their stacking order is controlled from **Node → Arrange**.
+
+### Guidelines
+
+Guidelines are horizontal or vertical lines you can route edges along, to keep a dense graph readable. They are created from the keyboard:
+
+- Hold `Shift` + `Q` and click the canvas for a **horizontal** guideline.
+- Hold `Shift` + `W` and click the canvas for a **vertical** guideline.
+
+The new guideline is selected immediately, and the **Properties** window shows its colour, its orientation, and the list of edges assigned to it. While a guideline is selected the canvas dims unassigned edges and highlights assigned ones in the guideline's colour: click an edge to assign it, click it again to unassign. Each guideline gets a distinct colour automatically.
+
+Drag a guideline to move it; the edges assigned to it follow. Delete it from the **Properties** window, and the edges revert to their normal routing.
+
 ## Task properties
 
-Select a task to populate the **Properties** window. It has three tabs:
+Select a task to populate the **Properties** window. It has three tabs.
 
-- **Arguments** — the task's inputs and outputs, with per-argument controls for copying, resetting to the default, and excluding an argument from execution.
-- **Config** — execution settings for the task, including cache behaviour and compute resources.
-- **Annotations** — key/value metadata attached to the task.
+### Arguments
+
+Every input the component declares, with its type and its current value. Each row has a lightning-bolt button that opens a menu of ways to fill the argument:
+
+| Item                  | Effect                                                                       |
+| --------------------- | ---------------------------------------------------------------------------- |
+| **Reset to Default**  | Restore the component's declared default                                      |
+| **Unset Argument**    | Clear the value entirely                                                      |
+| **Dynamic Data**      | Resolve the value at run time rather than hard-coding it — see below            |
+| **Connect to…**       | Wire the input to a matching upstream output, grouped by source node and labelled with each port's type |
+| **Create Input**      | Create a pipeline-level input for this argument and connect it in one step      |
+
+**Dynamic Data** covers values that should not be baked into the pipeline definition:
+
+- **Select Secret…** opens a picker over the secrets available to you, so the pipeline stores a reference rather than the secret itself. See [Secrets](/docs/core-concepts/secrets).
+- The remaining entries are values the platform supplies at run time.
+
+For long or structured values, the arguments editor opens a code editor with syntax highlighting. It picks a language from the argument's type and lets you override it — JSON, YAML, Python, JavaScript, TypeScript, HTML, CSS, SQL, Markdown, Shell, or plain text. `Ctrl` + `Shift` + `M` maximizes the editor while you work in it.
+
+Alongside the tabs, arguments show a validation indicator when a required value is missing or a connection no longer resolves.
+
+### Config
+
+Execution settings for the selected task:
+
+- **Task color** — a colour for the node on the canvas, which also drives the batch recolour in a multiple selection.
+- **Disable cache** — opt this task out of caching. Not shown for subgraph tasks. See [Caching](/docs/core-concepts/caching).
+- **Collapse node** — draw the node in a condensed form on the canvas.
+- **Compute resources** — cloud provider and per-provider resource settings. Choosing a provider swaps in that provider's fields; switching provider clears the fields belonging to the old one.
+
+### Annotations
+
+Key/value metadata attached to the task, with your own annotations kept separate from the ones the platform maintains.
 
 Beneath the tabs, an **Actions** section collects the operations available for the selected task.
 
+## Validation and fixing issues
+
+The editor validates the pipeline continuously. The **Pipeline Details** window summarises the result as, for example, `2 errors, 1 warning`. Click the summary to expand the full list, or click **Fix** to open the **Fix Issues** window.
+
+**Fix Issues** walks the pipeline's issues one at a time. A header shows your position (`3 of 7`) with **Previous issue** and **Next issue** buttons; moving between issues also navigates the canvas to the entity concerned, including into a subgraph when the issue is nested. When everything validates, the window reads **No issues to fix**.
+
+Each issue shows its severity and message, followed by whatever fix applies to it:
+
+| Problem                                             | Offered fix                                                   |
+| --------------------------------------------------- | ------------------------------------------------------------- |
+| A pipeline input has no value                       | Enter the value inline                                         |
+| A required task input is unset                      | Supply the input                                               |
+| A task, component, input, or output has an empty name | Rename it inline                                              |
+| Two inputs or two outputs share a name              | Rename one of them                                             |
+| A task has no component reference                   | **Delete Task**                                                 |
+| An input or output is unconnected                   | **Delete Input** / **Delete Output**                            |
+| A connection points at something that no longer exists | Clear the broken reference                                    |
+| A connection is left dangling at one end            | **Delete Binding**                                              |
+| The component could not be loaded from its source   | Guidance to check the component URL or your connection, then reload |
+| A required launcher annotation is missing           | Guidance to fill it in on the task's **Config** tab             |
+| The graph contains a circular dependency            | Guidance — cycles have to be broken by hand                     |
+| The pipeline has no tasks                           | Guidance to add tasks from the component library                |
+
+Issues that cannot be fixed automatically say so rather than offering a button that would not help.
+
+## Pipeline Structure
+
+The **Pipeline Structure** window is a tree of the pipeline: the root pipeline, its tasks, and its subgraphs nested inside one another. The branch you are currently editing is highlighted, and the tree expands to follow you as you navigate into subgraphs.
+
+Entities with validation problems carry a badge — red with a total count when there are errors, amber with a count when there are only warnings — so you can see which branch of a large pipeline needs attention without expanding all of it. Expanding an entity lists its issues; clicking one selects it and navigates the canvas to it, the same way the **Fix Issues** window does.
+
+## History
+
+The **History** window lists every change in this editing session, most recent last, with the initial state marked at the top. Its toolbar has undo and redo buttons, a counter reading `undone / total`, and a **Clear history** button that discards the recorded history.
+
+Undo history is scoped to the pipeline you are editing. The most recent changes are saved in the browser and restored when you reopen the pipeline, so a reload does not cost you your last few undos.
+
 ## Subgraphs
 
-A group of tasks can be collapsed into a subgraph node, which keeps large pipelines readable. Double-click a subgraph node to navigate into it; the **Pipeline Details** window becomes **Subgraph Details** while you are inside, and the **Pipeline Structure** window shows where you are in the nesting.
+A group of tasks can be collapsed into a subgraph node, which keeps large pipelines readable. Select two or more tasks and use **Create Subgraph** from the floating selection toolbar or the **Properties** window.
+
+Double-click a subgraph node to navigate into it; the **Pipeline Details** window becomes **Subgraph Details** while you are inside, and the **Pipeline Structure** window shows where you are in the nesting.
 
 To flatten a subgraph back into its individual tasks, select it and choose **Node → Unpack Subgraph**.
+
+## Opening a pipeline
+
+Landing in the editor without a pipeline shows an **Open Pipeline** panel with your pipeline folders, so you can pick one without going back to the dashboard. The same picker is available at any time from **File → Open** or with `Ctrl` + `O`.
 
 ## Switching to the legacy editor
 
