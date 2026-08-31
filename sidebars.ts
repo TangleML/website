@@ -36,8 +36,18 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Studio Interface',
+
+      items: [
+        'user-guide/pipeline-editor',
+        'user-guide/run-view',
+        'user-guide/component-search',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Core Concepts',
-      
+
       items: [
        'core-concepts/what-are-components',
        'core-concepts/tasks-and-executions',

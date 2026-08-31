@@ -11,6 +11,15 @@ import { HelpCircle, Info, Delete, Maximize2, PlusSquare, Copy, ListRestart } fr
 
 TangleML Studio provides a comprehensive web-based interface for building, managing, and running machine learning pipelines. This guide walks you through the main areas of the application: Dashboard, Editor, Pipeline Run, and Settings.
 
+:::info Editor and run view versions
+Studio ships two generations of the editor and run view, and you can switch between them with the version toggle. The **current** experience is the default, and is documented on its own pages:
+
+- [Pipeline Editor](/docs/user-guide/pipeline-editor)
+- [Run View](/docs/user-guide/run-view)
+
+The [Editor](#editor) and [Pipeline Run view](#pipeline-run-view) sections below describe the **legacy** experience, which is still reachable through the same toggle.
+:::
+
 ## Dashboard
 
 The Dashboard is your home base for navigating pipelines, runs, and components across your TangleML instance. A persistent sidebar on the left lets you switch between views without leaving the dashboard layout.
@@ -74,12 +83,11 @@ The runs list includes a filter bar with the following controls:
 
 ### Components
 
-The **Components** view is a two-pane browser for every component available to your TangleML instance:
+The **Components** view searches every component source available to your TangleML instance at once — the standard library, components published to the connected backend, registered external libraries, and your own user components — and ranks the matches in a single list. Results are badged with the source they came from, sources can be filtered individually, and an optional AI search reranks the top candidates for you.
 
-- **Left pane**: A collapsible list grouped into **User Components**, **Library Components** (the standard library, organised as a folder tree when you're not searching), and **Published Components** (components published to the connected backend). Use the search box at the top to filter all three groups by name or author.
-- **Right pane**: When you select a component, this pane shows its name, author, digest, description, GitHub source links (when available), inputs and outputs, and a sticky source-code viewer with the full YAML definition.
+Selecting a component opens a detail pane with its description, inputs and outputs, and full source definition. The selected component is reflected in the URL, so you can share a link to a specific component with collaborators.
 
-The selected component is reflected in the URL, so you can share a link to a specific component with collaborators.
+See [Component Search](/docs/user-guide/component-search) for the full guide.
 
 ### Favorites
 
@@ -321,7 +329,7 @@ Empty input is not the same as excluded input. Excluded input is removed from th
 
 For arguments that require sensitive or runtime-generated values, click the **dynamic data** button (database icon) next to an argument field to switch from a static value to a dynamic data source. Two categories are available:
 
-- **Secrets**: Bind the argument to a named secret stored on the TangleML backend. The secret value is injected at execution time and never stored in the pipeline YAML. See [Managing Secrets](/docs/user-guide/secrets).
+- **Secrets**: Bind the argument to a named secret stored on the TangleML backend. The secret value is injected at execution time and never stored in the pipeline YAML. See [Managing Secrets](/docs/core-concepts/secrets).
 - **System data**: Use runtime-provided values such as the pipeline run ID, pipeline name, or current timestamp — useful for generating unique output paths without hardcoding values.
 
 #### Understanding default values
@@ -456,7 +464,7 @@ See [Understanding Artifacts](/docs/core-concepts/artifacts) for a full list of 
 
 ## Settings
 
-The Settings page is accessible from the top bar and provides a sidebar layout with four sections:
+The Settings page is accessible from the top bar and provides a sidebar layout with the following sections:
 
 ### Backend
 
@@ -487,6 +495,16 @@ Store credentials for use in pipeline component arguments. Secrets are encrypted
 :::tip
 To use a secret in a task argument, open the argument's dynamic data dropdown and select **Secret**, then choose the secret by name.
 :::
+
+### AI Configuration
+
+Configure the AI provider that powers Studio's AI-assisted features, such as AI search in [Component Search](/docs/user-guide/component-search):
+
+- **API base URL**: The endpoint of an OpenAI-compatible provider.
+- **API key**: The token for that provider. The field is masked, with a show/hide control.
+- **Model**: The model id to use. You can type one directly or pick from a list of common models.
+
+Until a provider is configured, AI-assisted features stay disabled and say so in place — ordinary search and editing are unaffected.
 
 ## Best practices
 

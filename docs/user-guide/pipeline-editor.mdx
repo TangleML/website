@@ -1,0 +1,136 @@
+---
+id: pipeline-editor
+title: Pipeline Editor
+description: Build pipelines in the TangleML Studio editor using the menu bar, dockable windows, and view presets.
+---
+
+# Pipeline Editor
+
+The pipeline editor is where you assemble, configure, and submit pipelines. It is built around a menu bar at the top, an infinite canvas in the middle, and a set of **windows** you can show, hide, dock, or float around the canvas.
+
+:::info
+This page describes the current editor, which is the default for all users. A legacy editor is still available — see [Switching to the legacy editor](#switching-to-the-legacy-editor) below. The legacy layout is documented in the [Studio UI Guide](/docs/user-guide/studio-app-ui-overview#editor).
+:::
+
+## Menu bar
+
+The menu bar spans the top of the editor. On the left it shows the TangleML logo (a link back to your dashboard), the current pipeline name, and the menus. On the right it shows the run controls.
+
+Hover the pipeline name to reveal a pencil button that opens the **Rename Pipeline** dialog.
+
+### File
+
+| Item                | Description                                                        |
+| ------------------- | ------------------------------------------------------------------ |
+| **Open**            | Open another pipeline without leaving the editor                    |
+| **Save**            | Save the current pipeline                                           |
+| **Save as**         | Save a copy under a new name                                        |
+| **Rename**          | Rename the current pipeline                                         |
+| **New pipeline**    | Start a fresh, empty pipeline                                       |
+| **Import**          | Load a pipeline from a file or by pasting YAML                       |
+| **Export**          | Download the pipeline as a YAML file                                 |
+| **Move to folder**  | Move the pipeline into a pipeline folder                             |
+| **Delete pipeline** | Delete the pipeline, after a confirmation prompt                     |
+
+### View
+
+- **Auto-layout** — re-arrange the graph using one of four algorithms: **Sugiyama**, **Sugiyama Centered**, **Compact**, or **Spread**. Sugiyama is bound to a keyboard shortcut, shown next to the item.
+- **View YAML** — open the full pipeline definition in a fullscreen, read-only viewer.
+- **Focus mode** — a checkbox that hides surrounding chrome so you can concentrate on the canvas. Also available via a keyboard shortcut.
+
+### Runs
+
+- **Submit Run** — submit the pipeline as-is.
+- **Submit with Arguments** — open a dialog to review and set argument values before submitting.
+
+### Components
+
+- **Explore library** — open the component browser.
+- **Add component** — add a new component to your user library.
+
+### Windows
+
+The **Windows** menu lists every editor window with a checkbox, so you can show or hide each one individually. A **Views** submenu applies a whole layout at once:
+
+| Preset      | Effect                                                                 |
+| ----------- | ---------------------------------------------------------------------- |
+| **Default** | The standard working layout                                            |
+| **All**     | Every window visible, including diagnostics panels                     |
+| **Minimal** | Hide all windows, leaving only the canvas                               |
+
+### Node
+
+Enabled when a task is selected on the canvas:
+
+- **Duplicate Task**
+- **Arrange** — **Move Forward**, **Move Backward**, **Bring to Front**, **Send to Back**
+- **Unpack Subgraph** — replace a subgraph node with its constituent tasks
+- **Delete Task**
+
+### Run controls
+
+At the right of the menu bar:
+
+- **Submit Run** — a quick-run button. It is accompanied by a **Submit run with arguments** option. When the pipeline has validation problems, the button reports them — either **Pipeline has validation errors** (which blocks submission) or **Pipeline has validation warnings**.
+- **Auto-save indicator** — shows **Auto-save enabled** normally and **Saving…** while a save is in flight, so you can tell your work has been persisted without saving manually.
+
+## Windows
+
+Editor panels are windows rather than fixed sidebars. Each window can be docked to the left or right edge, floated over the canvas, minimized, maximized, or hidden. Your layout is saved in the browser and restored on your next visit.
+
+### Window controls
+
+Every window header carries a set of buttons:
+
+| Control                  | Description                                                        |
+| ------------------------ | ------------------------------------------------------------------ |
+| **Minimize** / **Expand** | Collapse a docked window to its title bar, or expand it again      |
+| **Maximize** / **Restore** | Expand a window to fill the available area, or return it to its previous size |
+| **Hide**                 | Remove the window from view; bring it back from the **Windows** menu |
+
+Drag a window by its header to move it. Dragging toward the left or right edge docks it there; dragging away from an edge floats it over the canvas. Docked windows on the same side stack vertically.
+
+### Available windows
+
+| Window                | Contents                                                                                                  |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Component Search**  | Search for components across every available source and drop them onto the canvas. See [Component Search](/docs/user-guide/component-search) |
+| **Runs & Submissions** | Submit the current pipeline. If you are not signed in, this window offers a sign-in button instead          |
+| **Recent Runs**       | Recent runs for this pipeline, for quick navigation                                                        |
+| **Pipeline Details**  | Pipeline-level information: name, timestamps, digest, validation status, tags, and inputs and outputs. When you are inside a subgraph the window is titled **Subgraph Details** and describes that subgraph instead |
+| **Properties**        | Context panel for the current selection. See [Task properties](#task-properties)                            |
+| **Pipeline Structure** | A tree view of the pipeline, including nested subgraphs                                                    |
+| **History**           | The undo/redo history for this editing session                                                              |
+| **Minimap**           | Canvas navigation controls and an overview map of the whole graph                                            |
+| **Tip of the Day**    | A rotating usage tip                                                                                        |
+| **Debug Panel**       | Diagnostic information about editor state, useful when reporting a problem. Hidden in the **Default** view; show it from the **Windows** menu or the **All** view |
+
+## Canvas
+
+The canvas is your workspace for building the pipeline graph. Tasks appear as nodes with inputs on the left and outputs on the right; drag from an output handle to an input handle to connect them.
+
+Alongside task nodes, the editor supports pipeline **input** and **output** nodes for pipeline-level parameters and results, and **subgraph** nodes for nested pipelines.
+
+Use the **Minimap** window for navigation and the **View → Auto-layout** menu to tidy up the graph.
+
+## Task properties
+
+Select a task to populate the **Properties** window. It has three tabs:
+
+- **Arguments** — the task's inputs and outputs, with per-argument controls for copying, resetting to the default, and excluding an argument from execution.
+- **Config** — execution settings for the task, including cache behaviour and compute resources.
+- **Annotations** — key/value metadata attached to the task.
+
+Beneath the tabs, an **Actions** section collects the operations available for the selected task.
+
+## Subgraphs
+
+A group of tasks can be collapsed into a subgraph node, which keeps large pipelines readable. Double-click a subgraph node to navigate into it; the **Pipeline Details** window becomes **Subgraph Details** while you are inside, and the **Pipeline Structure** window shows where you are in the nesting.
+
+To flatten a subgraph back into its individual tasks, select it and choose **Node → Unpack Subgraph**.
+
+## Switching to the legacy editor
+
+A version toggle in the editor lets you move between the current and legacy editors for the same pipeline. Hover it to see **Switch to legacy editor**; from the legacy editor the same control reads **Switch to new editor**. Both editors read and write the same pipeline, so you can switch back and forth without losing work.
+
+The first time you land in the current editor, a short welcome message points out the toggle. Dismiss it and it will not reappear.

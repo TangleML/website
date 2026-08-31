@@ -1,0 +1,73 @@
+---
+id: component-search
+title: Component Search
+description: Search across every component source available to your TangleML instance, filter by source, and optionally rerank results with AI.
+---
+
+# Component Search
+
+Component Search is the **Components** view in the dashboard. It searches every component source available to you at once — the standard library, components published to your backend, external libraries you have registered, and your own user components — and presents the matches in a single ranked list.
+
+The same search is available inside the pipeline editor as the **Component Search** window, so you can find and place a component without leaving the canvas. See [Pipeline Editor → Windows](/docs/user-guide/pipeline-editor#windows).
+
+## Searching
+
+Type into the search box at the top of the view. The placeholder suggests the range of queries that work:
+
+> e.g. `train_test_split`, `pandas`, `clean up my data`
+
+Search matches against several parts of a component, not just its name:
+
+- Component **name**
+- **Description**
+- **Inputs and outputs**, including their types
+- **Implementation** details
+- **Metadata**
+
+Each result explains why it matched, so a hit on an input type reads differently from a hit on the name. Your query is reflected in the URL, so you can bookmark or share a search.
+
+When nothing matches, the view suggests alternative searches based on the component sources you have loaded.
+
+## Sources
+
+Every result carries a badge naming where the component came from:
+
+| Source         | Meaning                                                        |
+| -------------- | -------------------------------------------------------------- |
+| **Standard**   | The curated standard library that ships with TangleML           |
+| **Published**  | Components published to the connected backend. See [Published Components Library](/docs/component-development/published-components-library) |
+| **User**       | Your own components                                             |
+| *Library name* | A registered external library, badged with that library's name  |
+
+Components that appear in more than one source are shown once, under the highest-priority source.
+
+You can switch individual sources off to narrow a search, and re-enable them all in one action. The active source filters are stored in the URL alongside the query.
+
+## AI search
+
+Next to the search box is an **AI search** button (a sparkle icon). It takes the top candidates from your current search and reranks them with a language model, which helps when you know what you want the component to *do* but not what it is called.
+
+Reranked results gain a relevance percentage so you can see how confident the ranking is.
+
+AI search requires an OpenAI-compatible provider. Until one is configured, the button is disabled and the view explains that **AI search unavailable** — ordinary search results are unaffected. Configure a provider under **Settings → AI Configuration**, where you set the API base URL, API key, and model.
+
+:::note
+AI search reranks a bounded set of candidates that your query already matched locally. It reorders and explains results — it does not reach beyond the component sources you have loaded.
+:::
+
+## Component details
+
+Selecting a result opens a detail pane showing the component's description, inputs and outputs, and full source definition. From the pane header you can:
+
+- **Copy component link** — a shareable URL that reopens the view with this component selected
+- **Copy component to clipboard** — the component definition itself
+- **Close component details**
+
+The pane also shows the component's **prefilled description** — the description its author wrote — and offers a **Generate with AI** button that writes an AI description for components whose own documentation is thin. Generating a description is optional and requires the same AI provider configuration as AI search.
+
+## Related components
+
+Alongside search results, the view surfaces two kinds of suggestion to help you assemble a pipeline rather than just find one component:
+
+- **Collections** — registered libraries that contain matching components, with a count and a preview of the component names inside.
+- **Compatible components** — components whose types line up with your current selection. Each suggestion is labelled **Can use outputs** (it accepts what your component produces) or **Can provide inputs** (it produces what your component needs), and lists the matching types.
