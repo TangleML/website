@@ -8,7 +8,7 @@ description: Search across every component source available to your TangleML ins
 
 Component Search is the **Components** view in the dashboard. It searches every component source available to you at once — the standard library, components published to your backend, external libraries you have registered, and your own user components — and presents the matches in a single ranked list.
 
-The same search is available inside the pipeline editor as the **Component Search** window, so you can find and place a component without leaving the canvas. See [Pipeline Editor → Windows](/docs/user-guide/pipeline-editor#windows).
+The same search is available inside the pipeline editor as the **Component Search** window, so you can find and place a component without leaving the canvas — see [The editor window](#the-editor-window).
 
 ## Searching
 
@@ -64,6 +64,32 @@ Selecting a result opens a detail pane showing the component's description, inpu
 - **Close component details**
 
 The pane also shows the component's **prefilled description** — the description its author wrote — and offers a **Generate with AI** button that writes an AI description for components whose own documentation is thin. Generating a description is optional and requires the same AI provider configuration as AI search.
+
+## The editor window
+
+Inside the pipeline editor, the same search runs in the **Component Search** window. It is narrower than the dashboard view and geared towards placing components rather than reading about them, so it differs in a few ways.
+
+### Browsing
+
+Leave the search box empty and the window shows a browsable tree instead of a result list:
+
+| Folder                | Contents                                                                 |
+| --------------------- | -------------------------------------------------------------------------- |
+| **Canvas Tools**      | **Sticky Note** — an annotation node that carries no execution meaning        |
+| **Inputs & Outputs**  | **Input** and **Output** nodes for pipeline-level parameters and results      |
+| *Your component sources* | One folder per source, expandable to the components inside                |
+
+Drag anything from the tree onto the canvas to place it. Dropping a component onto an existing task swaps that task's component instead — see [Replacing a task's component](/docs/user-guide/pipeline-editor#replacing-a-tasks-component).
+
+### Searching from the editor
+
+Type into the box and the tree is replaced by ranked results, which match against the same fields as the dashboard view. Results appear as you type, without submitting.
+
+Above the results:
+
+- **Add Component** — opens the **Add Component** dialog, which adds a component to your user library from a **File**, a **URL**, or a **New** component you write in place. See [Adding Components](/docs/component-development/adding-components).
+- A sparkle button reranks the current results with AI, exactly as **AI search** does in the dashboard. While it works, the window reports its progress; the button is disabled when no AI provider is configured or when there is nothing to rerank.
+- A row of source icons filters results by source. Click an icon to switch that source off, and re-enable them all in one action.
 
 ## Related components
 
