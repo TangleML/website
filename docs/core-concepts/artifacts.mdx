@@ -95,8 +95,17 @@ The run view includes an inline artifact viewer that renders artifact contents d
 | **CSV / TSV** | Scrollable table with column headers |
 | **Apache Parquet** | Scrollable table, read in pages directly from storage |
 | **Images** (PNG, JPEG, GIF, WebP, etc.) | Displayed inline |
+| **URL** | The link itself, followable and copyable — see [URL artifacts](#url-artifacts) |
+
+The viewer picks a renderer from the artifact's declared type, and falls back to the file extension of the artifact's location when no type is declared. Common aliases are understood, so `txt`, `log`, `yaml`, `yml`, and `xml` render as text; `uri` and `link` as a URL; `png`, `jpg`, `svg`, and the other image extensions as images; `json` as JSON; and `parquet` or `table` as Parquet.
 
 Click the **fullscreen** button to expand the viewer to fill the screen. For artifact types that cannot be rendered inline, a download link is shown instead.
+
+#### URL artifacts
+
+A component whose output is a location rather than data — a deployed endpoint, a dashboard, a file in another system — can declare it as a URL artifact. The viewer renders it as the link itself, in a monospace font, alongside a **Copy URL** button that copies it to the clipboard. Following the link opens it in a new tab.
+
+Only absolute `http` and `https` URLs are treated as links. A value that is not a usable URL is shown verbatim under a **Not a valid URL** note, so you can still see what the component actually wrote, and an empty value reads as **No data**.
 
 #### Tabular viewer (CSV, TSV, Parquet)
 
@@ -109,6 +118,7 @@ The header reports the artifact's **exact total row and column counts** — for 
 - **Load max**: click **Load max** to jump straight to the preview limit without paging through it.
 - **Sticky column headers**: headers remain visible while you scroll the table vertically. The table also scrolls horizontally when columns overflow the viewport.
 - **Column types**: when the artifact's schema is available (such as for Parquet files), each column header shows the column type below the name. Nullable columns are marked with a trailing `?` (for example `int64?`).
+- **Structured cells**: a cell holding a nested object or array — common in Parquet — is rendered as compact JSON (for example `{"locale":"en","limit":3}`) rather than as a placeholder, and the full value is available in the cell's tooltip.
 
 ##### Preview limit
 

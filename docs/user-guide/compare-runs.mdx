@@ -1,0 +1,118 @@
+---
+id: compare-runs
+title: Compare Runs
+description: Compare two pipeline runs side by side in TangleML Studio — structured diff, YAML diff, graph diff, run metadata, artifacts, and logs.
+---
+
+# Compare Runs
+
+Comparing runs answers a question the run view alone cannot: *what is different between these two executions?* Pick two runs and Studio aligns them task by task, showing which tasks were added, removed, or configured differently, which arguments changed, and which outputs differ.
+
+:::info
+Compare runs is enabled by default for everyone. If you would rather not see the run-selection checkboxes on the run list, turn **Compare runs** off under **Settings → Beta Features**.
+:::
+
+## Opening a comparison
+
+There are two ways in:
+
+- **From the run list.** Each row on the **All Runs** page has a checkbox. Select runs and a floating bar appears at the bottom of the list with a **Compare** button. The button stays disabled until exactly two runs are selected — hover it and it explains *"Select exactly 2 runs to compare"*.
+- **From a run.** In the run view, **Run → Compare with another run…** opens the comparison with that run already loaded as side **A**, leaving you to pick **B**.
+
+The two runs are labelled **A** and **B** throughout, and each label keeps its own colour so a value is always attributable to a run at a glance.
+
+## Choosing the runs
+
+The header carries a pill for each side. An empty side shows **Select run A** / **Select run B**, which opens a run picker with:
+
+- A search box — **Search by pipeline name…**
+- A **Date range (UTC)** filter
+- The run already chosen on the other side excluded from the list, so you cannot compare a run against itself by accident
+
+Once a side holds a run, its pill shows the run's name and id, and links to that run in a new tab. Two small buttons sit beside it: **Change run** reopens the picker, and **Clear run** empties the side.
+
+Between the pills, **Swap runs** exchanges A and B — useful when the diff reads more naturally in the other direction. It is available only once both sides are filled.
+
+At the right of the header, **Copy link to this comparison** copies the current URL, and **Close comparison** returns you to the run list. Both runs live in the URL, so a link you share opens the same comparison for a colleague.
+
+### Comparing with only one run selected
+
+With a single run selected, the views render that run on its own rather than an empty diff — every task reads as unchanged, and the summary counts and **Show unchanged** control are hidden because there is nothing yet to filter. Pick a second run and the comparison fills in.
+
+## Run metadata
+
+Above the tabs, a collapsible **Run metadata** section reports differences in how the two runs were started and how they turned out:
+
+| Field | Notes |
+| ----- | ----- |
+| **author** | Who created each run |
+| **created** | When each run was created |
+| **status** | Each run's execution status |
+| **duration** | How long each run took |
+| **Run annotations** | Annotations that differ between the runs |
+| **Run arguments** | Argument values that differ between the runs |
+
+The section header carries a *"N changed"* badge so you can tell whether it is worth expanding.
+
+Two things are deliberately excluded from this comparison:
+
+- **Run notes and tags** are free text a person edits on the run afterwards. They say nothing about what the run did, so a difference in them is not reported.
+- **Duration** counts as a difference only when the gap is both large in absolute terms and large in proportion — otherwise every pair of runs would report a difference, since no two executions take exactly the same time.
+
+## Structured tab
+
+The **Structured** tab is the default view: a per-entity list of what differs, grouped into **Inputs**, **Tasks**, and **Outputs**.
+
+A summary row above the list counts the entities that are **added**, **removed**, **changed**, and **unchanged**, plus a separate count for tasks whose configuration matches but whose **outcome differs** between runs.
+
+By default only differences are listed. **Show unchanged** reveals the rest, which is useful when you want the full shape of the pipeline rather than just the delta. When both runs are identical the tab reports **No differences**.
+
+Expand a task row for its detail:
+
+- **Status** for each side, side by side.
+- **Cache** — whether caching was disabled, when that changed between runs.
+- **Arguments** — the argument values that differ.
+- **Execution settings** — execution options that differ.
+- **Annotations** — task annotations that differ.
+- **Artifacts** — a collapsible section listing the task's output artifacts on both sides. See [Comparing artifacts](#comparing-artifacts).
+- **Compare logs** — opens a side-by-side log dialog for the two executions of that task. Subgraph tasks have no logs of their own, so the button is not offered for them.
+
+When a task's configuration and outcome both match, the detail says so and points you at **Artifacts** to compare what each run actually produced.
+
+Pipeline inputs and outputs expand in the same way, showing each side's value.
+
+### Comparing artifacts
+
+The **Artifacts** section aligns each task's output artifacts by name and marks each one as unchanged, changed, **Only in A**, or **Only in B**. Where at least one side is previewable, a **Compare** button opens both artifacts side by side in a dialog; for text-like artifacts the dialog shows a line-by-line diff.
+
+:::note
+Artifacts are compared using what the run listing reports about their contents — the inline value, the total size, and whether the artifact is a directory. Artifact ids are minted per execution, so two runs that produced byte-identical output would always look different if ids were used. The consequence of comparing on content metadata is that a same-size file with different bytes reads as unchanged. Open the artifacts themselves when you need certainty.
+:::
+
+## YAML tab
+
+The **YAML** tab diffs the two runs' pipeline definitions as raw YAML, in a side-by-side editor. Use it when a difference is easier to see in the source than in the structured list, or when a run has no graph pipeline to align — a non-graph pipeline has no tasks, inputs, or outputs to compare structurally, and the structured tab will say so and send you here.
+
+With a single run selected, the tab shows that run's YAML on its own rather than a diff.
+
+## Graph tab
+
+The **Graph** tab draws both runs as a single merged graph. Every task that appears in either run is drawn once, coloured by whether it is unchanged, changed, present only in A, or present only in B — so you can see structural change in the shape of the pipeline rather than in a list.
+
+A three-way control switches what is emphasised:
+
+| Option | Effect |
+| ------ | ------ |
+| **Both** | Show both runs together |
+| **A** | Highlight run A, dimming what is not in it |
+| **B** | Highlight run B, dimming what is not in it |
+
+Click a node to open its detail beside the graph — the same task detail as the structured tab, including artifacts and logs. **Close details** dismisses it.
+
+The YAML and graph tabs each carry expensive state — a code editor and a laid-out canvas — so they load the first time you open them rather than up front, and stay loaded afterwards so switching back is instant.
+
+## Related
+
+- [Run View](/docs/user-guide/run-view) — inspecting a single run
+- [Understanding Artifacts](/docs/core-concepts/artifacts) — what the artifact viewers can render
+- [Caching](/docs/core-concepts/caching) — why a task in one run may not have executed at all

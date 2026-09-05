@@ -41,6 +41,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'user-guide/pipeline-editor',
         'user-guide/run-view',
+        'user-guide/compare-runs',
         'user-guide/component-search',
       ],
     },
@@ -76,6 +77,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'component-development/oasis-cli-manual',
         'reference/schema',
+        'reference/host-integration',
       ],
     },
 

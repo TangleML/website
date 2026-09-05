@@ -79,6 +79,7 @@ The runs list includes a filter bar with the following controls:
 - **Run status**: View the current status of each run (**Running**, **Succeeded**, **Failed**, **Cancelled**).
 - **Run origin**: A small icon at the end of each row indicates where the run was submitted from — a window icon for the Tangle web app, a bot icon for programmatic submissions (CLI or AI), and a question-mark icon when the origin is unknown. Hover the icon for a tooltip describing the source.
 - **Share Run**: A share icon at the end of each row copies a direct link to that run to your clipboard, confirmed by a "Link copied to clipboard" toast. Paste the link to send a collaborator straight to the run without having to find it in the list first.
+- **Select and compare**: A checkbox on each row, plus one in the header to select the whole page. Selecting runs raises a bar at the bottom of the list with a **Compare** button, enabled once exactly two runs are selected — see [Compare Runs](/docs/user-guide/compare-runs).
 - **Quick access**: Click on any run to view detailed execution information.
 
 ### Components
@@ -125,6 +126,7 @@ The top bar provides quick access to essential functions:
 - **Import pipeline:** Load a pipeline into the editor from a file or by pasting YAML content.
 - **New pipeline:** Start a fresh, empty pipeline project.
 - **Backend status:** Check the status of your backend connection at a glance.
+- **Notices:** A megaphone button opening the notice inbox, badged with the number of unread notices. Shown on every page. Notices are published by whoever operates the deployment — see [Host Page Integration](/docs/reference/host-integration#reading-notices).
 - **Settings:** Navigate to the Settings page to configure your backend connection, personal preferences, beta features, and secrets.
 
 ### Left panel
@@ -480,9 +482,13 @@ Adjust personal preferences that apply to your browser session:
 - **Appearance**: Choose how Tangle looks using the **Light**, **Dark**, and **System** options. **System** follows your device's operating-system setting and switches automatically when it changes. Your selection is remembered in the browser.
 - Editor behaviour settings
 
+Some preferences only make sense when the feature they configure is switched on — those appear here once it is, and are hidden otherwise.
+
 ### Beta Features
 
-Enable or disable opt-in features that are still under active development. Beta features are toggled per-browser and do not affect other users.
+Enable or disable features that are still under active development. Beta features are toggled per-browser and do not affect other users.
+
+Not every entry here is off by default. A beta feature that has been released to everyone still appears in this list, switched on, so you can opt out of it if you would rather not have it. [Compare runs](/docs/user-guide/compare-runs) and [conditional execution](/docs/user-guide/pipeline-editor#conditional-execution) are both on by default in this way.
 
 ### Secrets
 

@@ -121,7 +121,7 @@ Drag a window by its header to move it. Dragging toward the left or right edge d
 | **Component Search**  | Search for components across every available source and drop them onto the canvas. See [Component Search](/docs/user-guide/component-search) |
 | **Runs & Submissions** | Submit the current pipeline. If you are not signed in, this window offers a sign-in button instead          |
 | **Recent Runs**       | Recent runs for this pipeline, for quick navigation                                                        |
-| **Pipeline Details**  | Pipeline-level information: name, timestamps, digest, validation status, tags, and inputs and outputs. When you are inside a subgraph the window is titled **Subgraph Details** and describes that subgraph instead |
+| **Pipeline Details**  | Pipeline-level information: name, timestamps, digest, validation status, tags, and inputs and outputs. Its **Details** section also holds the pipeline's description, notes, and [run name template](#run-name-template). When you are inside a subgraph the window is titled **Subgraph Details** and describes that subgraph instead |
 | **Properties**        | Context panel for the current selection. See [Task properties](#task-properties)                            |
 | **Pipeline Structure** | A tree view of the pipeline, including nested subgraphs and per-entity issue badges. See [Pipeline Structure](#pipeline-structure) |
 | **Fix Issues**        | Guided fixes for validation problems, one issue at a time. See [Validation and fixing issues](#validation-and-fixing-issues) |
@@ -225,15 +225,57 @@ Alongside the tabs, arguments show a validation indicator when a required value 
 Execution settings for the selected task:
 
 - **Task color** — a colour for the node on the canvas, which also drives the batch recolour in a multiple selection.
+- **Conditional execution** — gate whether this task runs at all. See [Conditional execution](#conditional-execution).
 - **Disable cache** — opt this task out of caching. Not shown for subgraph tasks. See [Caching](/docs/core-concepts/caching).
 - **Collapse node** — draw the node in a condensed form on the canvas.
 - **Compute resources** — cloud provider and per-provider resource settings. Choosing a provider swaps in that provider's fields; switching provider clears the fields belonging to the old one.
+
+#### Conditional execution
+
+By default every task in a pipeline runs. Turning on **Conditional execution** for a task makes its execution depend on a condition you control, which is how you build a pipeline that takes one path or another rather than always doing everything.
+
+Switching it on adds a **Run when** control and gives the task an extra **Run when** port on the canvas, alongside its ordinary inputs. There are two ways to fill it:
+
+- **Leave the port unconnected** and choose a literal from the **Run when** control — **Always** or **Never**. **Never** is useful for temporarily taking a task out of a pipeline without deleting it and losing its configuration.
+- **Connect the port to an upstream value** — a pipeline input, or an output of an earlier task. The condition is then evaluated at run time from that value, so the same pipeline can execute the task on one run and skip it on another. Once the port is connected, the **Run when** row shows what it is reading from instead of the literal control.
+
+Switching **Conditional execution** back off clears both the literal and the connection, so the task returns to running unconditionally.
+
+A few constraints are worth knowing:
+
+- **Subgraphs cannot be conditional.** The execution system only honours a run condition on ordinary tasks, so the controls are not offered for subgraph nodes. A pipeline that somehow carries one — imported YAML, for instance — reports **Conditional execution is not supported on subgraphs** as a validation error.
+- **The condition must read as true or false.** Connecting the port to a value the execution system cannot interpret that way is reported as a validation error naming the type it found.
+- **`__is_enabled__` is a reserved input name.** It is how a run condition is expressed in the pipeline definition, so a component declaring an input by that name is flagged during validation.
+
+:::info
+Conditional execution is enabled by default for everyone. You can turn it off under **Settings → Beta Features**, which hides the controls; conditions already set on a pipeline stay in its definition.
+:::
 
 ### Annotations
 
 Key/value metadata attached to the task, with your own annotations kept separate from the ones the platform maintains.
 
 Beneath the tabs, an **Actions** section collects the operations available for the selected task.
+
+## Run name template
+
+By default a run is named after the pipeline it came from, which makes a list of twenty runs of the same pipeline hard to tell apart. A **run name template** fixes that: it names each run from the values it was actually submitted with.
+
+The template lives in the **Pipeline Details** window, under **Details**, in the **Run name template** field — for example `${arguments.dataset}-${date.timestamp}`. It is saved with the pipeline, so every run submitted from it is named the same way.
+
+Placeholders take the form `${source.key}`:
+
+| Source | Resolves to | Example |
+| ------ | ----------- | ------- |
+| `arguments` | The value of the named argument for this run. Falls back to the pipeline input's own value or declared default when the run did not set it | `${arguments.Dataset Path}` |
+| `date` | The submission time, in one of three formats — `timestamp` (Unix seconds), `short`, or `long`. The `short` and `long` forms follow your browser's locale | `${date.timestamp}`, `${date.short}` |
+| `annotations` | The value of a named annotation on the run | `${annotations.team}` |
+
+Argument names are used exactly as they appear, spaces included. A placeholder that cannot be resolved — an unknown source, or an argument the pipeline does not declare — is left in the name unchanged rather than replaced with a blank, so a typo is visible in the resulting run name instead of silently disappearing.
+
+Where a template renames a run, the pipeline's own name is still recorded on the run, so the run remains traceable back to the pipeline it came from.
+
+The template is applied when a run is submitted, and also when you re-run or clone an existing run, so a rerun is named from its own arguments rather than inheriting the original run's name.
 
 ## Validation and fixing issues
 
