@@ -1,0 +1,112 @@
+---
+id: host-integration
+title: Host Page Integration
+description: Extend TangleML Studio from the page that embeds it — publish notices to readers and add your own items to the dashboard navigation.
+---
+
+# Host Page Integration
+
+When TangleML Studio is served from your own page or platform, that page can extend the UI in two ways: it can publish **notices** that Studio renders to readers, and it can add its own **navigation items** to the dashboard sidebar.
+
+Both are opt-in and both default to nothing. A deployment that installs neither behaves exactly as it would without them.
+
+:::note
+These are integration points for whoever operates the deployment, not per-user settings. If you use a TangleML Studio someone else operates, the reader-facing half — [Reading notices](#reading-notices) — is the part that applies to you.
+:::
+
+## Notices
+
+Notices are short messages Studio shows to everyone using the deployment: a maintenance window, an incident, a new capability worth pointing at. They appear in two places — as banners on the dashboard home, and in a notice inbox reachable from every page.
+
+### Reading notices
+
+A **Notices** button (a megaphone) sits in the header on every page. It carries a badge with the number of unread notices, counting up to `9+`. Opening the inbox marks everything in it as read.
+
+The inbox lists each notice as a card with its title, body, and — where the publisher supplied one — a button linking onward. A **Hide notices** / **Show notices** link at the top of the inbox toggles the dashboard banners for all current notices at once.
+
+On the dashboard home, notices also appear as banners above the rest of the page. Each banner has its own **Hide notice** control. Hiding a banner is not the same as dismissing the notice:
+
+- **Hide** removes the banner from the dashboard home but leaves the notice in the inbox, so you can clear the top of your dashboard without losing the message. **Show notices** in the inbox brings the banners back.
+- **Dismiss**, offered in the inbox for notices the publisher marked dismissible, retires the notice for you entirely — it leaves both the banners and the inbox and does not come back.
+
+Notices are ordered by severity, so errors surface above warnings, warnings above successes, and informational notices last. Read, dismissed, and hidden state is stored per browser.
+
+### Installing a notice source
+
+There is no default source. Assign one to `window.__TANGLE_NOTICE_SOURCE__` and dispatch the `tangle:notice-source` event:
+
+```js
+window.__TANGLE_NOTICE_SOURCE__ = {
+  version: 1,
+  getSnapshot: () => notices,
+  subscribe: (listener) => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  },
+  refresh: () => fetchNotices(),
+};
+
+window.dispatchEvent(new CustomEvent("tangle:notice-source"));
+```
+
+**The event is required.** Studio subscribes as soon as it mounts, which may be before your source exists — `tangle:notice-source` is what tells it to bind. A host that assigns the global without dispatching the event never shows a notice. Dispatching again after replacing the global is safe and rebinds.
+
+| Member | Required | Notes |
+| ------ | -------- | ----- |
+| `version` | yes | Must be exactly `1`. Anything else is ignored wholesale |
+| `getSnapshot` | yes | Called on every render of every subscriber — must be cheap and pure |
+| `subscribe` | yes | Returns an unsubscribe function. A non-function return is tolerated |
+| `refresh` | no | Called when the tab regains visibility, at most once every 30 seconds |
+
+`refresh` is best-effort. Nothing in Studio polls on a timer, so a tab left continuously visible may never call it. If your notices change on their own schedule — a maintenance window opening, an incident being declared — re-fetch on your own interval and publish, rather than relying on this hook.
+
+### Notice shape
+
+```ts
+{
+  id: string,          // required; a finite number is coerced to a string
+  title: string,       // required and non-blank
+  body?: string,       // Markdown, rendered as untrusted input
+  variant?: "info" | "warning" | "success" | "error",   // default "info"
+  dismissible?: true,  // only the literal `true` counts
+  action?: { url: string, text?: string }               // absolute http(s) only
+}
+```
+
+Every field is validated at the boundary and Studio never throws on bad input. Entries that fail validation are dropped silently, as are actions whose `url` is not an absolute `http(s)` URL. Duplicate ids collapse to the first occurrence, and at most 20 notices are read per snapshot.
+
+Notice bodies are rendered as Markdown, as untrusted input — links and formatting work, anything active does not.
+
+:::warning
+**An `id` belongs to a notice's content, not to its slot.** Whether a reader has read, dismissed, or hidden a notice is stored against its `id` in their browser, so editing a `title` or `body` while keeping the `id` will not resurface it for anyone who has already cleared it. Publish changed content under a new `id`.
+:::
+
+`getSnapshot` may return a freshly built array on every call — Studio compares content and hands subscribers a stable reference, so this will not loop. The notices it returns are frozen; mutating them is not a supported way to update the UI. Publish new data and notify instead.
+
+## Extra navigation items
+
+A host page can add its own links to the dashboard sidebar by assigning `window.__TANGLE_EXTRA_NAV_ITEMS__`:
+
+```js
+window.__TANGLE_EXTRA_NAV_ITEMS__ = [
+  { label: "Model registry", href: "/registry", icon: "Boxes" },
+  { label: "Runbook", href: "https://wiki.example.com/ml", icon: "BookOpen", external: true },
+  { label: "Admin", href: "/admin", icon: "Shield", requiresPermission: "admin" },
+];
+```
+
+| Field | Required | Notes |
+| ----- | -------- | ----- |
+| `label` | yes | The text shown in the sidebar. Blank labels are dropped |
+| `href` | yes | A same-origin path, or an absolute `http(s)` URL |
+| `icon` | no | A Lucide icon name, as used elsewhere in Studio. Unknown names are ignored and the item renders without an icon |
+| `requiresPermission` | no | The item is shown only to users holding this permission |
+| `external` | no | Only the literal `true` counts |
+
+Items are validated individually — an entry missing a usable `label` or `href` is dropped, and the rest still render.
+
+`requiresPermission` filters the item against the permissions of the signed-in user, so a single injected configuration can serve every user and each one sees only the items they are entitled to. An item with no `requiresPermission` is shown to everyone.
+
+:::note
+Only same-origin paths and `http(s)` URLs are accepted, so a host page assembling this configuration from somewhere less trusted than its own markup cannot turn a nav item into a `javascript:` sink. A leading slash alone is not enough to count as same-origin — paths are resolved against the current origin and kept only if they still belong to it.
+:::
