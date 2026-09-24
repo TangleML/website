@@ -143,7 +143,7 @@ Parquet previews read the file in pages using range requests rather than downloa
 
 This has a few consequences worth knowing:
 
-- **Large Parquet files open quickly, at any size.** Because the viewer never downloads the whole file, Parquet previews are not subject to the 50 MB inline preview limit that applies to other artifact types. If the storage backend serving the artifact does not support range requests, the viewer falls back to a whole-file read and reports **Too large to preview** for files above that limit.
+- **Large Parquet files open quickly, at any size.** Because the viewer never downloads the whole file, Parquet previews are not subject to the 50 MB inline preview limit that applies to other artifact types. To read a file in pages the viewer first needs its total size: it uses the size already recorded against the artifact where that is known, and otherwise asks storage for the file's first byte and takes the total from the response. Only where neither is available does it fall back to downloading the whole file, which is subject to the 50 MB limit and reports **This parquet file is too large to preview** above it.
 - **Row and column counts are exact from the start**, because they come from the file's metadata rather than from the rows that have loaded so far.
 - **Download schema**: a **Download schema** button in the viewer header saves the file's column layout — names, types, and nullability — as a `schema.json` file.
 
