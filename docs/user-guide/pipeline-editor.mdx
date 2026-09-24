@@ -144,7 +144,7 @@ There are several ways to get something onto the canvas:
 
 - Drag a component from the **Component Search** window.
 - Drop a component YAML file straight onto the canvas. The component is added to the canvas and to your user component library at the same time.
-- Paste a copied selection with `Cmd/Alt` + `V`; it lands at the pointer.
+- Paste a copied selection with `Cmd/Alt` + `V`; it lands at the pointer. See [Copying and pasting nodes](#copying-and-pasting-nodes).
 - Drag **Sticky Note**, **Input**, or **Output** out of the **Component Search** window's browse view — see [Component Search](/docs/user-guide/component-search#the-editor-window).
 
 ### Replacing a task's component
@@ -170,6 +170,16 @@ With a multiple selection active, the **Properties** window switches to a batch 
 - **Common Arguments** — arguments that all the selected tasks share. Editing one applies to the whole selection; where the tasks currently disagree, the field reads `mixed` and hovering it explains that values differ across tasks.
 - **Auto Layout Selection** — re-arrange just the selected nodes, leaving the rest of the graph alone.
 - **Create Subgraph** — the same action as the floating toolbar.
+
+### Copying and pasting nodes
+
+**Copy** — from the floating toolbar or `Cmd/Alt` + `C` — writes the selection to your system clipboard, so it is not confined to the tab you copied from. Paste it with `Cmd/Alt` + `V` into the same pipeline, into a different pipeline, or into an editor open in another browser tab or window; the nodes land at the pointer. Copying from a run view works the same way, which is how you lift part of an executed graph back into an editable pipeline — see [Task inspection](/docs/user-guide/run-view#task-inspection).
+
+Where the clipboard holds no copied selection, the editor falls back to the last selection you copied in this tab, so paste still does something sensible after you have copied unrelated text from elsewhere.
+
+Clipboard access depends on the browser, and some browsers withhold it. Rather than failing silently, the editor reports what happened: **Couldn't copy to the clipboard. Check browser permissions and try again.** when a copy is refused, and the matching message when a paste cannot be read.
+
+Copy and paste inside a dialog, a text field, or the arguments code editor behave as they normally would — the canvas does not intercept them.
 
 ### Sticky notes
 
@@ -228,7 +238,20 @@ Execution settings for the selected task:
 - **Conditional execution** — gate whether this task runs at all. See [Conditional execution](#conditional-execution).
 - **Disable cache** — opt this task out of caching. Not shown for subgraph tasks. See [Caching](/docs/core-concepts/caching).
 - **Collapse node** — draw the node in a condensed form on the canvas.
-- **Compute resources** — cloud provider and per-provider resource settings. Choosing a provider swaps in that provider's fields; switching provider clears the fields belonging to the old one.
+- **Compute resources** — cloud provider and per-provider resource settings. See [Compute resources](#compute-resources).
+
+#### Compute resources
+
+**Compute resources** decides where a task runs and on what hardware. Choosing a provider swaps in that provider's fields; switching provider clears the fields belonging to the old one.
+
+Where your deployment publishes a launcher configuration, the provider list is built from it rather than from a fixed list bundled with the app, so the entries you see are the targets your backend actually offers. Each one names the platform and the cluster together — `GKE: us-abc-123`, `Nebius: B300 cluster` — and a cluster belonging to a particular project shows it underneath as `Project: <project-id>`.
+
+Two kinds of entry are worth recognising:
+
+- **Aliases.** A deployment can publish a stable name that stands for whichever cluster currently sits behind it. An alias is listed under its own name — an alias `prod` appears as **Prod default** — with a caption reading **Currently** followed by the cluster it resolves to today. Selecting the alias pins the task to the name rather than to that cluster, so the task follows the alias if the deployment later points it somewhere else. A pipeline that already names an alias resolves to the right cluster when it is opened.
+- **Withdrawn clusters.** A cluster past its availability date is left out of the list so it cannot be chosen afresh. A task already pinned to one still shows it, marked as no longer available, with the date it was withdrawn and — where the deployment names one — the cluster that replaced it.
+
+A cluster your deployment lists but has not enabled is shown as unavailable, noting that it is not enabled for this deployment.
 
 #### Conditional execution
 

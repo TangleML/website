@@ -79,11 +79,11 @@ Click a task in the graph to fill the **Properties** window with that task's exe
 
 - **Artifacts** — the task's inputs and output artifacts. For the preview formats supported here, see [Understanding Artifacts](/docs/core-concepts/artifacts).
 - **Details** — the component behind the task, its description and interface, and its annotations. Annotations you or the pipeline author set appear under **Task Annotations**; the ones the execution system adds are kept in a separate, collapsed **System annotations** section, so a long list of platform metadata does not bury your own.
-- **Logs** — the task's container logs, alongside its execution events. **Pop out** moves the logs into their own window you can dock or resize, and a second control opens them in a new browser tab. Subgraph tasks have no logs of their own, so the tab is not shown for them.
+- **Logs** — the task's container logs, alongside its execution events. Three controls sit in the logs panel's own header: **Pop out logs** moves the logs into a window you can dock, float, or resize, opened at a width that fits the longest line in the log rather than a fixed size; **Open logs in a new tab** opens them on their own page, which you can share or keep open beside the run; and **View fullscreen** expands the panel to fill the screen, with `Esc` to leave it again. When the backend is unavailable the new-tab control is disabled and says so on hover. Subgraph tasks have no logs of their own, so the tab is not shown for them.
 
 Output nodes in the graph show a preview of their artifact directly on the node once the run has produced one, so you can read a result without opening a panel.
 
-Selecting several nodes at once shows a small toolbar with **Copy**, which copies the selection so you can paste it into a pipeline in the editor. `Cmd/Alt` + `C` does the same from the keyboard.
+Selecting several nodes at once shows a small toolbar with **Copy**, which copies the selection so you can paste it into a pipeline in the editor — including an editor open in a different browser tab or window. `Cmd/Alt` + `C` does the same from the keyboard. See [Copying and pasting nodes](/docs/user-guide/pipeline-editor#copying-and-pasting-nodes).
 
 ## Subgraphs
 
