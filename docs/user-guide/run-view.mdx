@@ -67,11 +67,28 @@ The **Run Details** window opens on the pipeline's name, followed by a status ba
 
 The rest of the window is organised into collapsible sections:
 
-- **Run Info** — run id, execution id, who created the run, and when. Where the platform knows how the run was started, a line explains its origin.
-- **Details** — the pipeline's description, its tags, and any annotations that are not platform bookkeeping.
-- **Notes** — the pipeline's own notes, plus a **Run Notes** field for this run specifically. Run notes are editable by whoever created the run and read-only for everyone else, so you can record what a run was for without touching the pipeline.
+- **Run Info** — run id, execution id, who created the run, and when. Where the run recorded how it was started, a line below shows an icon and a sentence naming the source — see [Run origin](#run-origin).
+- **Details** — the pipeline's description and its tags, followed by three blocks:
+  - **Pipeline Annotations** — annotations carried by the pipeline, minus platform bookkeeping.
+  - **Pipeline Notes** and **Run Notes** — the pipeline's own notes, plus a notes field for this run specifically. Run notes are editable by whoever created the run and read-only for everyone else, so you can record what a run was for without touching the pipeline.
+  - **Run Annotations** — annotations attached to this run rather than to the pipeline. Runs submitted by the CLI or by an agent carry context here, and so do reruns, which record the run they came from and the failing run they are meant to fix. Keys and values are both click-to-copy. Notes, tags and source are left out because the panel already shows them elsewhere, as are the execution system's own `system/…` keys; when nothing is left after that the block is not shown at all. The list is read-only — run annotations cannot be added or edited from the panel.
 - **Arguments** — the values this run was submitted with.
 - **Outputs** — what the run produced.
+
+### Run origin
+
+Runs reach TangleML from more than one place, and the run view says which. Where a run recorded a source, **Run Info** shows a small icon and a sentence naming it. The same icon appears at the end of every row in the [All Runs](/docs/user-guide/studio-app-ui-overview#all-runs) list, where hovering it gives the same sentence as a tooltip.
+
+| Icon          | The run was submitted                      |
+| ------------- | ------------------------------------------ |
+| Window        | From the Tangle web app                     |
+| Bot           | By an AI agent working inside the web app   |
+| Terminal      | With the Tangle CLI                         |
+| Sparkles      | By an agent running outside the web app     |
+| Globe         | By some other tool                          |
+| Question mark | With no source recorded                     |
+
+A source this build does not recognise draws the globe rather than failing, so a run from a tool introduced after your deployment still reads sensibly. A run that recorded no source at all keeps the question mark, and **Run Info** omits the origin line for it entirely.
 
 ## Task inspection
 

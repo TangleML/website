@@ -77,7 +77,7 @@ The runs list includes a filter bar with the following controls:
 - **Annotation filters**: Add key/value annotation predicates to filter runs by custom metadata attached at submission time.
 - **Active filter chips**: Active filters appear as removable chips below the filter controls. Click **Clear all** to reset.
 - **Run status**: View the current status of each run (**Running**, **Succeeded**, **Failed**, **Cancelled**).
-- **Run origin**: A small icon at the end of each row indicates where the run was submitted from — a window icon for the Tangle web app, a bot icon for programmatic submissions (CLI or AI), and a question-mark icon when the origin is unknown. Hover the icon for a tooltip describing the source.
+- **Run origin**: A small icon at the end of each row indicates where the run was submitted from — a window for the Tangle web app, a terminal for the Tangle CLI, a bot or sparkles for a run an AI agent submitted, a globe for any other tool, and a question mark when the run recorded no source at all. Hover the icon for a tooltip naming the source. See [Run origin](/docs/user-guide/run-view#run-origin) for the full set.
 - **Share Run**: A share icon at the end of each row copies a direct link to that run to your clipboard, confirmed by a "Link copied to clipboard" toast. Paste the link to send a collaborator straight to the run without having to find it in the list first.
 - **Select and compare**: A checkbox on each row, plus one in the header to select the whole page. Selecting runs raises a bar at the bottom of the list with a **Compare** button, enabled once exactly two runs are selected — see [Compare Runs](/docs/user-guide/compare-runs).
 - **Quick access**: Click on any run to view detailed execution information.
@@ -414,7 +414,7 @@ When viewing the overall run:
 - Total duration
 - Input parameters used
 - Overall pipeline outputs
-- **Run origin**: An icon next to the **Run Info** heading shows where this run was submitted from — the Tangle web app, a programmatic source (CLI or AI), or an unknown source. Hover the icon for a tooltip describing the origin.
+- **Run origin**: An icon next to the **Run Info** heading shows where this run was submitted from, with a tooltip naming the source. Each known submitter has its own icon — see [Run origin](/docs/user-guide/run-view#run-origin).
 
 Output nodes in the graph display their artifact values inline when the run has completed.
 
@@ -547,6 +547,7 @@ Until a provider is configured, AI-assisted features stay disabled and say so in
 - Check validation panel for errors
 - Ensure all required inputs have values
 - Verify component compatibility
+- If the backend refuses the submission, read the error message itself — it names what the backend objected to, including the field it rejected, the rule that field broke, and the value it was given, rather than only reporting that the run could not be created. A pipeline that passes validation can still be refused this way: an input default of the wrong type, for example, is a one-field fix rather than a problem with the graph
 
 **Lost draft pipelines:**
 
