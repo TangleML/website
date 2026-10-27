@@ -4,20 +4,12 @@ title: TangleML Studio UI Guide
 description: Navigate the TangleML Studio interface including the visual pipeline editor, component library, and execution monitoring views.
 ---
 
-import { ImageAnnotation } from "@site/src/components/ImageAnnotation";
-import { HelpCircle, Info, Delete, Maximize2, PlusSquare, Copy, ListRestart } from "lucide-react";
-
 # TangleML Studio UI Guide
 
 TangleML Studio provides a comprehensive web-based interface for building, managing, and running machine learning pipelines. This guide walks you through the main areas of the application: Dashboard, Editor, Pipeline Run, and Settings.
 
-:::info Editor and run view versions
-Studio ships two generations of the editor and run view, and you can switch between them with the version toggle. The **current** experience is the default, and is documented on its own pages:
-
-- [Pipeline Editor](/docs/user-guide/pipeline-editor)
-- [Run View](/docs/user-guide/run-view)
-
-The [Editor](#editor) and [Pipeline Run view](#pipeline-run-view) sections below describe the **legacy** experience, which is still reachable through the same toggle.
+:::info
+The editor and the run view each have their own guide: [Pipeline Editor](/docs/user-guide/pipeline-editor) and [Run View](/docs/user-guide/run-view). The legacy editor and run view, and the version toggle that switched between them, have been removed from Studio.
 :::
 
 ## Dashboard
@@ -29,7 +21,7 @@ The Dashboard is your home base for navigating pipelines, runs, and components a
 The dashboard sidebar contains the following entries:
 
 - **My Dashboard** — overview of favorites, recently viewed items, recently used components, and your runs.
-- **My Pipelines** — your draft pipelines, with a preview of favorited pipelines on top.
+- **All Pipelines** — your pipelines, with a preview of favorited pipelines on top. On deployments with [remote pipelines](/docs/user-guide/remote-pipelines), the pipelines saved on the backend are listed here too.
 - **All Runs** — every pipeline run on your TangleML instance, with a filter bar for narrowing results.
 - **Components** — a searchable browser for User Components, the Standard Library, and Published Components.
 - **Favorites** — every pipeline and run you've starred, in a single grid with search and pagination.
@@ -49,11 +41,15 @@ The **My Dashboard** view is the landing page when you visit the dashboard. It s
 
 Each preview block has a **View all →** link in the heading that takes you to the full view for that section.
 
-### My Pipelines
+### All Pipelines
 
-The **My Pipelines** view manages your draft pipelines stored locally in browser storage.
+The **All Pipelines** view manages your pipelines. By default these are draft pipelines stored locally in browser storage. An **Example Pipelines** button beside the heading opens the [example pipelines](/docs/user-guide/learning-hub).
 
-<img src={require("./assets/HomeScreen_MyPipelines.png").default} alt="My Pipelines" style={{width: "100%", borderRadius: "6px"}} />
+If your deployment stores pipelines on the backend, the view has two tabs. **Remote Pipelines** is selected by default and lists the backend's pipelines, filtered at first to your own. **Local Pipelines** lists the ones in your browser and has an **Upload pipeline** button on each row. Without any browser pipelines, only the remote list is shown. See [Remote Pipelines](/docs/user-guide/remote-pipelines) for how to filter, share, and move pipelines between the two.
+
+The rest of this section describes the browser list.
+
+<img src={require("./assets/HomeScreen_MyPipelines.png").default} alt="All Pipelines" style={{width: "100%", borderRadius: "6px"}} />
 
 - **Favorite Pipelines preview**: When you have one or more favorited pipelines, a preview block appears at the top of the view with up to five of them. The block is hidden automatically when you have no favorited pipelines so it doesn't take up space.
 - **Local storage**: All draft pipelines are stored in your browser's local storage. For more on local vs shared storage, see [Pipelines Persistence](/docs/getting-started/pipelines-persistence).
@@ -105,364 +101,15 @@ The **Recently Viewed** view lists the items you've most recently opened — pip
 
 ## Editor
 
-The Editor is the heart of TangleML Studio, providing an intuitive drag-and-drop interface for building machine learning Pipelines.
+The editor is where you build pipelines: drag components onto an infinite canvas, connect outputs to inputs, and configure each task. It is organised as a menu bar above the canvas, with dockable windows around it such as **Component Search**, **Pipeline Details**, and **Properties**.
 
-<img src={require("./assets/Editor_1.png").default} alt="Layout overview" style={{width: "100%", borderRadius: "6px"}} />
-
-### Layout overview
-
-The Editor consists of four main areas:
-
-- **Top bar**: Quick access to manage pipelines.
-- **Left Panel**: Pipeline controls and component library.
-- **Canvas**: Central workspace for visual pipeline construction.
-- **Right Panel**: Context-sensitive information panel.
-
-### Top bar
-
-The top bar provides quick access to essential functions:
-
-- **Pipeline name:** Shows the current pipeline's name. Click to edit and rename your pipeline.
-- **Import pipeline:** Load a pipeline into the editor from a file or by pasting YAML content.
-- **New pipeline:** Start a fresh, empty pipeline project.
-- **Backend status:** Check the status of your backend connection at a glance.
-- **Notices:** A megaphone button opening the notice inbox, badged with the number of unread notices. Shown on every page. Notices are published by whoever operates the deployment — see [Host Page Integration](/docs/reference/host-integration#reading-notices).
-- **Settings:** Navigate to the Settings page to configure your backend connection, personal preferences, beta features, and secrets.
-
-### Left panel
-
-The left panel organizes pipeline management and component access.
-
-<ImageAnnotation src={require("./assets/LeftPanel.png").default} alt="Left Panel">
-    #### Pipeline actions
-
-    - **Save Pipeline**: Saves current state to browser local storage
-    - **Save Pipeline As**: Creates a copy with a new name
-    - **Export Pipeline**: Downloads pipeline as YAML file
-    - **Import Pipeline**: Load from file or paste YAML directly
-
-    #### Runs and submission
-
-    - **Submit Run**: Immediately schedules the current Pipeline for Execution
-    - **Recent Pipeline Runs**: Displays popover with recent runs for quick access
-
-    #### Components
-
-    Search functionality:
-
-    - Search by: Name, input name, input type, output name, or output type
-    - Toggle between partial match (default) and exact match
-    - Example: Search `CSV` to find all CSV-related components
-
-    Component categories:
-
-    - **Used in pipeline**: Shows all components currently in your pipeline
-      - Click any component to navigate directly to it on the canvas
-    - **User components**: Your personal component library
-      - Components created or imported by you
-      - Stored locally in browser storage
-    - **Special components**: Input and output nodes for pipeline parameters
-    - **Standard library**: Hierarchical collection of standard components
-      - Data manipulation tools for various formats
-      - Machine learning frameworks (PyTorch, XGBoost, TensorFlow, TFX)
-      - Common operations and transformations
-
-    Each component in the list shows a provenance subtitle beneath its name so you can tell at a glance where it came from: **Published by** followed by the author's name, for components published to the connected backend, or the component's content **Digest** when it has no publisher.
-
-    :::tip
-    Each component has an info icon (ⓘ) that opens a detailed dialog with three tabs:
-
-    - **Details**: Complete component information
-    - **Input/Output**: Lists all inputs and outputs with metadata (required status, type, description)
-    - **Implementation**: Full YAML definition of the component
-    :::
-</ImageAnnotation>
-
-### Canvas
-
-The Canvas is your infinite workspace for visual Pipeline construction.
-
-- **Pan**: Click and drag to move around the canvas
-- **Zoom**: Scroll or use zoom controls to adjust view
-- **Mini-map**: Bottom-left corner shows your current position in the pipeline
-
-#### Canvas toolbar
-
-The Canvas Toolbar provides a set of essential tools to manage and navigate your Pipeline workspace:
-
-<ImageAnnotation src={require("./assets/GroupSelection.png").default} alt="Canvas Toolbar">
-
-- **Mini-map**: Offers a visual overview of your entire pipeline layout, letting you quickly jump to different areas.
-- **Zoom In/Out**: Adjusts the canvas scale so you can focus on details or see the bigger picture.
-- **Fit to View**: Automatically rescales and centers your pipeline to fit the entire view.
-- **Lock**: Prevents accidental movement of tasks, allowing you to navigate safely without disturbing your layout.
-- **Group Select**: Enables you to select multiple tasks at once for bulk operations such as moving, deleting, or updating them.
-
-</ImageAnnotation>
-
-#### Task representation
-
-<ImageAnnotation src={require("./assets/Task.png").default} alt="Task Representation">
-
-- Tasks appear as rectangles with inputs on the left, outputs on the right
-- Connection points (handles) for creating data flows
-- Visual indicators for validation status and recent changes. Red dot indicates a validation error.
-- Click the collapse button in the node header to toggle between expanded and collapsed view. Collapsed nodes show only the node title and connection handles, reducing visual clutter on large pipelines.
-
-</ImageAnnotation>
-
-#### Basic operations
-
-- **Add component**: Drag from Component Library to Canvas
-- **Connect tasks**: Click output handle and drag to input handle
-- **Move tasks**: Click and drag to reposition
-- **Delete connection**: Select connection and press Backspace
-
-#### Undo/redo controls
-
-The editor tracks the last 50 changes, and you can undo and redo changes from the bottom-right corner or using keyboard shortcuts. Changes are stored per session, and if you reload the page your history will be lost.
-
-<video src={require("./assets/UndoRedo.mov").default} autoPlay loop muted style={{ width: "100%" }} />
-
-#### Group operations
-
-To activate group operations, select **Group Selection** in the canvas toolbar or hold `Ctrl/Cmd` and click individual nodes. From there, you can:
-
-- **Delete**: Remove all selected nodes and their connections.
-- **Duplicate**: Create copies of selected nodes while preserving their connections.
-- **Update**: Apply version updates or configuration changes to all selected nodes simultaneously. Useful when upgrading multiple components to newer versions.
-- **Move as group**: Drag any selected node to move the entire selection while maintaining relative positions.
-
-When multiple nodes are selected, the right panel displays a **Multiselection Context Panel** summarising the selected nodes by type (tasks, inputs, outputs). You can view and perform bulk actions on the selection from there.
-
-:::tip
-Use Ctrl/Cmd+A to select all nodes, then deselect specific ones with Ctrl/Cmd+Click.
-:::
-
-:::warning
-Tasks with validation errors will prevent pipeline execution. Check the validation section to identify and resolve issues before submitting runs.
-:::
-
-### Pipeline context panel
-
-When no Task is selected, the panel shows pipeline-level information:
-
-<ImageAnnotation src={require("./assets/RightPanel_Pipeline.png").default} alt="Pipeline Context">
-
-**Pipeline information:**
-
-- Pipeline name with edit button
-- Creation and last update timestamps
-- Unique digest identifier (click to copy)
-- Validation status and errors
-
-**Tags:**
-
-- Add up to 10 tags to a pipeline for categorisation and search.
-- Click **Add tag** to create a new tag. Tags appear in the pipeline list on **My Pipelines** in the dashboard.
-- Click an existing tag to edit or remove it.
-
-**Pipeline inputs/outputs:**
-
-- All pipeline parameters via Input/Output nodes
-- Editable values for Input nodes (required)
-- Copy values to clipboard
-
-**Pipeline YAML:**
-
-- View-only display of complete pipeline definition
-- Full YAML content for reference
-
-</ImageAnnotation>
-
-### Arguments context panel
-
-When a task is selected, the panel shows three tabs.
-
-<ImageAnnotation src={require("./assets/RightPanel_Arguments.png").default} alt="Task Context">
-- Complete list of task inputs and outputs
-- Required arguments marked with asterisk (\*)
-- Per-argument controls:
-  - Copy value to clipboard
-  - Reset to default value
-  - Exclude argument from execution
-  - Copy a shareable link to this node directly to your clipboard
-- Green indicator for recently changed values
-- Expandable multi-line editor for complex values
-- Click row to view argument description
-</ImageAnnotation>
-
-When configuring component inputs, you have several actions available through the toolbar buttons:
-
-
-| Action               | Icon | Description                                 |
-| -------------------- | ---- | ------------------------------------------- |
-| **Copy value**       | <Copy/> | Copies the current input value to clipboard |
-| **Reset to default** | <ListRestart />   | Resets input to its default value from YAML |
-| **Exclude argument** | <Delete />   | Excludes this input from execution          |
-| **Include argument** | <PlusSquare />   | Re-includes a previously excluded input     |
-| **Copy node link**   | Link icon | Copies a shareable URL that opens the pipeline run and navigates directly to this node |
-
-#### Argument types
-
-Task arguments support three input modes, selectable via the dropdown on each argument field:
-
-- **Plain value**: Enter a static string, number, or other value directly.
-- **Secret**: Reference a secret stored in Settings > Secrets. The secret value is resolved at runtime and never exposed in the pipeline definition.
-- **System data**: Reference dynamic runtime data provided by the execution environment (for example, the current pipeline run ID or execution timestamp).
-
-To switch an argument to a different mode, click the **dynamic data dropdown** icon at the right of the argument field and select the desired type.
-
-#### Exclude/include argument
-
-When you use the **Exclude Argument** action, the input is removed from the execution parameters.
-This is especially helpful for optional inputs that you do not need.
-The input field will become dimmed, but you can still edit its contents if you wish.
-
-Choosing the **Include Argument** action will re-add a previously excluded input.
-This returns the input to its active state in the pipeline.
-If the input was empty when you include it, it may automatically be filled in with the default value.
-
-:::warning
-Empty input is not the same as excluded input. Excluded input is removed from the execution parameters, while empty input is still a value that will be passed to the task execution.
-:::
-
-#### Dynamic data arguments
-
-For arguments that require sensitive or runtime-generated values, click the **dynamic data** button (database icon) next to an argument field to switch from a static value to a dynamic data source. Two categories are available:
-
-- **Secrets**: Bind the argument to a named secret stored on the TangleML backend. The secret value is injected at execution time and never stored in the pipeline YAML. See [Managing Secrets](/docs/core-concepts/secrets).
-- **System data**: Use runtime-provided values such as the pipeline run ID, pipeline name, or current timestamp — useful for generating unique output paths without hardcoding values.
-
-#### Understanding default values
-
-Default values are specified in the component's YAML definition and serve as fallback values when an input is not explicitly provided. Authors specify default values in the component specification.
-
-:::warning Default value divergence
-The default value shown in the UI comes from the component's YAML definition, but it may differ from what the actual component implementation uses.
-:::
-
-
-### Details Context Panel
-
-<ImageAnnotation src={require("./assets/RightPanel_Details.png").default} alt="Task Context">
-- Component information for selected Task
-- Access to component YAML
-- Action buttons:
-  - Download YAML
-  - Download Python code (if available)
-  - Copy YAML to clipboard
-  - Duplicate task
-  - Edit component definition (if enabled in preferences)
-  - Delete task
-- Unique digest identifier
-
-</ImageAnnotation>
-
-### Configuration context panel
-
-<ImageAnnotation src={require("./assets/RightPanel_Configuration.png").default} alt="Task Context">
-
-- You can disable cache for the Task.
-- Configure compute resources:
-  - CPU cores
-  - Memory (GB)
-  - GPU enablement
-  - Cloud provider selection
-- Custom annotations section for additional metadata
-
-</ImageAnnotation>
+See [Pipeline Editor](/docs/user-guide/pipeline-editor) for the full guide, including [task properties](/docs/user-guide/pipeline-editor#task-properties), [validation and fixing issues](/docs/user-guide/pipeline-editor#validation-and-fixing-issues), and [keyboard shortcuts](/docs/user-guide/pipeline-editor#keyboard-shortcuts).
 
 ## Pipeline Run view
 
-The **Pipeline Run** view provides detailed insights into pipeline execution, allowing you to monitor progress, inspect outputs, and debug issues.
+The run view shows a single pipeline run: the execution graph with the status of every task, the run's details, and each task's artifacts, execution details, and logs. You can drill into a subgraph to see the tasks inside it.
 
-<img src={require("./assets/RunView.png").default} alt="Pipeline Run View" style={{width: "100%", borderRadius: "6px"}} />
-
-### Run overview
-
-The main area displays the pipeline graph with execution status for each task:
-
-- Visual indicators show task status (Pending, Running, Succeeded, Failed, Skipped)
-- Execution timeline and duration for completed tasks
-- Real-time updates for running pipelines
-- Click the collapse button on any node to hide its inputs and outputs and reduce visual clutter
-
-### Run actions
-
-Available actions depend on run status:
-
-- **Inspect**: Open the pipeline editor for the run. Only available for pipelines stored in local browser storage.
-- **Cancel**: Stop a running pipeline. Only the user who created the run can cancel it.
-- **Re-run**: Re-run a pipeline with the same parameters.
-- **Clone**: Create a new pipeline from this run's configuration.
-
-:::tip
-Use the logs tab to debug failed tasks. Error messages and stack traces help identify issues quickly.
-:::
-
-### Context panel
-
-The right panel provides detailed information about the run or selected task.
-
-#### Pipeline Run details (no task selected)
-
-When viewing the overall run:
-
-- Run status and metadata
-- Start and end times
-- Total duration
-- Input parameters used
-- Overall pipeline outputs
-- **Run origin**: An icon next to the **Run Info** heading shows where this run was submitted from, with a tooltip naming the source. Each known submitter has its own icon — see [Run origin](/docs/user-guide/run-view#run-origin).
-
-Output nodes in the graph display their artifact values inline when the run has completed.
-
-#### Task Execution details (task selected)
-
-When a specific Task is selected, three tabs provide comprehensive execution information:
-
-#### 1. Artifacts tab
-
-<ImageAnnotation src={require("./assets/RunView_Artifacts.png").default} alt="Pipeline Run View">
-
-- Output artifacts produced by the Task
-- Inline viewer for supported formats (text, JSON, CSV/TSV, Apache Parquet, images) — click the fullscreen button to expand, or **Cmd/Ctrl + click** the fullscreen button to open the artifact on its own dedicated page in a new tab
-- **Share** button in the viewer header copies the artifact's preview URL to the clipboard so you can share or bookmark a direct link to the artifact
-- Tabular artifacts (CSV, TSV, Parquet) show the artifact's exact total row and column counts in the header, and page in batches of 100 rows via **Load more** / **Load max**. The preview is bounded by a 50,000-cell budget rather than a fixed row count, so wide tables stop at fewer rows than narrow ones. Once the limit is reached, a **Download full dataset** link appears
-- Column headers stay sticky while scrolling, and Parquet columns show their type (with `?` marking nullable columns). Parquet previews also offer a **Download schema** button and are read in pages straight from storage, so large Parquet files open quickly and are not blocked by the inline preview size limit
-- Download links for all artifacts
-- Artifact metadata (size, type, storage location)
-</ImageAnnotation>
-
-See [Understanding Artifacts](/docs/core-concepts/artifacts) for a full list of supported viewer formats and details on the standalone artifact preview page.
-
-#### 2. Details tab
-
-<ImageAnnotation src={require("./assets/RunView_Details.png").default} alt="Pipeline Run View">
-
-- Task Execution metadata
-- Start and completion times
-- Duration
-- Resource usage statistics
-- Component version used
-- Execution environment details
-
-</ImageAnnotation>
-
-#### 3. Logs tab
-
-<ImageAnnotation src={require("./assets/RunView_Logs.png").default} alt="Pipeline Run View">
-
-- Complete execution logs
-- Stdout and stderr output
-- System messages
-- Error traces for debugging
-- Log filtering and search capabilities
-- Logs auto-scroll to the latest entry while a task is running. Scroll up to pause auto-scroll.
-- Timestamps show elapsed time while the task is running and switch to absolute time after it completes.
-
-</ImageAnnotation>
+See [Run View](/docs/user-guide/run-view) for the full guide, including [task inspection](/docs/user-guide/run-view#task-inspection) and [execution details](/docs/user-guide/run-view#execution-details). For the artifact viewer, see [Understanding Artifacts](/docs/core-concepts/artifacts).
 
 ## Settings
 
@@ -481,6 +128,8 @@ Adjust personal preferences that apply to your browser session:
 
 - **Appearance**: Choose how Tangle looks using the **Light**, **Dark**, and **System** options. **System** follows your device's operating-system setting and switches automatically when it changes. Your selection is remembered in the browser.
 - Editor behaviour settings
+- **Save new pipelines in this browser**: Keep new pipelines, imports, and copies in your browser rather than as [remote pipelines](/docs/user-guide/remote-pipelines). The switch is locked on when the deployment does not store pipelines on the backend, or before a backend is configured.
+- **Ask before moving pipelines to this backend**: If you chose to move pipelines you open to the backend without asking, this brings the question back for the current backend.
 
 Some preferences only make sense when the feature they configure is switched on — those appear here once it is, and are hidden otherwise.
 
@@ -523,20 +172,7 @@ Until a provider is configured, AI-assisted features stay disabled and say so in
 
 ## Keyboard shortcuts & hotkeys
 
-| Shortcut                    | Action                                       |
-| --------------------------- | -------------------------------------------- |
-| `Ctrl/Cmd + Z`              | Undo                                         |
-| `Ctrl/Cmd + Y`              | Redo                                         |
-| `Ctrl/Cmd + Shift + Z`      | Redo                                         |
-| `Delete/Backspace`          | Delete selected elements                     |
-| `Shift + Delete/Backspace`  | Delete selected elements (skip confirmation) |
-| `Shift + Drag`              | Full select multiple tasks (as a group)      |
-| `Ctrl/Cmd + Shift + Drag`   | Partial select multiple tasks (as a group)   |
-| `Ctrl/Cmd + Click`          | Select multiple tasks (individually)         |
-| `Ctrl/Cmd + A`              | Select all tasks                             |
-| `Ctrl/Cmd + C`              | Copy selected tasks                          |
-| `Ctrl/Cmd + V`              | Paste copied tasks                           |
-| `Escape`                    | Deselect all                                 |
+The editor's shortcuts are listed in [Pipeline Editor](/docs/user-guide/pipeline-editor#keyboard-shortcuts).
 
 ## Troubleshooting
 
@@ -554,6 +190,7 @@ Until a provider is configured, AI-assisted features stay disabled and say so in
 - Draft pipelines are stored in browser local storage
 - Clearing browser data will remove drafts
 - Always export important pipelines as YAML backups
+- [Remote pipelines](/docs/user-guide/remote-pipelines) are stored on the backend and survive clearing browser data. If a remote pipeline fails to save, use **Save local copy** in the banner before closing the tab
 
 **Can't connect components:**
 

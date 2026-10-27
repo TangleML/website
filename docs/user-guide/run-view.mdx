@@ -9,7 +9,7 @@ description: Monitor pipeline runs in TangleML Studio — run tools, run details
 The run view shows a single pipeline run: the execution graph, the status of every task, and the artifacts and logs each task produced. Like the editor, it is organised as a menu bar plus a set of dockable windows around a central canvas.
 
 :::info
-This page describes the current run view, which is the default for all users. A legacy run view is still available via the version toggle — see [Switching to the legacy run view](#switching-to-the-legacy-run-view). The legacy layout is documented in the [Studio UI Guide](/docs/user-guide/studio-app-ui-overview#pipeline-run-view).
+This is the only run view in Studio. The legacy run view and its version toggle have been removed. A run opens at `/runs/<run id>`, and links that still point at the old `/runs-v2/…` address redirect there, including links into a subgraph. The browser tab is titled `Tangle - <pipeline name> - <run id>`, so several open runs are easy to tell apart.
 :::
 
 ## Menu bar
@@ -55,7 +55,7 @@ The **Run Tools** window collects the actions available for the run:
 - **View YAML** — the pipeline definition this run executed.
 - **Share run** — copy a direct link to the run.
 - **Inspect pipeline** — open the run's pipeline in the editor. Shown only when that pipeline is available in your browser storage.
-- **Clone pipeline** — create a new pipeline from this run.
+- **Clone pipeline** — create a new pipeline from this run. It is saved wherever your new pipelines are saved: in your browser, or on the backend if your deployment uses [remote pipelines](/docs/user-guide/remote-pipelines).
 - **Cancel run** — stop a run that is still in progress. Shown only to the user who created the run.
 - **Rerun pipeline** — submit the same pipeline again. Shown once the run has finished.
 
@@ -94,11 +94,25 @@ A source this build does not recognise draws the globe rather than failing, so a
 
 Click a task in the graph to fill the **Properties** window with that task's execution detail. The panel header shows the task name and a status icon, followed by three tabs:
 
-- **Artifacts** — the task's inputs and output artifacts. For the preview formats supported here, see [Understanding Artifacts](/docs/core-concepts/artifacts).
-- **Details** — the component behind the task, its description and interface, and its annotations. Annotations you or the pipeline author set appear under **Task Annotations**; the ones the execution system adds are kept in a separate, collapsed **System annotations** section, so a long list of platform metadata does not bury your own.
+- **Artifacts** — the task's inputs and output artifacts. For the preview formats supported here, see [Understanding Artifacts](/docs/core-concepts/artifacts). An input that was given a [secret](/docs/core-concepts/secrets#secrets-in-a-run) shows a lock and the secret's name, as it does on the canvas. The secret's value is never stored as an artifact.
+- **Details** — the component behind the task, its description and interface, and its annotations. Annotations you or the pipeline author set appear under **Task Annotations**; the ones the execution system adds are kept in a separate, collapsed **System annotations** section, so a long list of platform metadata does not bury your own. For a task that has executed, an **Execution Details** section sits near the top. See [Execution details](#execution-details).
 - **Logs** — the task's container logs, alongside its execution events. Three controls sit in the logs panel's own header: **Pop out logs** moves the logs into a window you can dock, float, or resize, opened at a width that fits the longest line in the log rather than a fixed size; **Open logs in a new tab** opens them on their own page, which you can share or keep open beside the run; and **View fullscreen** expands the panel to fill the screen, with `Esc` to leave it again. When the backend is unavailable the new-tab control is disabled and says so on hover. Subgraph tasks have no logs of their own, so the tab is not shown for them.
 
 Output nodes in the graph show a preview of their artifact directly on the node once the run has produced one, so you can read a result without opening a panel.
+
+### Execution details
+
+The **Execution Details** section on the **Details** tab describes where and how the task's container ran. It always shows the **Execution ID**. Other rows appear once the backend reports them, including:
+
+| Row | Shows |
+| --- | ----- |
+| **Exit Code** | The container's exit code when it failed. `(Out of Memory)` is added when the code means the container ran out of memory |
+| **Started** and **Completed in** | When the container started, and how long it ran |
+| **Cluster** | The cluster the task ran on, named the same way as in the editor's [compute resources](/docs/user-guide/pipeline-editor#compute-resources) picker. A cluster your deployment no longer lists shows its raw key instead |
+| **Job name** and **Pod Name** | Identifiers of the job and pod that ran the container, where the launcher records them |
+| Links | Rows the backend attaches to the execution, such as a link to the job's page in the system that ran it. Each opens in a new tab |
+
+Which link rows appear depends on how your deployment is set up. A launcher adds them to the execution's container state, so different backends can point you at their own consoles. Subgraph tasks show only the execution ID.
 
 Selecting several nodes at once shows a small toolbar with **Copy**, which copies the selection so you can paste it into a pipeline in the editor — including an editor open in a different browser tab or window. `Cmd/Alt` + `C` does the same from the keyboard. See [Copying and pasting nodes](/docs/user-guide/pipeline-editor#copying-and-pasting-nodes).
 
@@ -109,7 +123,3 @@ When a pipeline contains subgraphs, the run view lets you drill into a subgraph'
 ## Comparing two runs
 
 To see what differs between two executions rather than inspect one, use **Run → Compare with another run…**, or select two runs on the **All Runs** page and click **Compare**. See [Compare Runs](/docs/user-guide/compare-runs).
-
-## Switching to the legacy run view
-
-A version toggle switches between the current and legacy run views for the same run, in the same way as the editor toggle. Both views read the same run data.

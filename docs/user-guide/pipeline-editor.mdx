@@ -9,7 +9,7 @@ description: Build pipelines in the TangleML Studio editor using the menu bar, d
 The pipeline editor is where you assemble, configure, and submit pipelines. It is built around a menu bar at the top, an infinite canvas in the middle, and a set of **windows** you can show, hide, dock, or float around the canvas.
 
 :::info
-This page describes the current editor, which is the default for all users. A legacy editor is still available — see [Switching to the legacy editor](#switching-to-the-legacy-editor) below. The legacy layout is documented in the [Studio UI Guide](/docs/user-guide/studio-app-ui-overview#editor).
+This is the only editor in Studio. The legacy editor and the version toggle that switched to it have been removed. Links that still point at the old `/editor-v2/…` address keep working: they redirect to the same pipeline at `/editor/…`.
 :::
 
 ## Menu bar
@@ -31,6 +31,8 @@ Hover the pipeline name to reveal a pencil button that opens the **Rename Pipeli
 | **Export**          | Download the pipeline as a YAML file                                 |
 | **Move to folder**  | Move the pipeline into a pipeline folder                             |
 | **Delete pipeline** | Delete the pipeline, after a confirmation prompt                     |
+
+For a [remote pipeline](/docs/user-guide/remote-pipelines), **Move to folder** and **Delete pipeline** are not offered, and **Open** lists only the pipelines saved in your browser. Delete a remote pipeline from the dashboard instead.
 
 ### View
 
@@ -76,7 +78,7 @@ The **Node** menu appears only while something is selected on the canvas, and it
 At the right of the menu bar:
 
 - **Submit Run** — a quick-run button. It is accompanied by a **Submit run with arguments** option. When the pipeline has validation problems, the button reports them — either **Pipeline has validation errors** (which blocks submission) or **Pipeline has validation warnings**.
-- **Auto-save indicator** — shows **Auto-save enabled** normally and **Saving…** while a save is in flight, so you can tell your work has been persisted without saving manually.
+- **Auto-save indicator** — shows **Auto-save enabled** normally, **Saving…** while a save is in flight, and **Last saved at** with the time once a save has finished, so you can tell your work has been persisted without saving manually. Click it to save right away. If a save fails, the icon turns red and its tooltip gives the reason; click it to retry. A new [remote pipeline](/docs/user-guide/remote-pipelines) that has not been saved yet reads **Draft — saved after your first edit**.
 
 ## Keyboard shortcuts
 
@@ -121,7 +123,7 @@ Drag a window by its header to move it. Dragging toward the left or right edge d
 | **Component Search**  | Search for components across every available source and drop them onto the canvas. See [Component Search](/docs/user-guide/component-search) |
 | **Runs & Submissions** | Submit the current pipeline. If you are not signed in, this window offers a sign-in button instead          |
 | **Recent Runs**       | Recent runs for this pipeline, for quick navigation                                                        |
-| **Pipeline Details**  | Pipeline-level information: name, timestamps, digest, validation status, tags, and inputs and outputs. Its **Details** section also holds the pipeline's description, notes, and [run name template](#run-name-template). When you are inside a subgraph the window is titled **Subgraph Details** and describes that subgraph instead |
+| **Pipeline Details**  | Pipeline-level information: name, timestamps, digest, validation status, tags (up to 10 per pipeline), and inputs and outputs. Its **Details** section also holds the pipeline's description, notes, and [run name template](#run-name-template). When you are inside a subgraph the window is titled **Subgraph Details** and describes that subgraph instead |
 | **Properties**        | Context panel for the current selection. See [Task properties](#task-properties)                            |
 | **Pipeline Structure** | A tree view of the pipeline, including nested subgraphs and per-entity issue badges. See [Pipeline Structure](#pipeline-structure) |
 | **Fix Issues**        | Guided fixes for validation problems, one issue at a time. See [Validation and fixing issues](#validation-and-fixing-issues) |
@@ -143,9 +145,20 @@ Use the **Minimap** window for navigation and the **View → Auto-layout** menu 
 There are several ways to get something onto the canvas:
 
 - Drag a component from the **Component Search** window.
-- Drop a component YAML file straight onto the canvas. The component is added to the canvas and to your user component library at the same time.
+- Drop a component YAML file straight onto the canvas. Once it passes [validation](#invalid-components), the component is added to the canvas and to your user component library at the same time.
 - Paste a copied selection with `Cmd/Alt` + `V`; it lands at the pointer. See [Copying and pasting nodes](#copying-and-pasting-nodes).
 - Drag **Sticky Note**, **Input**, or **Output** out of the **Component Search** window's browse view — see [Component Search](/docs/user-guide/component-search#the-editor-window).
+
+### Invalid components
+
+Every component you drop is checked against the component specification schema before anything is added: one dragged from **Component Search**, a YAML file dropped on the canvas, and one dropped onto an existing task to replace its component. A component that fails the check is not added. An **Invalid component** dialog says that it was not added to the pipeline and lists each problem with the path of the field concerned, for example:
+
+- `Expected a string. Quote numeric and boolean defaults.` An input default was written as a bare number or boolean, such as `default: 10`. Write it as `default: "10"`.
+- `Expected an object. Indent cond and then beneath if.` A [conditional](#conditional-execution) placeholder has `cond` and `then` beside `if` rather than nested beneath it.
+
+The pipeline is left exactly as it was, and a rejected file is not added to your user component library either. Close the dialog to carry on editing, then fix the component and drop it again.
+
+If the component or the schema cannot be downloaded, the dialog is titled **Unable to validate component** and nothing is added. Check your connection and drop the component again.
 
 ### Replacing a task's component
 
@@ -349,8 +362,4 @@ To flatten a subgraph back into its individual tasks, select it and choose **Nod
 
 Landing in the editor without a pipeline shows an **Open Pipeline** panel with your pipeline folders, so you can pick one without going back to the dashboard. The same picker is available at any time from **File → Open** or with `Ctrl` + `O`.
 
-## Switching to the legacy editor
-
-A version toggle in the editor lets you move between the current and legacy editors for the same pipeline. Hover it to see **Switch to legacy editor**; from the legacy editor the same control reads **Switch to new editor**. Both editors read and write the same pipeline, so you can switch back and forth without losing work.
-
-The first time you land in the current editor, a short welcome message points out the toggle. Dismiss it and it will not reappear.
+Every pipeline you open in the editor is added to **Recently Viewed** on the dashboard.

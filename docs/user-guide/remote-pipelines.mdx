@@ -1,0 +1,101 @@
+---
+id: remote-pipelines
+title: Remote Pipelines
+description: Store pipelines on the TangleML backend instead of in your browser — finding, sharing, and editing remote pipelines, view-only access, save recovery, and moving browser pipelines across.
+---
+
+# Remote Pipelines
+
+By default, the pipelines you build in Studio are saved in your browser. A deployment can save them on the backend instead, as **remote pipelines**. A remote pipeline is not tied to one browser: you can open it from another machine, send its link to a teammate, and it is not lost when you clear your browser data.
+
+:::info
+Remote pipelines are turned on by whoever builds and deploys Studio, by setting `VITE_REMOTE_PIPELINES=true`. They also need a backend that supports saved pipelines. Without both, every pipeline stays in your browser as described in [Pipelines Persistence](/docs/getting-started/pipelines-persistence). To check which applies to you, open **Settings → Preferences**. If the deployment has not turned remote storage on, the **Save new pipelines in this browser** switch is locked on and says so.
+:::
+
+## Where new pipelines are saved
+
+With remote pipelines on and a backend configured, new pipelines are saved on the backend:
+
+| Action | What happens |
+| ------ | ------------ |
+| **New pipeline** | Opens an unsaved draft with a **Draft** badge beside its name. The draft is saved as a remote pipeline by the first autosave after you change something. A draft you never change is never saved |
+| **Import**, or an example from **Example Pipelines** | Creates a remote pipeline straight away |
+| **File → Save as** | Saves the copy as a remote pipeline |
+| **Clone pipeline** from a run | Creates a remote pipeline |
+
+Once a draft is saved, its address changes to `/editor/pipeline/<id>` without reloading the editor.
+
+To keep new pipelines in your browser instead, turn on **Save new pipelines in this browser** under **Settings → Preferences**. This helps when your account cannot write to the backend. Pipelines that are already remote stay where they are.
+
+## Finding remote pipelines
+
+Remote pipelines are listed on the dashboard under **All Pipelines**. If your browser also holds pipelines, the page has two tabs: **Remote Pipelines**, selected by default, and **Local Pipelines** for the ones in your browser. The tabs disappear once no browser pipelines are left.
+
+The remote table shows each pipeline's **Name**, **ID**, **User** (its owner), **Created at**, **Updated at**, and **Current version**. Click a row to open the pipeline, or `Cmd/Ctrl` + click to open it in a new tab. To resize a column, drag the edge of its header, or focus the edge and use the arrow keys.
+
+Filters sit above the table:
+
+- **Search by name...** matches any part of the name.
+- **Search by ID...** matches a complete pipeline ID only. The **Copy pipeline ID** button in each row copies the full ID, even when the column is too narrow to show all of it.
+- **Search by user...** starts set to `me`, so you see your own pipelines first. Clear it to see everyone's, or click **Me** to return to your own.
+- **Created at** and **Updated at** take a date range. The end date is included.
+- **Clear** resets every filter, including the user filter, so the table shows pipelines from all users.
+
+The filters are kept in the page address, so you can bookmark or share a filtered list. `me` always means whoever opens the link, so a teammate who opens it sees their own pipelines. The table shows 10 pipelines per page.
+
+Each row has a favorite star. Rows for pipelines you own also have a delete button, which asks for confirmation first. Deleting a remote pipeline removes it from the backend for everyone and cannot be undone. Runs already submitted from it are not affected.
+
+## Editing a remote pipeline
+
+You can edit a remote pipeline if you own it and your account can write to the backend. It opens in the [Pipeline Editor](/docs/user-guide/pipeline-editor) and saves itself shortly after each change. Hover the save icon in the menu bar to see when it last saved, or click it to save right away.
+
+A few editor features work differently for a remote pipeline:
+
+- **File → Move to folder** and **File → Delete pipeline** are not offered. Delete a remote pipeline from the dashboard table instead.
+- **File → Open** lists only the pipelines saved in your browser.
+- Renaming a remote pipeline does not change its address, and two remote pipelines can have the same name.
+
+### When a save fails
+
+If the backend cannot save your changes, the save icon turns red and a banner explains why. Your changes stay in the open tab, and the banner offers two ways out:
+
+- **Retry remote save** tries again, for example once your connection is back.
+- **Save local copy** saves the current pipeline in your browser under a new name, `<name> (Local copy)` by default. The copy does not change the remote pipeline.
+
+If retrying keeps failing, save a local copy before you close the tab. Otherwise the unsaved changes are lost. The same banner appears if someone deletes the pipeline while you have unsaved edits.
+
+## Sharing and view-only access
+
+To share a remote pipeline, copy its address from the browser. It has the form `/editor/pipeline/<id>`. To send a teammate to one task, input, or output, select it and use **Copy node link** in its details. The link also records which subgraph you were in. The button is disabled while you have unsaved changes. Your teammate must be using the same backend for the link to open.
+
+If you do not own a pipeline, or your account cannot write to the backend, the pipeline opens view-only. A **View only** badge sits next to its name, and you can look around without changing anything:
+
+- Task, input, and output details are read-only, and nodes cannot be moved.
+- You can go into subgraphs and follow node links.
+- A **Pipeline Tools** panel offers **View YAML** and **Clone pipeline**. **Clone pipeline** asks for a name, `<name> (Copy)` by default, and gives you your own copy to edit.
+- You cannot submit runs. The File, Runs, Components, and Node menus are hidden, and so are the **Pipeline Structure**, **Runs & Submissions**, **Recent Runs**, and **History** windows.
+
+## Moving browser pipelines to the backend
+
+Pipelines already saved in your browser can be moved to the backend one at a time. There is no bulk move.
+
+**When you open one.** With remote pipelines on, and **Save new pipelines in this browser** off, opening a browser pipeline asks whether to move it. The dialog is titled **Move "&lt;name&gt;" to the server?**:
+
+- **Move** saves the pipeline and its configured input values to the backend. The browser copy is removed only after the move succeeds.
+- **Cancel** keeps you editing in your browser. You are asked again the next time you open the pipeline.
+
+Tick **Move pipelines I open to … without asking** to skip the question for that backend from then on. To be asked again, use **Ask before moving pipelines to this backend** under **Settings → Preferences**.
+
+**From the dashboard.** On the **Local Pipelines** tab, each row has an **Upload pipeline** button. Uploading saves a copy to the backend and keeps the browser copy as well. From then on the two copies are separate pipelines, and opening the browser copy no longer asks to move it.
+
+A pipeline with no tasks is not uploaded. Its dialog offers **Delete empty pipeline** instead. Confirming deletes the browser copy without creating a remote pipeline. **Cancel** keeps the pipeline so you can add tasks first.
+
+:::warning
+Once a pipeline is on the backend, other users with read access to that backend can see it, including its configured input values. Folder placement and undo history are not carried over.
+:::
+
+Favorites and recently viewed entries follow the pipeline to its remote copy. After a move, old links to the browser copy open the remote pipeline instead, in that browser.
+
+## If remote pipelines are turned off again
+
+If the deployment turns remote storage off again, existing remote pipelines can still be reached through their links, favorites, and recently viewed entries, and their owners can still edit them. New pipelines, imports, and copies are saved in your browser again, and the remote table disappears from the dashboard. Browser copies that were removed when a pipeline moved are not restored.

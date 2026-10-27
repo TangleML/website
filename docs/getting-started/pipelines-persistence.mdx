@@ -8,6 +8,8 @@ The editor saves your pipeline locally when editing, and saves it to the backend
 
 :::info
 This means pipelines stored in the editor will be lost if you clear browser data or use a different browser. You should always export important pipelines or submit them as runs for permanent storage.
+
+Some deployments save pipelines on the backend while you edit them, as [remote pipelines](#remote-pipelines). The browser-only behaviour on this page then applies only to the pipelines you keep under **Local Pipelines**.
 :::
 
 ## Local vs backend storage
@@ -47,6 +49,17 @@ All pipeline runs are available to anyone with the access to your instance of th
   alt="pipeline run screenshot" 
   style={{ width: "100%", borderRadius: "6px",  }} 
 />
+
+### Remote pipelines
+
+A deployment can also store the pipelines you are still editing on the backend, as **remote pipelines**. This is switched on by whoever deploys Studio and needs a backend that supports saved pipelines. When it is on:
+
+- New pipelines, imports, copies, and clones from a run are saved on the backend and autosaved as you edit.
+- Each remote pipeline has its own link, so you can open it from any browser or share it with a teammate. Teammates who do not own it can view it and clone it, but not change it.
+- Pipelines already in your browser can be moved to the backend when you open them, or uploaded from the dashboard.
+- Clearing your browser data does not lose a remote pipeline.
+
+See [Remote Pipelines](/docs/user-guide/remote-pipelines) for the full guide.
 
 ## Managing multiple pipeline versions
 
@@ -106,6 +119,6 @@ Share pipelines before creating runs through the export/import workflow:
 Your locally saved pipelines are accessible from the **Home** screen:
 
 1. Navigate to the Home Screen.
-2. Click on the **My Pipelines** tab.
+2. Click **All Pipelines** in the sidebar. If your deployment uses remote pipelines, select the **Local Pipelines** tab.
 3. View all pipelines stored in your browser.
 4. Click any pipeline to open it in the editor.

@@ -26,7 +26,7 @@ The relationship between components and tasks is fundamental to understanding Pi
 A pipeline in TangleML is a special kind of component known as a [graph component](/docs/core-concepts/what-are-components#2-graph-components). Instead of acting as a standalone container, its main role is to orchestrate multiple tasks and manage how data flows between them. Pipelines are highly reusable—they can themselves be used as components in other pipelines, enabling flexible and hierarchical workflows. When a pipeline runs, it takes care of task dependencies and directs the flow of data, making sure everything happens in the right order.
 
 :::tip
-While editing, pipelines are only stored locally in your browser. Once a pipeline is submitted, as a run, it's stored in the backend for all users. For more information, see [Pipelines Persistence](/docs/getting-started/pipelines-persistence).
+While editing, pipelines are stored locally in your browser, unless your deployment saves them on the backend as [remote pipelines](/docs/user-guide/remote-pipelines). Once a pipeline is submitted, as a run, it's stored in the backend for all users. For more information, see [Pipelines Persistence](/docs/getting-started/pipelines-persistence).
 :::
 
 ## Inputs and outputs
@@ -42,4 +42,4 @@ Outputs from one task become available as inputs to connected downstream tasks, 
 
 ## Artifacts
 
-Artifacts are the data produced by components (read: any output), stored in TangleML's artifact storage system. Artifacts can be a blob (nameless files) or a directory. To view artifacts, go to the **Pipeline Run** page in [the **Artifacts** tab](/docs/user-guide/studio-app-ui-overview#artifacts-tab). For more information, see [Artifacts](/docs/core-concepts/artifacts).
+Artifacts are the data produced by components (read: any output), stored in TangleML's artifact storage system. Artifacts can be a blob (nameless files) or a directory. To view artifacts, go to the **Pipeline Run** page in [the **Artifacts** tab](/docs/user-guide/run-view#task-inspection). For more information, see [Artifacts](/docs/core-concepts/artifacts).
