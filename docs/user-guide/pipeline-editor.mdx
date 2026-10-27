@@ -14,7 +14,7 @@ This is the only editor in Studio. The legacy editor and the version toggle that
 
 ## Menu bar
 
-The menu bar spans the top of the editor. On the left it shows the TangleML logo (a link back to your dashboard), the current pipeline name, and the menus. On the right it shows the run controls.
+The menu bar spans the top of the editor. On the left it shows the TangleML logo (a link back to your dashboard), the current pipeline name, and the menus. On the right are the run controls, the auto-save indicator, and the app's own buttons: **Notices**, **Settings**, **Documentation**, and sign-in.
 
 Hover the pipeline name to reveal a pencil button that opens the **Rename Pipeline** dialog.
 
@@ -22,14 +22,14 @@ Hover the pipeline name to reveal a pencil button that opens the **Rename Pipeli
 
 | Item                | Description                                                        |
 | ------------------- | ------------------------------------------------------------------ |
-| **Open**            | Open another pipeline without leaving the editor                    |
-| **Save**            | Save the current pipeline                                           |
-| **Save as**         | Save a copy under a new name                                        |
+| **Open**            | Open another pipeline without leaving the editor. See [Pipeline folders](#pipeline-folders) |
+| **Save**            | Save the current pipeline now. The editor also saves automatically   |
+| **Save as**         | Save a copy under a new name, in the **Save Pipeline As** dialog. The editor switches to the copy |
 | **Rename**          | Rename the current pipeline                                         |
 | **New pipeline**    | Start a fresh, empty pipeline                                       |
-| **Import**          | Load a pipeline from a file or by pasting YAML                       |
+| **Import**          | Load a pipeline from a file or by pasting YAML, in the **Import Pipeline** dialog |
 | **Export**          | Download the pipeline as a YAML file                                 |
-| **Move to folder**  | Move the pipeline into a pipeline folder                             |
+| **Move to folder**  | Move the pipeline into a [pipeline folder](#pipeline-folders)        |
 | **Delete pipeline** | Delete the pipeline, after a confirmation prompt                     |
 
 For a [remote pipeline](/docs/user-guide/remote-pipelines), **Move to folder** and **Delete pipeline** are not offered, and **Open** lists only the pipelines saved in your browser. Delete a remote pipeline from the dashboard instead.
@@ -38,21 +38,23 @@ For a [remote pipeline](/docs/user-guide/remote-pipelines), **Move to folder** a
 
 - **Auto-layout** — re-arrange the graph using one of four algorithms: **Sugiyama**, **Sugiyama Centered**, **Compact**, or **Spread**. Sugiyama is bound to a keyboard shortcut, shown next to the item.
 - **View YAML** — open the full pipeline definition in a fullscreen, read-only viewer.
-- **Focus mode** — a checkbox that hides surrounding chrome so you can concentrate on the canvas. Also available via a keyboard shortcut.
+- **Focus mode** — a checkbox that hides the docked windows, apart from **Properties**, so you can concentrate on the canvas. Floating windows and the menu bar stay, and the canvas gets a coloured outline while focus mode is on. Turning it off brings your layout back exactly as it was. Also available via a keyboard shortcut.
 
 ### Runs
 
 - **Submit Run** — submit the pipeline as-is.
 - **Submit with Arguments** — open a dialog to review and set argument values before submitting.
 
+While the pipeline has validation errors, both items are disabled and the menu shows how many issues there are, for example `3 validation issues`.
+
 ### Components
 
-- **Explore library** — open the component browser.
-- **Add component** — add a new component to your user library.
+- **Explore library** — leave the editor for the dashboard's **Components** page. See [Component Search](/docs/user-guide/component-search).
+- **Add component** — open the **Add Component** dialog to add a component to your user library from a file, a URL, or a new definition. See [Adding Components](/docs/component-development/adding-components).
 
 ### Windows
 
-The **Windows** menu lists every editor window with a checkbox, so you can show or hide each one individually. A **Views** submenu applies a whole layout at once:
+The **Windows** menu lists the editor's windows alphabetically, each with a checkbox, so you can show or hide each one individually. **Properties** is listed only while it is open, and [pinned task windows](#pinned-task-windows) and **Fix Issues** are never listed; reopen **Fix Issues** with the **Fix** button in **Pipeline Details**. A **Views** submenu applies a whole layout at once:
 
 | Preset      | Effect                                                                 |
 | ----------- | ---------------------------------------------------------------------- |
@@ -62,43 +64,48 @@ The **Windows** menu lists every editor window with a checkbox, so you can show 
 
 ### Node
 
-The **Node** menu appears only while something is selected on the canvas, and its items depend on what that something is:
+The **Node** menu appears only while a single task, pipeline input, or pipeline output is selected, and its items depend on what is selected:
 
 | Item                 | Available for                                                      |
 | -------------------- | ------------------------------------------------------------------ |
 | **Duplicate Task**   | Tasks                                                               |
-| **Arrange**          | Any node — **Move Forward**, **Move Backward**, **Bring to Front**, **Send to Back** |
+| **Arrange**          | Tasks, inputs, and outputs — **Move Forward**, **Move Backward**, **Bring to Front**, **Send to Back** |
 | **Unpack Subgraph**  | Subgraph nodes — replaces the node with its constituent tasks         |
 | **Delete Task**      | Tasks                                                               |
 
-**Arrange** controls stacking order, which matters when nodes overlap — most often when a sticky note sits behind or in front of the tasks it annotates.
+**Arrange** controls stacking order, which matters when nodes overlap. Sticky notes have their own stacking controls; see [Sticky notes](#sticky-notes).
 
 ### Run controls
 
 At the right of the menu bar:
 
-- **Submit Run** — a quick-run button. It is accompanied by a **Submit run with arguments** option. When the pipeline has validation problems, the button reports them — either **Pipeline has validation errors** (which blocks submission) or **Pipeline has validation warnings**.
+- **Submit Run** — a quick-run button that submits the pipeline as-is. When the pipeline has validation problems, the button reports them on hover — either **Pipeline has validation errors** (which blocks submission) or **Pipeline has validation warnings**. To set argument values first, use **Runs → Submit with Arguments** or the **Runs & Submissions** window. After you submit, a **Pipeline successfully submitted** notification offers **View Run**, and the editor stays open.
 - **Auto-save indicator** — shows **Auto-save enabled** normally, **Saving…** while a save is in flight, and **Last saved at** with the time once a save has finished, so you can tell your work has been persisted without saving manually. Click it to save right away. If a save fails, the icon turns red and its tooltip gives the reason; click it to retry. A new [remote pipeline](/docs/user-guide/remote-pipelines) that has not been saved yet reads **Draft — saved after your first edit**.
 
 ## Keyboard shortcuts
 
-Shortcuts use **Cmd** on macOS and **Alt** elsewhere; either modifier works, so the tables below write it as `Cmd/Alt`.
+Shortcuts use **Cmd** on macOS and **Alt** elsewhere; either modifier works, so the tables below write it as `Cmd/Alt`. On Windows and Linux some shortcut hints in the app read **Ctrl** where the shortcut actually uses **Alt**.
 
 | Shortcut             | Action                                                     |
 | -------------------- | ---------------------------------------------------------- |
 | `Cmd/Alt` + `/`      | Toggle focus mode                                           |
 | `Cmd/Alt` + `Shift` + `L` | Auto-layout the graph                                  |
 | `Cmd/Alt` + `C`      | Copy the current selection                                  |
-| `Cmd/Alt` + `V`      | Paste at the pointer                                        |
+| `Cmd/Alt` + `V`      | Paste in the middle of the visible canvas                   |
 | `Cmd/Alt` + `Z`      | Undo                                                        |
 | `Cmd/Alt` + `Shift` + `Z` | Redo                                                   |
 | `Cmd/Alt` + `Y`      | Redo (alternative)                                          |
 | `Ctrl` + `O`         | Open a pipeline                                             |
-| `Ctrl` + `Shift` + `M` | Maximize the arguments editor in the **Properties** window |
+| `Ctrl` + `Shift` + `M` | Maximize the **Properties** window while it shows a task's arguments — see [Arguments](#arguments) |
 | `Delete` or `Backspace` | Delete the current selection                              |
-| `Esc`                | Dismiss the topmost overlay, or clear the canvas selection   |
+| `Esc`                | Dismiss the topmost overlay, restore a maximized window, or clear the canvas selection |
+| `Shift` + click a task | Pin the task in its own window — see [Pinned task windows](#pinned-task-windows) |
+| `Shift` + drag       | Draw a selection box                                         |
+| `Cmd/Alt` + `Shift` + drag | Draw a selection box that also selects nodes it only partly covers |
+| `Cmd/Alt` + drag from a port | Create a connected pipeline input or output — see [Adding to the canvas](#adding-to-the-canvas) |
+| Hold `Shift` + `Q` or `Shift` + `W`, then click | Create a horizontal or vertical [guideline](#guidelines) |
 
-`Esc` works in layers: if a dialog, popover, or menu is open it closes that first, and only clears your canvas selection once nothing is stacked on top.
+`Esc` works in layers: if a dialog, popover, or menu is open it closes that first, then it restores a maximized window, and only clears your canvas selection once nothing is stacked on top.
 
 ## Windows
 
@@ -114,7 +121,11 @@ Every window header carries a set of buttons:
 | **Maximize** / **Restore** | Expand a window to fill the available area, or return it to its previous size |
 | **Hide**                 | Remove the window from view; bring it back from the **Windows** menu |
 
-Drag a window by its header to move it. Dragging toward the left or right edge docks it there; dragging away from an edge floats it over the canvas. Docked windows on the same side stack vertically.
+Drag a window by its header to move it. Dragging toward the left or right edge docks it there; dragging away from an edge floats it over the canvas. Docked windows on the same side stack vertically. Floating windows resize from any edge or corner.
+
+The right dock shows one expanded window at a time, so opening one there collapses the others. Double-click a dock's inner edge, or drag it narrow, to collapse the whole dock into a strip of icons. Each icon opens its window as a popover, and its tooltip names it, for example **View Pipeline Details**.
+
+**Properties** opens by itself when you select something on the canvas, and cannot be hidden. Its **Close** button clears the selection instead.
 
 ### Available windows
 
@@ -123,7 +134,7 @@ Drag a window by its header to move it. Dragging toward the left or right edge d
 | **Component Search**  | Search for components across every available source and drop them onto the canvas. See [Component Search](/docs/user-guide/component-search) |
 | **Runs & Submissions** | Submit the current pipeline. If you are not signed in, this window offers a sign-in button instead          |
 | **Recent Runs**       | Recent runs for this pipeline, for quick navigation                                                        |
-| **Pipeline Details**  | Pipeline-level information: name, timestamps, digest, validation status, tags (up to 10 per pipeline), and inputs and outputs. Its **Details** section also holds the pipeline's description, notes, and [run name template](#run-name-template). When you are inside a subgraph the window is titled **Subgraph Details** and describes that subgraph instead |
+| **Pipeline Details**  | Pipeline-level information: name, timestamps, digest, validation status, tags (up to 10 per pipeline), and inputs and outputs. Its **Details** section also holds the pipeline's description, notes, and [run name template](#run-name-template). When you are inside a subgraph the window is titled **Subgraph Details** and describes that subgraph instead. See [Pipeline Details](#pipeline-details) |
 | **Properties**        | Context panel for the current selection. See [Task properties](#task-properties)                            |
 | **Pipeline Structure** | A tree view of the pipeline, including nested subgraphs and per-entity issue badges. See [Pipeline Structure](#pipeline-structure) |
 | **Fix Issues**        | Guided fixes for validation problems, one issue at a time. See [Validation and fixing issues](#validation-and-fixing-issues) |
@@ -132,13 +143,33 @@ Drag a window by its header to move it. Dragging toward the left or right edge d
 | **Tip of the Day**    | A rotating usage tip                                                                                        |
 | **Debug Panel**       | Diagnostic information about editor state, useful when reporting a problem. Hidden in the **Default** view; show it from the **Windows** menu or the **All** view |
 
+### Pipeline Details
+
+Besides the fields above, **Pipeline Details** has:
+
+- A digest bar. Click the digest to copy it. Beside it are **View pipeline YAML** and a menu with **Download YAML** and **Copy YAML**.
+- The validation summary, which reads **No validation issues** with **Pipeline is ready for submission** when there is nothing to fix.
+- A collapsed **Metadata & annotations** section with **Created by**, **Created at**, **Last updated**, and the pipeline's own annotations.
+
+### Pinned task windows
+
+`Shift` + click a task to pin it in a window of its own, titled with the task's name, with **Details**, **I/O**, and **Code** tabs. Pinned windows stay open while you select other things, so you can keep several tasks in view side by side.
+
 ## Canvas
 
 The canvas is your workspace for building the pipeline graph. Tasks appear as nodes with inputs on the left and outputs on the right; drag from an output handle to an input handle to connect them.
 
 Alongside task nodes, the editor supports pipeline **input** and **output** nodes for pipeline-level parameters and results, and **subgraph** nodes for nested pipelines.
 
-Use the **Minimap** window for navigation and the **View → Auto-layout** menu to tidy up the graph.
+Use the **Minimap** window for navigation and the **View → Auto-layout** menu to tidy up the graph. Undo and redo buttons sit at the bottom right of the canvas.
+
+A few things you can do directly on a node:
+
+- Click an input's label on a task to select the task and jump to that argument in **Properties**.
+- Click a port to select all of its connections.
+- Badges mark a **Subgraph**, a task with **Cache Disabled**, and inputs whose value is a [secret](/docs/core-concepts/secrets) (a lock).
+
+Zoomed out below 30%, nodes are drawn in a simplified form and you cannot draw or re-route connections until you zoom back in.
 
 ### Adding to the canvas
 
@@ -146,8 +177,9 @@ There are several ways to get something onto the canvas:
 
 - Drag a component from the **Component Search** window.
 - Drop a component YAML file straight onto the canvas. Once it passes [validation](#invalid-components), the component is added to the canvas and to your user component library at the same time.
-- Paste a copied selection with `Cmd/Alt` + `V`; it lands at the pointer. See [Copying and pasting nodes](#copying-and-pasting-nodes).
-- Drag **Sticky Note**, **Input**, or **Output** out of the **Component Search** window's browse view — see [Component Search](/docs/user-guide/component-search#the-editor-window).
+- Paste a copied selection with `Cmd/Alt` + `V`; it lands in the middle of the visible canvas. See [Copying and pasting nodes](#copying-and-pasting-nodes).
+- Drag **Sticky Note**, **Input Node**, or **Output Node** out of the **Component Search** window's browse view — see [Component Search](/docs/user-guide/component-search#the-editor-window).
+- Hold `Cmd/Alt` and drag from a task's port to an empty part of the canvas. Dragging from an input creates a pipeline input, and dragging from an output creates a pipeline output, already connected. A new input takes the port's name and type, and the argument's current value or default.
 
 ### Invalid components
 
@@ -170,7 +202,7 @@ Hold `Shift` and drag to draw a selection box, or hold `Cmd`/`Ctrl` and click no
 
 | Button               | Effect                                                            |
 | -------------------- | ----------------------------------------------------------------- |
-| **Duplicate**        | Copy the selected nodes in place                                   |
+| **Duplicate**        | Copy the selected nodes, placed slightly down and to the right of the originals |
 | **Copy**             | Copy the selection to the clipboard                                |
 | **Create Subgraph**  | Collapse the selection into a subgraph — shown for two or more tasks |
 | **Delete**           | Remove the selected nodes                                          |
@@ -186,7 +218,7 @@ With a multiple selection active, the **Properties** window switches to a batch 
 
 ### Copying and pasting nodes
 
-**Copy** — from the floating toolbar or `Cmd/Alt` + `C` — writes the selection to your system clipboard, so it is not confined to the tab you copied from. Paste it with `Cmd/Alt` + `V` into the same pipeline, into a different pipeline, or into an editor open in another browser tab or window; the nodes land at the pointer. Copying from a run view works the same way, which is how you lift part of an executed graph back into an editable pipeline — see [Task inspection](/docs/user-guide/run-view#task-inspection).
+**Copy** — from the floating toolbar or `Cmd/Alt` + `C` — writes the selection to your system clipboard, so it is not confined to the tab you copied from. Paste it with `Cmd/Alt` + `V` into the same pipeline, into a different pipeline, or into an editor open in another browser tab or window. The nodes land in the middle of the visible canvas, and each further paste is offset a little so copies do not stack exactly on top of each other. Copying from a run view works the same way, which is how you lift part of an executed graph back into an editable pipeline — see [Task inspection](/docs/user-guide/run-view#task-inspection).
 
 Where the clipboard holds no copied selection, the editor falls back to the last selection you copied in this tab, so paste still does something sensible after you have copied unrelated text from elsewhere.
 
@@ -198,14 +230,15 @@ Copy and paste inside a dialog, a text field, or the arguments code editor behav
 
 Sticky notes are annotation nodes that carry no execution meaning — use them to label regions of a graph or leave a note for a collaborator. Drag **Sticky Note** from the **Canvas Tools** folder in the **Component Search** window's browse view.
 
-Select a note to edit it in the **Properties** window:
+Double-click a note to edit its text in place, and press `Tab` to move between its title and body. Select a note to edit it in the **Properties** window:
 
 - **Title** and **content**, each with its own font size.
-- **Background colour** and **border colour**.
-- A **lock** toggle that freezes the note's text and colours so you cannot edit it by accident.
+- **Background colour**, and a **border colour** when the background is transparent. A transparent note with no text shows an **Invisible Node** warning, because nothing would be visible on the canvas.
+- A **lock** toggle that freezes the note's text and colours so you cannot edit it by accident. It also appears on the note itself when you hover it.
+- Stacking controls — **Move Forward**, **Move Backward**, **Bring to Front**, **Send to Back** — for when a note overlaps tasks. They are hidden while the note is locked.
 - Read-only **Layout** (size, position, z-index) and **Metadata** (id, created timestamp, author) values, each copyable.
 
-Notes are resizable by dragging their edges, and their stacking order is controlled from **Node → Arrange**.
+Notes are resizable by dragging their edges.
 
 ### Guidelines
 
@@ -220,7 +253,15 @@ Drag a guideline to move it; the edges assigned to it follow. Delete it from the
 
 ## Task properties
 
-Select a task to populate the **Properties** window. It has three tabs.
+Select a task to populate the **Properties** window.
+
+At the top is the task's name. Hover it for a pencil button that renames the task in place: `Enter` saves and `Esc` cancels, and a name already used by another task is refused with **A task with that name already exists**. Below the name is the component bar:
+
+- Click the component's name to open its details dialog, with **Details**, **Inputs/Outputs**, and **Implementation** tabs.
+- **View YAML** shows the component's definition.
+- **More actions** offers **Download YAML**, **Download Python** (for components written in Python), **Copy YAML**, and **Edit Component**, which opens the [in-app component editor](/docs/component-development/in-app-editor).
+
+Three tabs follow: **Arguments**, **Config**, and annotations (a tag icon).
 
 ### Arguments
 
@@ -239,7 +280,7 @@ Every input the component declares, with its type and its current value. Each ro
 - **Select Secret…** opens a picker over the secrets available to you, so the pipeline stores a reference rather than the secret itself. See [Secrets](/docs/core-concepts/secrets).
 - The remaining entries are values the platform supplies at run time.
 
-For long or structured values, the arguments editor opens a code editor with syntax highlighting. It picks a language from the argument's type and lets you override it — JSON, YAML, Python, JavaScript, TypeScript, HTML, CSS, SQL, Markdown, Shell, or plain text. `Ctrl` + `Shift` + `M` maximizes the editor while you work in it.
+Each value is a text field that grows as you type. Its expand button opens a larger **Value for &lt;name&gt;** dialog. For long or structured values, maximize the **Properties** window, with its **Maximize** button or `Ctrl` + `Shift` + `M` while the **Arguments** tab is showing. The window then lists the arguments on the left and opens the selected one in a code editor on the right. The code editor picks a language from the argument's type and lets you override it — JSON, YAML, Python, JavaScript, TypeScript, HTML, CSS, SQL, Markdown, Shell, or plain text.
 
 Alongside the tabs, arguments show a validation indicator when a required value is missing or a connection no longer resolves.
 
@@ -255,14 +296,16 @@ Execution settings for the selected task:
 
 #### Compute resources
 
-**Compute resources** decides where a task runs and on what hardware. Choosing a provider swaps in that provider's fields; switching provider clears the fields belonging to the old one.
+**Compute resources** decides where a task runs and on what hardware. Choosing a provider swaps in that provider's fields; switching provider clears the fields belonging to the old one. Some fields also offer a **Custom...** option for typing a value that is not in the list, and an info button that explains the field. When your deployment offers no targets at all, the section reads **No compute resources available**.
 
 Where your deployment publishes a launcher configuration, the provider list is built from it rather than from a fixed list bundled with the app, so the entries you see are the targets your backend actually offers. Each one names the platform and the cluster together — `GKE: us-abc-123`, `Nebius: B300 cluster` — and a cluster belonging to a particular project shows it underneath as `Project: <project-id>`.
+
+A deployment can attach a note to a target, shown as an info line under the **Cloud provider** picker once you choose it. It typically says what you need to arrange before your first run there, such as an account, and links to where to arrange it. Links in the note can be clicked.
 
 Two kinds of entry are worth recognising:
 
 - **Aliases.** A deployment can publish a stable name that stands for whichever cluster currently sits behind it. An alias is listed under its own name — an alias `prod` appears as **Prod default** — with a caption reading **Currently** followed by the cluster it resolves to today. Selecting the alias pins the task to the name rather than to that cluster, so the task follows the alias if the deployment later points it somewhere else. A pipeline that already names an alias resolves to the right cluster when it is opened.
-- **Withdrawn clusters.** A cluster past its availability date is left out of the list so it cannot be chosen afresh. A task already pinned to one still shows it, marked as no longer available, with the date it was withdrawn and — where the deployment names one — the cluster that replaced it.
+- **Withdrawn clusters.** A cluster past its availability date is left out of the list so it cannot be chosen afresh. A task already pinned to one still shows it, marked as no longer available, with the date it was withdrawn and — where the deployment names one — the cluster that replaced it. Depending on the deployment, the note reads either `Runs are sent to <cluster> automatically.` or `Use <cluster> instead.` Withdrawn accelerator choices are shown the same way.
 
 A cluster your deployment lists but has not enabled is shown as unavailable, noting that it is not enabled for this deployment.
 
@@ -289,9 +332,19 @@ Conditional execution is enabled by default for everyone. You can turn it off un
 
 ### Annotations
 
-Key/value metadata attached to the task, with your own annotations kept separate from the ones the platform maintains.
+The third tab, shown as a tag icon, holds key/value metadata attached to the task. **Task annotations** lists your own, with **New** to add one. Studio's own bookkeeping keys are kept apart in a collapsed **System annotations** section.
 
-Beneath the tabs, an **Actions** section collects the operations available for the selected task.
+Beneath the tabs, an **Actions** section collects the operations available for the selected task: the stacking controls (**Move Forward**, **Move Backward**, **Bring to Front**, **Send to Back**), **Unpack Subgraph** for a subgraph, **Duplicate Task**, and a delete button.
+
+## Input and output properties
+
+Select a pipeline input node to edit it in **Properties**:
+
+- **Name**, **Type** (for example `String`, `Integer`, or `Float`), and **Description**.
+- **Value**, the input's default for runs, with an expand button for a larger editor.
+- **Optional**, showing whether a run can leave the input unset.
+
+A pipeline output node has a **Name** and **Description** you can edit, and a read-only **Type** taken from whatever it is connected to.
 
 ## Run name template
 
@@ -328,9 +381,13 @@ Each issue shows its severity and message, followed by whatever fix applies to i
 | A task, component, input, or output has an empty name | Rename it inline                                              |
 | Two inputs or two outputs share a name              | Rename one of them                                             |
 | A task has no component reference                   | **Delete Task**                                                 |
+| A component has no implementation                   | Guidance to replace it with a working component                |
 | An input or output is unconnected                   | **Delete Input** / **Delete Output**                            |
-| A connection points at something that no longer exists | Clear the broken reference                                    |
+| An argument refers to something that no longer exists | **Unset Argument**, or set a new value                        |
 | A connection is left dangling at one end            | **Delete Binding**                                              |
+| A connection points at a port that does not exist, reads from a pipeline output, or writes into a pipeline input | **Delete Connection** |
+| A subgraph has conditional execution set            | **Remove Condition**                                            |
+| A run condition is invalid, has the wrong type, or uses the reserved `__is_enabled__` name | Guidance on fixing the condition |
 | The component could not be loaded from its source   | Guidance to check the component URL or your connection, then reload |
 | A required launcher annotation is missing           | Guidance to fill it in on the task's **Config** tab             |
 | The graph contains a circular dependency            | Guidance — cycles have to be broken by hand                     |
@@ -346,20 +403,33 @@ Entities with validation problems carry a badge — red with a total count when 
 
 ## History
 
-The **History** window lists every change in this editing session, most recent last, with the initial state marked at the top. Its toolbar has undo and redo buttons, a counter reading `undone / total`, and a **Clear history** button that discards the recorded history.
+The **History** window lists every change in this editing session, newest at the top. Changes you have undone sit under **Future**, above a dashed divider, and the rest under **Past**, with **Initial state** at the bottom. Click any entry to jump to that point. The toolbar has undo and redo buttons, a counter showing how many changes are applied out of the total, and a **Clear history** button that discards the recorded history. Undo and redo buttons also sit at the bottom right of the canvas.
 
-Undo history is scoped to the pipeline you are editing. The most recent changes are saved in the browser and restored when you reopen the pipeline, so a reload does not cost you your last few undos.
+Undo history is scoped to the pipeline you are editing. The last 10 changes are saved in the browser and restored when you reopen the pipeline, so a reload does not cost you your last few undos.
 
 ## Subgraphs
 
 A group of tasks can be collapsed into a subgraph node, which keeps large pipelines readable. Select two or more tasks and use **Create Subgraph** from the floating selection toolbar or the **Properties** window.
 
-Double-click a subgraph node to navigate into it; the **Pipeline Details** window becomes **Subgraph Details** while you are inside, and the **Pipeline Structure** window shows where you are in the nesting.
+Double-click a subgraph node to navigate into it; the **Pipeline Details** window becomes **Subgraph Details** while you are inside, and the **Pipeline Structure** window shows where you are in the nesting. A breadcrumb trail at the top of the canvas, starting at **Root**, takes you back to any level. To rename the subgraph, use the **Rename subgraph** pencil in the **Subgraph Details** header.
 
 To flatten a subgraph back into its individual tasks, select it and choose **Node → Unpack Subgraph**.
 
-## Opening a pipeline
+## Pipeline folders
 
-Landing in the editor without a pipeline shows an **Open Pipeline** panel with your pipeline folders, so you can pick one without going back to the dashboard. The same picker is available at any time from **File → Open** or with `Ctrl` + `O`.
+Landing in the editor without a pipeline shows an **Open Pipeline** panel with your pipeline folders, so you can pick one without going back to the dashboard. The same picker is available at any time from **File → Open** or with `Ctrl` + `O`. Every pipeline you open in the editor is added to **Recently Viewed** on the dashboard.
 
-Every pipeline you open in the editor is added to **Recently Viewed** on the dashboard.
+The picker starts at **Pipelines**, the top level. Favourite folders appear as cards across the top, a breadcrumb shows where you are, and a `..` row goes up a level. The table lists each pipeline's **Title**, **Modified at**, **Tags**, **Last run**, and **Runs**, with a search box above it.
+
+:::tip
+**Hide empty pipelines** is on by default in the picker, so pipelines with no tasks are left out, and the toggle shows how many are hidden. If a pipeline you just created is missing, turn the toggle off.
+:::
+
+To organise pipelines:
+
+- **New Folder** opens a **Create Folder** dialog that asks for a **Folder name**.
+- Each folder's menu offers **Favorite** or **Unfavorite**, **Rename**, and **Delete**. Deleting a folder moves the pipelines inside it back to the top level and deletes its subfolders.
+- Select pipelines with their checkboxes to **Move** or **Delete** several at once. Runs are not affected by deleting a pipeline. You can also drag pipelines onto a folder to move them.
+- **File → Move to folder** moves the pipeline you are editing.
+
+In Chromium-based browsers, **Connect Folder** links a folder on your computer, and lists the `*.pipeline.component.yaml` files in it. Its menu has **Refresh** and **Disconnect**. Pipelines cannot be moved into or out of a connected folder. When the browser's access to the folder lapses, the picker asks you to **Grant Access** again, and so does the editor when you open one of its pipelines. Your deployment may offer other folder sources here too.

@@ -12,6 +12,8 @@ The run view shows a single pipeline run: the execution graph, the status of eve
 This is the only run view in Studio. The legacy run view and its version toggle have been removed. A run opens at `/runs/<run id>`, and links that still point at the old `/runs-v2/…` address redirect there, including links into a subgraph. The browser tab is titled `Tangle - <pipeline name> - <run id>`, so several open runs are easy to tell apart.
 :::
 
+While the run loads, the page reads **Loading Pipeline Run**. If it cannot load, the page says why instead: **Backend not configured** or **Backend not available** when Studio has no backend to ask, **Error loading pipeline run** when the backend refused, and **Couldn't reach the server**, with a **Reload page** button, when the connection failed.
+
 ## Menu bar
 
 The menu bar spans the top of the run view with the TangleML logo, the pipeline's name, and the menus below it.
@@ -22,21 +24,23 @@ The menu bar spans the top of the run view with the TangleML logo, the pipeline'
 | -------------------- | ----------------------------------------------------- |
 | **Inspect Pipeline** | When the run's pipeline is available in your browser storage |
 | **View YAML**        | Always                                                 |
-| **Clone Pipeline**   | Always — creates a new pipeline from this run's definition |
-| **Export YAML**      | Always                                                 |
+| **Compare with another run…** | While **Compare runs** is on (the default) — opens this run in [Compare Runs](/docs/user-guide/compare-runs) as side **A**, ready for you to pick the run to compare it against |
+| **Clone Pipeline**   | Always — creates a new pipeline from this run's definition. See [Run tools](#run-tools) |
+| **Export YAML**      | Always — downloads `<name>.pipeline.component.yaml`    |
 | **Cancel Run**       | While the run is in progress, and only for the user who created it |
 | **Rerun Pipeline**   | Once the run has finished                              |
-| **Compare with another run…** | Always — opens this run in [Compare Runs](/docs/user-guide/compare-runs) as side **A**, ready for you to pick the run to compare it against |
 
 **Cancel Run** asks for confirmation first: the run is scheduled for cancellation, and that cannot be undone.
 
 ### View
 
-**Auto-layout** re-arranges the execution graph using the same algorithms as the editor — **Sugiyama**, **Sugiyama Centered**, **Compact**, and **Spread**.
+**Auto-layout** re-arranges the execution graph using the same algorithms as the editor — **Sugiyama**, **Sugiyama Centered**, **Compact**, and **Spread**. `Cmd/Alt` + `Shift` + `L` applies **Sugiyama**.
+
+A run whose pipeline has no saved node positions, such as one written as YAML, is laid out automatically with **Sugiyama** when you open it, and again when you enter each of its subgraphs. Layout changes in the run view, whether automatic, from **Auto-layout**, or from dragging nodes, are never saved, so the run looks the same the next time you open it.
 
 ### Windows
 
-As in the editor, the **Windows** menu toggles individual windows and offers a **Views** submenu. The run view has two presets: **Default**, which puts **Run Tools** on the left and **Run Details** on the right, and **Minimal**, which hides every panel and leaves only the graph.
+As in the editor, the **Windows** menu toggles individual windows and offers a **Views** submenu. The run view has two presets: **Default**, which puts **Run Tools** on the left and **Run Details** on the right and hides the other windows, and **Minimal**, which hides every panel and leaves only the graph.
 
 ## Windows
 
@@ -44,36 +48,40 @@ As in the editor, the **Windows** menu toggles individual windows and offers a *
 | ----------------------- | -------------------------------------------------------------------------------------------- |
 | **Run Tools**           | The run's actions as a set of buttons — see [Run tools](#run-tools)                            |
 | **Run Details**         | Run-level metadata, notes, arguments, and outputs — see [Run details](#run-details)            |
-| **Properties**          | Details for the selected task — see [Task inspection](#task-inspection)                        |
+| **Properties**          | Details for the selected node — see [Task inspection](#task-inspection). Listed in the **Windows** menu only while it is open |
+| **Minimap**             | An overview of the graph, with zoom, fit-view, and lock controls. It starts floating near the bottom-left |
+| `Logs: <task>`          | A task's logs, popped out of the **Properties** window — see [Logs](#logs)                     |
 
-Windows behave the same way as in the editor — drag to dock or float, and use the header buttons to minimize, maximize, or hide. See [Windows](/docs/user-guide/pipeline-editor#windows).
+Windows behave the same way as in the editor — drag to dock or float, and use the header buttons to minimize (docked windows only), maximize, or hide. **Run Tools** and **Minimap** have no maximize button. See [Windows](/docs/user-guide/pipeline-editor#windows).
+
+The right dock shows one expanded window at a time. Selecting a node opens **Properties** there and collapses **Run Details**. Clicking empty canvas closes **Properties** and brings **Run Details** back, and closing **Properties** clears the selection. Your window layout is saved in the browser and used for every run you open.
 
 ## Run tools
 
 The **Run Tools** window collects the actions available for the run:
 
 - **View YAML** — the pipeline definition this run executed.
-- **Share run** — copy a direct link to the run.
+- **Share run** — copy a link to the run, confirmed by **Run URL copied to clipboard**. The link always points at the top of the run, not at the subgraph or task you are looking at. To share a task, use **Shareable Link** in its [properties](#task-inspection).
 - **Inspect pipeline** — open the run's pipeline in the editor. Shown only when that pipeline is available in your browser storage.
-- **Clone pipeline** — create a new pipeline from this run. It is saved wherever your new pipelines are saved: in your browser, or on the backend if your deployment uses [remote pipelines](/docs/user-guide/remote-pipelines).
-- **Cancel run** — stop a run that is still in progress. Shown only to the user who created the run.
-- **Rerun pipeline** — submit the same pipeline again. Shown once the run has finished.
+- **Clone pipeline** — create a new pipeline from this run and open it in the editor. It is saved wherever your new pipelines are saved: in your browser, or on the backend if your deployment uses [remote pipelines](/docs/user-guide/remote-pipelines). The copy is named after the pipeline plus a timestamp, its inputs are pre-filled with this run's arguments (secrets excepted), and every task's cache setting is removed.
+- **Cancel run** — stop a run that is still in progress. Shown only to the user who created the run, and disabled while the backend is unavailable. Once cancelled, the button stays disabled and reads **Run cancelled** on hover.
+- **Rerun pipeline** — submit the same pipeline again with the same arguments, straight away and without a confirmation, then open the new run. Shown once the run has finished.
 
-When the window is floating it lays the tools out in a row; docked, it stacks them vertically.
+`Cmd/Ctrl` + click on **Inspect pipeline** or **Clone pipeline** opens the result in a new tab. When the window is floating it lays the tools out in a row; docked, it stacks them vertically.
 
 ## Run details
 
-The **Run Details** window opens on the pipeline's name, followed by a status bar summarising how many of the run's tasks have succeeded, failed, or are still running. Beside the status sit a **View YAML** button and an overflow menu carrying the same actions as the **Run** menu — **Inspect Pipeline**, **Clone Pipeline**, **Export YAML**, and, depending on the run's state, **Cancel Run** or **Rerun Pipeline**.
+The **Run Details** window opens on the pipeline's name, which you can click to copy, followed by the run's overall status (for example **Running**) and a status bar summarising how many of the run's tasks have succeeded, failed, or are still running. Beside the status sit a **View YAML** button and an overflow menu with **Inspect Pipeline**, **Clone Pipeline**, **Export YAML**, and, depending on the run's state, **Cancel Run** or **Rerun Pipeline**.
 
 The rest of the window is organised into collapsible sections:
 
 - **Run Info** — run id, execution id, who created the run, and when. Where the run recorded how it was started, a line below shows an icon and a sentence naming the source — see [Run origin](#run-origin).
 - **Details** — the pipeline's description and its tags, followed by three blocks:
   - **Pipeline Annotations** — annotations carried by the pipeline, minus platform bookkeeping.
-  - **Pipeline Notes** and **Run Notes** — the pipeline's own notes, plus a notes field for this run specifically. Run notes are editable by whoever created the run and read-only for everyone else, so you can record what a run was for without touching the pipeline.
-  - **Run Annotations** — annotations attached to this run rather than to the pipeline. Runs submitted by the CLI or by an agent carry context here, and so do reruns, which record the run they came from and the failing run they are meant to fix. Keys and values are both click-to-copy. Notes, tags and source are left out because the panel already shows them elsewhere, as are the execution system's own `system/…` keys; when nothing is left after that the block is not shown at all. The list is read-only — run annotations cannot be added or edited from the panel.
+  - **Pipeline Notes** and **Run Notes** — the pipeline's own notes, plus a notes field for this run specifically. Run notes are editable by whoever created the run and read-only for everyone else, so you can record what a run was for without touching the pipeline. They are saved when you click away from the field.
+  - **Run Annotations** — annotations attached to this run rather than to the pipeline. Runs submitted by the CLI or by an agent carry context here. Keys and values are both click-to-copy. Notes, tags and source are left out because the panel already shows them elsewhere, as are the execution system's own `system/…` keys; when nothing is left after that the block is not shown at all. The list is read-only — run annotations cannot be added or edited from the panel.
 - **Arguments** — the values this run was submitted with.
-- **Outputs** — what the run produced.
+- **Outputs** — the pipeline's outputs, each with its type and the task output it is connected to. To see the value an output produced, click its node in the graph.
 
 ### Run origin
 
@@ -90,15 +98,37 @@ Runs reach TangleML from more than one place, and the run view says which. Where
 
 A source this build does not recognise draws the globe rather than failing, so a run from a tool introduced after your deployment still reads sensibly. A run that recorded no source at all keeps the question mark, and **Run Info** omits the origin line for it entirely.
 
+## Reading the graph
+
+Every task that has started shows a status tab with its state and an icon. A task with caching turned off carries a **Cache Disabled** badge. A task that has logs shows an **Open Logs** button above it, which selects the task and opens its **Logs** tab.
+
+A subgraph node shows a bar summarising the states of the tasks inside it. Hover a segment for a count such as `3 Succeeded`. The bar is hatched when any of them was cancelled.
+
+Pipeline input and output nodes show their type and value: an input shows the value this run was given, and an output shows the task output it is connected to, or **No value**. Click an output node to see the artifact it produced.
+
+Click an edge to highlight the two nodes it connects and dim the rest. Guidelines from the editor are drawn but cannot be changed. Sticky notes are not shown in the run view.
+
 ## Task inspection
 
-Click a task in the graph to fill the **Properties** window with that task's execution detail. The panel header shows the task name and a status icon, followed by three tabs:
+Click a task in the graph to fill the **Properties** window with that task's execution detail. The panel header shows the task name and a status icon, with a row of buttons beneath it: **Download YAML**, **Download Python Code** (for components written in Python), **Copy YAML**, **View YAML**, and **Shareable Link**. **Shareable Link** copies a link that opens the run with this task selected and centred.
+
+Three tabs follow:
 
 - **Artifacts** — the task's inputs and output artifacts. For the preview formats supported here, see [Understanding Artifacts](/docs/core-concepts/artifacts). An input that was given a [secret](/docs/core-concepts/secrets#secrets-in-a-run) shows a lock and the secret's name, as it does on the canvas. The secret's value is never stored as an artifact.
-- **Details** — the component behind the task, its description and interface, and its annotations. Annotations you or the pipeline author set appear under **Task Annotations**; the ones the execution system adds are kept in a separate, collapsed **System annotations** section, so a long list of platform metadata does not bury your own. For a task that has executed, an **Execution Details** section sits near the top. See [Execution details](#execution-details).
-- **Logs** — the task's container logs, alongside its execution events. Three controls sit in the logs panel's own header: **Pop out logs** moves the logs into a window you can dock, float, or resize, opened at a width that fits the longest line in the log rather than a fixed size; **Open logs in a new tab** opens them on their own page, which you can share or keep open beside the run; and **View fullscreen** expands the panel to fill the screen, with `Esc` to leave it again. When the backend is unavailable the new-tab control is disabled and says so on hover. Subgraph tasks have no logs of their own, so the tab is not shown for them.
+- **Details** — the task's **Execution Status** and [execution details](#execution-details), then the component behind it: its author, links to its source (**View raw component.yaml**) and documentation where it has them, its description, and its digest. Annotations follow. **System annotations** collects the keys Studio uses for its own bookkeeping, such as editor positions, colours, notes, and tags, in a collapsed section. Every other annotation, whether set by you, the pipeline author, or the platform, is listed under **Task Annotations**.
+- **Logs** — the task's container logs. See [Logs](#logs). Subgraph tasks have no logs of their own, so the tab is not shown for them.
 
-Output nodes in the graph show a preview of their artifact directly on the node once the run has produced one, so you can read a result without opening a panel.
+Click a pipeline input node to see its name, type, and description, the value this run was given (or its **Default Value** if the run did not set one), and whether it is optional. Its value can be copied or opened in a larger viewer. Click an output node to see the artifact it produced, with the same previews as the **Artifacts** tab.
+
+Selecting one or more nodes and pressing `Cmd/Alt` + `C` copies them so you can paste them into a pipeline in the editor — including an editor open in a different browser tab or window. A selection of several nodes also shows a small toolbar with **Copy**. See [Copying and pasting nodes](/docs/user-guide/pipeline-editor#copying-and-pasting-nodes). If you have selected text on the page, the shortcut copies the text instead.
+
+### Logs
+
+The **Logs** tab shows the container's output in an **Execution Logs** viewer. It refreshes every few seconds while the task is running, pending, or cancelling, and opens scrolled to the end. A task that never launched shows **No logs available**.
+
+When the execution system reports an error of its own, for example because the task could not be launched, a red **System error** box above the viewers gives its message in one line. For a Python traceback that is the final exception, such as `ValueError: …`, and any links in it can be clicked. The full text follows in a **System Error Logs** viewer.
+
+Three controls sit in the logs panel's own header: **Pop out logs** moves the logs into a `Logs: <task>` window you can dock, float, or resize, opened at a width that fits the longest line in the log rather than a fixed size; **Open logs in a new tab** opens them on their own page, which you can share or keep open beside the run; and **View fullscreen** expands the panel to fill the screen, with `Esc` to leave it again. When the backend is unavailable the new-tab control is disabled and says so on hover. Some deployments also show execution events above the logs.
 
 ### Execution details
 
@@ -114,11 +144,19 @@ The **Execution Details** section on the **Details** tab describes where and how
 
 Which link rows appear depends on how your deployment is set up. A launcher adds them to the execution's container state, so different backends can point you at their own consoles. Subgraph tasks show only the execution ID.
 
-Selecting several nodes at once shows a small toolbar with **Copy**, which copies the selection so you can paste it into a pipeline in the editor — including an editor open in a different browser tab or window. `Cmd/Alt` + `C` does the same from the keyboard. See [Copying and pasting nodes](/docs/user-guide/pipeline-editor#copying-and-pasting-nodes).
-
 ## Subgraphs
 
-When a pipeline contains subgraphs, the run view lets you drill into a subgraph's execution to see the tasks inside it and their individual statuses. The URL tracks which subgraph execution you are viewing, so a link you copy takes a collaborator to the same place in the run.
+When a pipeline contains subgraphs, double-click a subgraph node to go into its execution and see the tasks inside it and their individual statuses. Breadcrumbs above the canvas, starting at **Root**, take you back to any level, and the browser's back and forward buttons move between levels too. The URL tracks which subgraph execution you are viewing, so a link you copy takes a collaborator to the same place in the run.
+
+## Keyboard shortcuts
+
+| Shortcut                  | Action                                                                    |
+| ------------------------- | ------------------------------------------------------------------------- |
+| `Cmd/Alt` + `C`           | Copy the selected nodes, or the selected text if there is any              |
+| `Cmd/Alt` + `Shift` + `L` | Auto-layout the graph                                                      |
+| `Esc`                     | Leave a fullscreen viewer                                                  |
+
+As in the editor, **Cmd** applies on macOS and **Alt** elsewhere. The run view is read-only, so it has no undo.
 
 ## Comparing two runs
 

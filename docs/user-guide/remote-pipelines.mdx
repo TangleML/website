@@ -1,15 +1,21 @@
 ---
 id: remote-pipelines
 title: Remote Pipelines
-description: Store pipelines on the TangleML backend instead of in your browser — finding, sharing, and editing remote pipelines, view-only access, save recovery, and moving browser pipelines across.
+description: Store pipelines on a backend instead of in your browser — finding, sharing, and editing remote pipelines, view-only access, save recovery, and moving browser pipelines across. Requires a backend you provide yourself.
 ---
 
 # Remote Pipelines
 
-By default, the pipelines you build in Studio are saved in your browser. A deployment can save them on the backend instead, as **remote pipelines**. A remote pipeline is not tied to one browser: you can open it from another machine, send its link to a teammate, and it is not lost when you clear your browser data.
+:::danger Requires a backend you build yourself
+Remote pipelines rely on saved-pipeline APIs that the open-source TangleML backend **does not provide**. These include `/api/pipelines/search`, `/api/pipelines/{pipeline_id}`, and `/api/users/me/pipelines`. Studio assumes those endpoints exist and behave a particular way. **Do not turn this feature on unless you have developed your own backend that implements them.**
+
+Against the open-source backend, those requests fail, so remote pipelines cannot be listed, opened, or saved. A backend that implements the APIs only in part is riskier: [moving a browser pipeline](#moving-browser-pipelines-to-the-backend) deletes the browser copy as soon as the backend reports the save succeeded.
+:::
+
+By default, the pipelines you build in Studio are saved in your browser. A deployment with its own pipeline-storage backend can save them there instead, as **remote pipelines**. A remote pipeline is not tied to one browser: you can open it from another machine, send its link to a teammate, and it is not lost when you clear your browser data.
 
 :::info
-Remote pipelines are turned on by whoever builds and deploys Studio, by setting `VITE_REMOTE_PIPELINES=true`. They also need a backend that supports saved pipelines. Without both, every pipeline stays in your browser as described in [Pipelines Persistence](/docs/getting-started/pipelines-persistence). To check which applies to you, open **Settings → Preferences**. If the deployment has not turned remote storage on, the **Save new pipelines in this browser** switch is locked on and says so.
+Remote pipelines are turned on by whoever builds and deploys Studio, by setting `VITE_REMOTE_PIPELINES=true`. They also need a backend that implements the saved-pipeline APIs above. Without both, every pipeline stays in your browser as described in [Pipelines Persistence](/docs/getting-started/pipelines-persistence). To check which applies to you, open **Settings → Preferences**. If the deployment has not turned remote storage on, the **Save new pipelines in this browser** switch is locked on and says so.
 :::
 
 ## Where new pipelines are saved

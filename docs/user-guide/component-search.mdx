@@ -49,7 +49,7 @@ Next to the search box is an **AI search** button (a sparkle icon). It takes the
 
 Reranked results gain a relevance percentage so you can see how confident the ranking is.
 
-AI search requires an OpenAI-compatible provider. Until one is configured, the button is disabled and the view explains that **AI search unavailable** — ordinary search results are unaffected. Configure a provider under **Settings → AI Configuration**, where you set the API base URL, API key, and model.
+AI search requires an AI provider. Until one is configured, the button is disabled and the view explains that **AI search unavailable** — ordinary search results are unaffected. Configure a provider under [**Settings → AI Configuration**](/docs/user-guide/studio-app-ui-overview#ai-configuration): either your backend's AI proxy, or your own provider's base URL and key, plus the model to use. The open-source backend has no AI proxy, so with it you need your own key.
 
 :::note
 AI search reranks a bounded set of candidates that your query already matched locally. It reorders and explains results — it does not reach beyond the component sources you have loaded.
@@ -78,7 +78,7 @@ Leave the search box empty and the window shows a browsable tree instead of a re
 | Folder                | Contents                                                                 |
 | --------------------- | -------------------------------------------------------------------------- |
 | **Canvas Tools**      | **Sticky Note** — an annotation node that carries no execution meaning        |
-| **Inputs & Outputs**  | **Input** and **Output** nodes for pipeline-level parameters and results      |
+| **Inputs & Outputs**  | **Input Node** and **Output Node** for pipeline-level parameters and results  |
 | *Your component sources* | One folder per source, expandable to the components inside                |
 
 Drag anything from the tree onto the canvas to place it. Dropping a component onto an existing task swaps that task's component instead — see [Replacing a task's component](/docs/user-guide/pipeline-editor#replacing-a-tasks-component).

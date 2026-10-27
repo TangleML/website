@@ -35,28 +35,11 @@ Transform your local Components into reusable workspace assets through the publi
 
 ### Steps to publish
 
-1. Add your component to the pipeline editor canvas by dropping it into the canvas, then configure and test the component.
-2. Navigate to the **User Components** folder in the left panel, and click the component info icon (ⓘ) to open the component info dialog.
-3. Click the **Publish** tab in the component panel and reeview the component details and metadata.
-4. Fix any validation issues. The system automatically checks:
-      - Documentation completeness
-      - Required metadata fields
-      - Component structure validity
-5. Click **Publish component**, and your component is now available to all workspace users.
-
-<video
-  src={require("./assets/PublishedComponents_Publish.mp4").default}
-  autoPlay
-  loop
-  muted
-  playsInline
-  style={{
-    width: "100%",
-  }}
->
-  Your browser does not support the video tag.
-</video>
-
+1. Add your component to your user library — for example by dropping its YAML onto the editor canvas — then configure and test it in a pipeline.
+2. In the **Component Search** window, clear the search box, open the **User Components** folder, and click the component's ⓘ button to open its details dialog.
+3. Open the **Publish** tab. It appears only for your own user components. It shows a **Component Review** of the author, name, description, digest, and publisher, and the component's **Publish History**.
+4. Click **Publish component**. The confirmation dialog includes a **ComponentSpec quality check** of the component's name and description, and the type and description of each input and output. The check is advisory: fixing what it flags makes the component easier to use, but is not required to publish.
+5. Click **Continue**. **Component published successfully** confirms that your component is now available to all workspace users.
 
 :::warning
 Once published, components cannot be deleted to ensure pipeline stability. Instead, publish new versions to update functionality.
@@ -77,33 +60,21 @@ Find and integrate published Components quickly using the search and discovery f
 
 ### Search and add components
 
-1. **Use the search bar**
-   - Type keywords in the component search input
-   - Filter by name or author
-   - Results update in real-time
+1. **Search in the Component Search window**
+   - Type keywords in the search box. Published components show **Published by** and the publisher's name.
+   - Narrow the results to published components with the source filters, or browse the **Published Components** folder with the search box empty.
+   - The search matches names and descriptions, and the component's `author` annotation, but not the publisher's user name.
 
 2. **Drag to canvas**
    - Select your desired component from search results
    - Drag it directly onto the pipeline editor canvas
    - Configure parameters as needed
 
-<video
-  src={require("./assets/PublishedComponents_Usage.mp4").default}
-  autoPlay
-  loop
-  muted
-  playsInline
-  style={{
-    width: "100%",
-  }}
->
-  Your browser does not support the video tag.
-</video>
+See [Component Search](/docs/user-guide/component-search) for more on searching.
 
 :::tip
 Use descriptive search terms like "data preprocessing" or "model training" to find relevant components faster.
 :::
-
 
 ## Releasing new versions
 
@@ -111,82 +82,33 @@ Keep your published Components up-to-date with the versioning workflow.
 
 ### Update process
 
-1. **Load the Updated Component**
-   - Drop the new version onto the Pipeline Editor canvas
+1. **Load the updated component**
+   - Add the new version to your user library under the same name, by dropping its YAML onto the canvas or saving it from the [in-app editor](/docs/component-development/in-app-editor)
    - Make necessary modifications and improvements
 
-2. **Access the Component**
-   - Navigate to "User components" in the sidebar
-   - Select the component you're updating
+2. **Open the component**
+   - In the **Component Search** window, open **User Components** and click the component's ⓘ button
+   - Open the **Publish** tab. Its history notes that you have a version of the component that is not published yet
 
-3. **Release New Version**
-   - Click the "Publish" tab
-   - Click "Release new version" button
-   - Add version notes describing changes
+3. **Release the new version**
+   - Click **Release new version** and confirm with **Continue**
+   - **Component updated successfully** confirms the release, and the previous version is marked deprecated
 
-<video
-  src={require("./assets/PublishedComponents_NewVersion.mp4").default}
-  autoPlay
-  loop
-  muted
-  playsInline
-  style={{
-    width: "100%",
-  }}
->
-  Your browser does not support the video tag.
-</video>
+**Release new version** is offered only when the component keeps the same name, you published the previous version, and that version is not already deprecated. There is no field for version notes, so describe what changed in the component's own description or annotations.
 
 :::warning
-Breaking changes should be clearly documented in version notes to help users migrate smoothly.
+Breaking changes should be clearly documented in the component's description to help users migrate smoothly.
 :::
 
 ## Receiving component upgrades
 
-Stay current with automatic upgrade notifications and guided update flows.
+When a newer version of a published component exists, tasks that use an older one are marked on the canvas with an orange book icon, beside the task's short digest. The same icon marks the component in the **Component Search** browse view.
 
-### Automatic detection
+To upgrade a task, drag the newer version from **Component Search** onto it, and confirm the **Replace Task?** dialog with **Continue**. The dialog shows which inputs and outputs the new version adds, keeps, or removes before anything changes. You can use different component versions for different tasks in the same pipeline.
 
-The system checks for component updates on every page refresh:
-
-- Scans all components in your pipelines
-- Identifies available upgrades
-- Notifies you of update opportunities
-
-### Upgrade workflow
-
-1. **Review Notification**
-   - Look for the upgrade indicator on page load
-   - Click the "Review" button when updates are available
-
-2. **Follow Guided Update**
-   - Review changes between versions
-   - Check compatibility notes
-   - Preview impact on your pipeline
-   - Apply updates selectively or all at once
-
-3. **Validate Changes**
-   - Test pipeline after updates
-   - Verify parameter mappings
-   - Check for any deprecation warnings
-
-<video
-  src={require("./assets/PublishedComponents_Upgrade.mp4").default}
-  autoPlay
-  loop
-  muted
-  playsInline
-  style={{
-    width: "100%",
-  }}
->
-  Your browser does not support the video tag.
-</video>
-
-:::tip
-You can choose to skip the upgrade for curtain tasks by clicking the "Skip" button. You can use different component versions for different tasks in the same pipeline.
+:::info
+If you turn **Component Search** off under **Settings → Beta Features**, the editor shows the older **Components** window instead. That window shows an **Upgrades available** alert when tasks can be upgraded. **Review** opens an **Upgrade Components** window listing them, with a checkbox for each task and an **Upgrade** button. **Dismiss** hides the alert for 24 hours.
 :::
-
 
 ## Best practices
 

@@ -153,18 +153,29 @@ To use a secret in a task argument, open the argument's dynamic data dropdown an
 
 ### AI Configuration
 
-Configure the AI provider that powers Studio's AI-assisted features, such as AI search in [Component Search](/docs/user-guide/component-search):
+Configure the AI provider that powers Studio's AI-assisted features, such as AI search in [Component Search](/docs/user-guide/component-search). The page is titled **AI Provider Settings**, and a status line under the title says whether a provider is configured.
 
-- **API base URL**: The endpoint of an OpenAI-compatible provider.
-- **API key**: The token for that provider. The field is masked, with a show/hide control.
-- **Model**: The model id to use. You can type one directly or pick from a list of common models.
+There are two ways to reach a provider, chosen with the **Bring your own key** switch:
+
+- **Backend AI proxy** (switch off, the default). Studio sends AI requests to an AI proxy on your configured backend, and no personal key is needed. The page shows the proxy's address once a backend is selected under **Settings → Backend**.
+- **Bring your own key** (switch on). Studio calls a provider you configure directly from your browser:
+  - **API base URL**: The provider's base URL, without an endpoint path, such as `https://api.openai.com/v1` or `https://api.anthropic.com/v1`.
+  - **API key**: The token for that provider. It is optional if your proxy handles authentication itself. The field is masked, with a show/hide control, and the key is stored in this browser only.
+
+:::warning
+The open-source TangleML backend does not include an AI proxy. If you run it, turn on **Bring your own key** and configure a provider, or AI features will not work. The status line can still read as configured in proxy mode, because it only checks that a backend is selected.
+:::
+
+The **Model** control picks the model and, for models that support it, how much **Thinking** it does, from **Faster** to **Deeper**. Choose from the bundled list, or pick **Custom model…** and type any model ID your provider accepts. A Claude model used with `https://api.anthropic.com/v1` talks to the Anthropic Messages API directly. Any other combination must offer an OpenAI-compatible Responses API. Semantic matching in Component Search needs an embeddings endpoint, so it is not available against `https://api.anthropic.com/v1`. Ordinary search and AI reranking still work.
+
+**Save and test AI** sends a short test request and saves the settings only if it succeeds. In proxy mode, where there is nothing to save, the button reads **Test AI**. A failed test reports the provider's status and error. With **Bring your own key** on, **Clear** removes the saved provider settings.
 
 Until a provider is configured, AI-assisted features stay disabled and say so in place — ordinary search and editing are unaffected.
 
 ## Best practices
 
-- **Save frequently**: Use **Save Pipeline** regularly to preserve your work
-- **Validate before running**: Check the validation panel for errors before submitting
+- **Back up important pipelines**: The editor saves automatically, but pipelines kept in your browser are lost if you clear its data. Use **File → Export** to keep a YAML copy
+- **Validate before running**: Check the validation summary in **Pipeline Details**, and use **Fix** to work through any issues, before submitting
 - **Use descriptions**: Add meaningful descriptions to help others understand your pipeline
 - **Use tags**: Tag pipelines with project names or status labels to make them easier to find in the pipeline list
 - **Organize components**: Keep your **User Components** library organized by removing unused items
@@ -180,7 +191,7 @@ The editor's shortcuts are listed in [Pipeline Editor](/docs/user-guide/pipeline
 
 **Pipeline won't run:**
 
-- Check validation panel for errors
+- Check the validation summary in **Pipeline Details** for errors, and use **Fix** to resolve them
 - Ensure all required inputs have values
 - Verify component compatibility
 - If the backend refuses the submission, read the error message itself — it names what the backend objected to, including the field it rejected, the rule that field broke, and the value it was given, rather than only reporting that the run could not be created. A pipeline that passes validation can still be refused this way: an input default of the wrong type, for example, is a one-field fix rather than a problem with the graph
