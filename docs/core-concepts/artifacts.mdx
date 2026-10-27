@@ -13,7 +13,7 @@ Artifacts are the data produced by components (read: any output), stored in Tang
 
 <ImageAnnotation src={require('./assets/Artifacts.png').default} alt="Artifacts" >
 
-Artifacts can be accessed in the **Pipeline Run** page, in [the **Artifacts** tab](/docs/user-guide/studio-app-ui-overview#1-artifacts-tab).
+Artifacts can be accessed in the **Pipeline Run** page, in [the **Artifacts** tab](/docs/user-guide/run-view#task-inspection).
 
 </ImageAnnotation>
 
@@ -69,10 +69,15 @@ Every artifact has:
 
 | Artifact Type                 | Storage Duration  | What's Retained After TTL  |
 | ----------------------------- | ----------------- | -------------------------- |
-| **Large artifacts**           | 30 days (Shopify) | Metadata only (size, hash) |
+| **Large artifacts**           | Set by your deployment | Metadata only (size, hash) |
 | **Small values**           | Permanent         | Full value in database     |
 
-The retention period for large artifacts is configured per deployment. When a retention period is configured, the run view displays an **Artifact Storage** warning at the top of the artifact section reminding you that artifacts older than the retention period may no longer be available in remote storage. The notice includes the configured number of days. If your deployment does not configure a retention period, this notice is suppressed.
+The retention period for large artifacts is configured per deployment. When a retention period is configured, the run view shows an **Artifact Storage** notice at the top of a task's artifacts:
+
+- **Within the retention period**, an info notice gives the date the run's artifacts expire: _"Artifacts from this run expire on October 30, 2026."_
+- **Once that date has passed**, it becomes a warning that artifacts are expected to expire after the configured number of days and may no longer be available in remote storage.
+
+If your deployment does not configure a retention period, the notice is not shown.
 
 ### When artifacts are no longer available
 

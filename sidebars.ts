@@ -43,6 +43,7 @@ const sidebars: SidebarsConfig = {
         'user-guide/run-view',
         'user-guide/compare-runs',
         'user-guide/component-search',
+        'user-guide/remote-pipelines',
       ],
     },
     {

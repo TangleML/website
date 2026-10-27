@@ -8,6 +8,8 @@ The editor saves your pipeline locally when editing, and saves it to the backend
 
 :::info
 This means pipelines stored in the editor will be lost if you clear browser data or use a different browser. You should always export important pipelines or submit them as runs for permanent storage.
+
+Some deployments with their own pipeline-storage backend save pipelines there while you edit them, as [remote pipelines](#remote-pipelines). The browser-only behaviour on this page then applies only to the pipelines you keep under **Local Pipelines**.
 :::
 
 ## Local vs backend storage
@@ -25,12 +27,6 @@ The pipeline editor automatically saves all your changes to your browser's local
 
 Editor changes are stored locally in your browser. You cannot share pipelines directly via URL links while they're in the Editor. To share your work, you must either export the pipeline or submit it as a pipeline run.
 
-<img 
-  src={require("./assets/Editor.png").default} 
-  alt="pipeline editor screenshot" 
-  style={{ width: "100%", borderRadius: "6px",  }} 
-/>
-
 ### Backend storage (pipeline runs)
 
 When you submit a pipeline for execution, it becomes a pipeline run stored on the backend:
@@ -42,11 +38,22 @@ When you submit a pipeline for execution, it becomes a pipeline run stored on th
 
 All pipeline runs are available to anyone with the access to your instance of the TangleML Studio App.
 
-<img 
-  src={require("./assets/PipelineRun.png").default} 
-  alt="pipeline run screenshot" 
-  style={{ width: "100%", borderRadius: "6px",  }} 
-/>
+### Remote pipelines
+
+A deployment can also store the pipelines you are still editing on the backend, as **remote pipelines**. This is switched on by whoever deploys Studio.
+
+:::warning
+Remote pipelines depend on saved-pipeline APIs that the open-source TangleML backend does not provide. Only turn them on if you have developed your own backend that implements those APIs. See [Remote Pipelines](/docs/user-guide/remote-pipelines).
+:::
+
+When it is on:
+
+- New pipelines, imports, copies, and clones from a run are saved on the backend and autosaved as you edit.
+- Each remote pipeline has its own link, so you can open it from any browser or share it with a teammate. Teammates who do not own it can view it and clone it, but not change it.
+- Pipelines already in your browser can be moved to the backend when you open them, or uploaded from the dashboard.
+- Clearing your browser data does not lose a remote pipeline.
+
+See [Remote Pipelines](/docs/user-guide/remote-pipelines) for the full guide.
 
 ## Managing multiple pipeline versions
 
@@ -54,25 +61,9 @@ All pipeline runs are available to anyone with the access to your instance of th
 
 You can use **Save As** to experiment with different pipeline configurations without affecting the original:
 
-1. Click on the pipeline name or menu.
-2. Select **Save Pipeline As**.
-3. Enter a new name for the copy.
-4. The new version becomes your active pipeline.
-
-<video
-  src={require("./assets/SaveAs.mov").default}
-  controls
-  autoPlay
-  loop
-  muted
-  playsInline
-  style={{
-    width: "100%",
-    borderRadius: "6px",
-  }}
->
-  Your browser does not support the video tag.
-</video>
+1. In the editor, choose **File → Save as**.
+2. In the **Save Pipeline As** dialog, enter a new name for the copy and click **Save**.
+3. The new version becomes your active pipeline.
 
 ### Export and import
 
@@ -81,15 +72,15 @@ Share pipelines before creating runs through the export/import workflow:
 #### Exporting pipelines
 
 1. Open your pipeline in the editor.
-2. Click **Export pipeline** from the pipeline actions menu.
+2. Choose **File → Export**.
 3. Save the YAML file to your local machine.
 
 #### Importing pipelines
 
-1. Click **Import pipeline** in the Editor.
+1. In the editor, choose **File → Import** to open the **Import Pipeline** dialog.
 2. Either:
-   - Select a YAML file from your computer
-   - Paste YAML content directly
+   - On **Import from File**, select a YAML file from your computer
+   - On **Paste YAML**, paste YAML content and click **Import**
 
 <img
   src={require("./assets/ImportPipeline.png").default}
@@ -106,6 +97,6 @@ Share pipelines before creating runs through the export/import workflow:
 Your locally saved pipelines are accessible from the **Home** screen:
 
 1. Navigate to the Home Screen.
-2. Click on the **My Pipelines** tab.
+2. Click **All Pipelines** in the sidebar. If your deployment uses remote pipelines, select the **Local Pipelines** tab.
 3. View all pipelines stored in your browser.
 4. Click any pipeline to open it in the editor.
