@@ -104,10 +104,14 @@ Breaking changes should be clearly documented in the component's description to 
 
 When a newer version of a published component exists, tasks that use an older one are marked on the canvas with an orange book icon, beside the task's short digest. The same icon marks the component in the **Component Search** browse view.
 
-To upgrade a task, drag the newer version from **Component Search** onto it, and confirm the **Replace Task?** dialog with **Continue**. The dialog shows which inputs and outputs the new version adds, keeps, or removes before anything changes. You can use different component versions for different tasks in the same pipeline.
+While the pipeline has tasks that can be upgraded, the **Component Search** window shows an **Upgrades available** alert below **Add Component**. **Review** opens the **Upgrade Components** window, and **Dismiss** hides the alert for 24 hours. The same window is a click away from a published component's details dialog. Open it from **Component Search** or by clicking the component's name in a task's **Properties**. When a newer version exists, the dialog reads **There is a newer version of this component available.** and offers **Review tasks**.
+
+The **Upgrade Components** window lists each task that can be upgraded, with its current and new short digest, and a button that takes you to the task on the canvas. Its header says how many components can be upgraded and how many of those have predicted issues. Select a task to see the new version's source, which inputs and outputs it adds or removes, and any predicted issues, or **No issues — safe to upgrade**. Tick the tasks you want, or use the checkbox in the header to tick them all, and click **Upgrade**.
+
+You can also upgrade a single task by dragging the newer version from **Component Search** onto it, and confirming the **Replace Task?** dialog with **Continue**. The dialog shows which inputs and outputs the new version adds, keeps, or removes before anything changes. You can use different component versions for different tasks in the same pipeline.
 
 :::info
-If you turn **Component Search** off under **Settings → Beta Features**, the editor shows the older **Components** window instead. That window shows an **Upgrades available** alert when tasks can be upgraded. **Review** opens an **Upgrade Components** window listing them, with a checkbox for each task and an **Upgrade** button. **Dismiss** hides the alert for 24 hours.
+If you turn **Component Search** off under **Settings → Beta Features**, the editor shows the older **Components** window instead, with the same **Upgrades available** alert.
 :::
 
 ## Best practices

@@ -12,6 +12,8 @@ The run view shows a single pipeline run: the execution graph, the status of eve
 This is the only run view in Studio. The legacy run view and its version toggle have been removed. A run opens at `/runs/<run id>`, and links that still point at the old `/runs-v2/…` address redirect there, including links into a subgraph. The browser tab is titled `Tangle - <pipeline name> - <run id>`, so several open runs are easy to tell apart.
 :::
 
+The tab's icon follows the run's overall status, with separate icons for in progress, succeeded, failed, and cancelled. A run left open in a background tab shows when it finishes or fails without your switching back to it. The icon reflects the whole run, even while you are looking inside a subgraph, and returns to the usual Tangle icon when you leave the run.
+
 While the run loads, the page reads **Loading Pipeline Run**. If it cannot load, the page says why instead: **Backend not configured** or **Backend not available** when Studio has no backend to ask, **Error loading pipeline run** when the backend refused, and **Couldn't reach the server**, with a **Reload page** button, when the connection failed.
 
 ## Menu bar
@@ -22,7 +24,7 @@ The menu bar spans the top of the run view with the TangleML logo, the pipeline'
 
 | Item                 | Availability                                          |
 | -------------------- | ----------------------------------------------------- |
-| **Inspect Pipeline** | When the run's pipeline is available in your browser storage |
+| **Inspect Pipeline** | When the run's pipeline is available in your browser storage, or the run records the [remote pipeline](/docs/user-guide/remote-pipelines) it came from — see [Run tools](#run-tools) |
 | **View YAML**        | Always                                                 |
 | **Compare with another run…** | While **Compare runs** is on (the default) — opens this run in [Compare Runs](/docs/user-guide/compare-runs) as side **A**, ready for you to pick the run to compare it against |
 | **Clone Pipeline**   | Always — creates a new pipeline from this run's definition. See [Run tools](#run-tools) |
@@ -34,7 +36,7 @@ The menu bar spans the top of the run view with the TangleML logo, the pipeline'
 
 ### View
 
-**Auto-layout** re-arranges the execution graph using the same algorithms as the editor — **Sugiyama**, **Sugiyama Centered**, **Compact**, and **Spread**. `Cmd/Alt` + `Shift` + `L` applies **Sugiyama**.
+**Auto-layout** re-arranges the execution graph using the same algorithms as the editor — **Sugiyama**, **Sugiyama Centered**, **Compact**, and **Spread**. `Cmd/Ctrl` + `Shift` + `L` applies **Sugiyama**.
 
 A run whose pipeline has no saved node positions, such as one written as YAML, is laid out automatically with **Sugiyama** when you open it, and again when you enter each of its subgraphs. Layout changes in the run view, whether automatic, from **Auto-layout**, or from dragging nodes, are never saved, so the run looks the same the next time you open it.
 
@@ -61,8 +63,8 @@ The right dock shows one expanded window at a time. Selecting a node opens **Pro
 The **Run Tools** window collects the actions available for the run:
 
 - **View YAML** — the pipeline definition this run executed.
-- **Share run** — copy a link to the run, confirmed by **Run URL copied to clipboard**. The link always points at the top of the run, not at the subgraph or task you are looking at. To share a task, use **Shareable Link** in its [properties](#task-inspection).
-- **Inspect pipeline** — open the run's pipeline in the editor. Shown only when that pipeline is available in your browser storage.
+- **Share run** — copy a link to the run, confirmed by **Run URL copied to clipboard**. The link always points at the top of the run, not at the subgraph or task you are looking at. To share a task, use **Copy node link** in its [properties](#task-inspection).
+- **Inspect pipeline** — open the run's pipeline in the editor. When the backend recorded which [remote pipeline](/docs/user-guide/remote-pipelines) the run came from, this opens that remote pipeline. The backend records it for runs it starts from a saved remote pipeline, such as triggered runs. Runs submitted from the editor do not record it, so for those the button looks for a pipeline of the same name in your browser storage, and is shown only when it finds one.
 - **Clone pipeline** — create a new pipeline from this run and open it in the editor. It is saved wherever your new pipelines are saved: in your browser, or on the backend if your deployment uses [remote pipelines](/docs/user-guide/remote-pipelines). The copy is named after the pipeline plus a timestamp, its inputs are pre-filled with this run's arguments (secrets excepted), and every task's cache setting is removed.
 - **Cancel run** — stop a run that is still in progress. Shown only to the user who created the run, and disabled while the backend is unavailable. Once cancelled, the button stays disabled and reads **Run cancelled** on hover.
 - **Rerun pipeline** — submit the same pipeline again with the same arguments, straight away and without a confirmation, then open the new run. Shown once the run has finished.
@@ -106,11 +108,17 @@ A subgraph node shows a bar summarising the states of the tasks inside it. Hover
 
 Pipeline input and output nodes show their type and value: an input shows the value this run was given, and an output shows the task output it is connected to, or **No value**. Click an output node to see the artifact it produced.
 
-Click an edge to highlight the two nodes it connects and dim the rest. Guidelines from the editor are drawn but cannot be changed. Sticky notes are not shown in the run view.
+To follow a connection to its source, click it, or click a connected port on a task, pipeline input, or pipeline output. The connection and the nodes at either end are highlighted and the other connections fade. Click empty canvas to clear the highlight. When you are zoomed out far enough for tasks to be drawn in their simplified form, a task's port highlights every connection on that side of the task. Ports in a run cannot start a new connection, and connections cannot be deleted.
+
+Guidelines from the editor are drawn but cannot be changed. Sticky notes are not shown in the run view.
 
 ## Task inspection
 
-Click a task in the graph to fill the **Properties** window with that task's execution detail. The panel header shows the task name and a status icon, with a row of buttons beneath it: **Download YAML**, **Download Python Code** (for components written in Python), **Copy YAML**, **View YAML**, and **Shareable Link**. **Shareable Link** copies a link that opens the run with this task selected and centred.
+Click a task in the graph to fill the **Properties** window with that task's execution detail. The panel header shows the task name and a status icon, then the same component bar as the editor's [task properties](/docs/user-guide/pipeline-editor#task-properties):
+
+- The component's name and short digest, so you can tell which component a task used even when the task was given a different name. Click it to open the component's details dialog, with **Details**, **Inputs/Outputs**, and **Implementation** tabs. In a run the dialog is read-only.
+- **View YAML** shows the component's definition.
+- **More actions** offers **Download YAML**, **Download Python** (for components written in Python), **Copy YAML**, and **Copy node link**. **Copy node link** copies a link that opens the run with this task selected and centred, including a task inside a subgraph. A run is read-only, so the menu has no **Edit Component**.
 
 Three tabs follow:
 
@@ -120,7 +128,7 @@ Three tabs follow:
 
 Click a pipeline input node to see its name, type, and description, the value this run was given (or its **Default Value** if the run did not set one), and whether it is optional. Its value can be copied or opened in a larger viewer. Click an output node to see the artifact it produced, with the same previews as the **Artifacts** tab.
 
-Selecting one or more nodes and pressing `Cmd/Alt` + `C` copies them so you can paste them into a pipeline in the editor — including an editor open in a different browser tab or window. A selection of several nodes also shows a small toolbar with **Copy**. See [Copying and pasting nodes](/docs/user-guide/pipeline-editor#copying-and-pasting-nodes). If you have selected text on the page, the shortcut copies the text instead.
+Selecting one or more nodes and pressing `Cmd/Ctrl` + `C` copies them so you can paste them into a pipeline in the editor — including an editor open in a different browser tab or window. A selection of several nodes also shows a small toolbar with **Copy**. See [Copying and pasting nodes](/docs/user-guide/pipeline-editor#copying-and-pasting-nodes). If you have selected text on the page, the shortcut copies the text instead.
 
 ### Logs
 
@@ -152,11 +160,11 @@ When a pipeline contains subgraphs, double-click a subgraph node to go into its 
 
 | Shortcut                  | Action                                                                    |
 | ------------------------- | ------------------------------------------------------------------------- |
-| `Cmd/Alt` + `C`           | Copy the selected nodes, or the selected text if there is any              |
-| `Cmd/Alt` + `Shift` + `L` | Auto-layout the graph                                                      |
-| `Esc`                     | Leave a fullscreen viewer                                                  |
+| `Cmd/Ctrl` + `C`           | Copy the selected nodes, or the selected text if there is any             |
+| `Cmd/Ctrl` + `Shift` + `L` | Auto-layout the graph                                                     |
+| `Esc`                      | Leave a fullscreen viewer                                                 |
 
-As in the editor, **Cmd** applies on macOS and **Alt** elsewhere. The run view is read-only, so it has no undo.
+As in the editor, **Cmd** applies on macOS and **Ctrl** on Windows and Linux. The run view is read-only, so it has no undo.
 
 ## Comparing two runs
 

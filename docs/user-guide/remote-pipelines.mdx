@@ -1,7 +1,7 @@
 ---
 id: remote-pipelines
 title: Remote Pipelines
-description: Store pipelines on a backend instead of in your browser — finding, sharing, and editing remote pipelines, view-only access, save recovery, and moving browser pipelines across. Requires a backend you provide yourself.
+description: Store pipelines on a backend instead of in your browser — finding, sharing, and editing remote pipelines, read-only access, save recovery, and moving browser pipelines across. Requires a backend you provide yourself.
 ---
 
 # Remote Pipelines
@@ -51,6 +51,8 @@ The filters are kept in the page address, so you can bookmark or share a filtere
 
 Each row has a favorite star. Rows for pipelines you own also have a delete button, which asks for confirmation first. Deleting a remote pipeline removes it from the backend for everyone and cannot be undone. Runs already submitted from it are not affected.
 
+You can also get to a remote pipeline from a run that the backend started from it, such as a triggered run. **Inspect Pipeline** in the [run view](/docs/user-guide/run-view#run-tools) opens the remote pipeline. Runs submitted from the editor do not record which remote pipeline they came from, so for those **Inspect Pipeline** looks for a pipeline of the same name in your browser instead.
+
 ## Editing a remote pipeline
 
 You can edit a remote pipeline if you own it and your account can write to the backend. It opens in the [Pipeline Editor](/docs/user-guide/pipeline-editor) and saves itself shortly after each change. Hover the save icon in the menu bar to see when it last saved, or click it to save right away.
@@ -70,11 +72,11 @@ If the backend cannot save your changes, the save icon turns red and a banner ex
 
 If retrying keeps failing, save a local copy before you close the tab. Otherwise the unsaved changes are lost. The same banner appears if someone deletes the pipeline while you have unsaved edits.
 
-## Sharing and view-only access
+## Sharing and read-only access
 
 To share a remote pipeline, copy its address from the browser. It has the form `/editor/pipeline/<id>`. To send a teammate to one task, input, or output, select it and use **Copy node link** in its details. The link also records which subgraph you were in. The button is disabled while you have unsaved changes. Your teammate must be using the same backend for the link to open.
 
-If you do not own a pipeline, or your account cannot write to the backend, the pipeline opens view-only. A **View only** badge sits next to its name, and you can look around without changing anything:
+If you do not own a pipeline, or your account cannot write to the backend, the pipeline opens read-only. A **Read only** badge sits next to its name, and you can look around without changing anything:
 
 - Task, input, and output details are read-only, and nodes cannot be moved.
 - You can go into subgraphs and follow node links.
