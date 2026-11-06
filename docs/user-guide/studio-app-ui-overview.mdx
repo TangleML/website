@@ -143,12 +143,14 @@ Not every entry here is off by default. A beta feature that has been released to
 
 Store credentials for use in pipeline component arguments. Secrets are encrypted at rest and resolved at execution time — their values are never stored in the pipeline YAML.
 
-- **Add secret**: Provide a name and value. The name is used to reference the secret in task arguments.
-- **Replace secret**: Update the value of an existing secret without changing its name.
-- **Delete secret**: Remove a secret. Any pipeline arguments referencing it will need to be updated.
+- **Add secret**: Provide a name and value, and optionally a description and an expiry date. The name is used to reference the secret in task arguments.
+- **Replace secret**: Update the value of an existing secret, and its description or expiry date, without changing its name.
+- **Delete secret**: Remove a secret after confirming it. Any pipeline arguments referencing it will need to be updated.
+
+See [Managing Secrets](/docs/core-concepts/secrets) for the details.
 
 :::tip
-To use a secret in a task argument, open the argument's dynamic data dropdown and select **Secret**, then choose the secret by name.
+To use a secret in a task argument, open the argument's lightning-bolt menu, choose **Dynamic Data → Select Secret...**, then choose the secret by name.
 :::
 
 ### AI Configuration

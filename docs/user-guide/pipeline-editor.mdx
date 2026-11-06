@@ -58,7 +58,7 @@ The **Windows** menu lists the editor's windows alphabetically, each with a chec
 
 | Preset      | Effect                                                                 |
 | ----------- | ---------------------------------------------------------------------- |
-| **Default** | The standard working layout                                            |
+| **Default** | The standard working layout. `Cmd/Ctrl` + `Shift` + `D` applies it from anywhere in the editor |
 | **All**     | Every window visible, including diagnostics panels                     |
 | **Minimal** | Hide all windows, leaving only the canvas                               |
 
@@ -84,25 +84,27 @@ At the right of the menu bar:
 
 ## Keyboard shortcuts
 
-Shortcuts use **Cmd** on macOS and **Alt** elsewhere; either modifier works, so the tables below write it as `Cmd/Alt`. On Windows and Linux some shortcut hints in the app read **Ctrl** where the shortcut actually uses **Alt**.
+Shortcuts use **Cmd** on macOS and **Ctrl** on Windows and Linux, so the tables below write it as `Cmd/Ctrl`. A shortcut written with `Ctrl` alone uses the Control key on every platform, macOS included. The shortcut hints in the menus show the keys for your platform; on macOS, ⌘ stands for Cmd and ⌃ for Control.
 
 | Shortcut             | Action                                                     |
 | -------------------- | ---------------------------------------------------------- |
-| `Cmd/Alt` + `/`      | Toggle focus mode                                           |
-| `Cmd/Alt` + `Shift` + `L` | Auto-layout the graph                                  |
-| `Cmd/Alt` + `C`      | Copy the current selection                                  |
-| `Cmd/Alt` + `V`      | Paste in the middle of the visible canvas                   |
-| `Cmd/Alt` + `Z`      | Undo                                                        |
-| `Cmd/Alt` + `Shift` + `Z` | Redo                                                   |
-| `Cmd/Alt` + `Y`      | Redo (alternative)                                          |
+| `Cmd/Ctrl` + `/`     | Toggle focus mode                                           |
+| `Cmd/Ctrl` + `Shift` + `D` | Apply the **Default** window layout                   |
+| `Cmd/Ctrl` + `Shift` + `L` | Auto-layout the graph                                 |
+| `Cmd/Ctrl` + `C`     | Copy the current selection                                  |
+| `Cmd/Ctrl` + `V`     | Paste in the middle of the visible canvas                   |
+| `Cmd/Ctrl` + `D`     | Duplicate the current selection                             |
+| `Cmd/Ctrl` + `Z`     | Undo                                                        |
+| `Cmd/Ctrl` + `Shift` + `Z` | Redo                                                  |
+| `Cmd/Ctrl` + `Y`     | Redo (alternative)                                          |
 | `Ctrl` + `O`         | Open a pipeline                                             |
 | `Ctrl` + `Shift` + `M` | Maximize the **Properties** window while it shows a task's arguments — see [Arguments](#arguments) |
 | `Delete` or `Backspace` | Delete the current selection                              |
 | `Esc`                | Dismiss the topmost overlay, restore a maximized window, or clear the canvas selection |
 | `Shift` + click a task | Pin the task in its own window — see [Pinned task windows](#pinned-task-windows) |
 | `Shift` + drag       | Draw a selection box                                         |
-| `Cmd/Alt` + `Shift` + drag | Draw a selection box that also selects nodes it only partly covers |
-| `Cmd/Alt` + drag from a port | Create a connected pipeline input or output — see [Adding to the canvas](#adding-to-the-canvas) |
+| `Cmd/Ctrl` + `Shift` + drag | Draw a selection box that also selects nodes it only partly covers |
+| `Cmd/Ctrl` + drag from a port | Create a connected pipeline input or output — see [Adding to the canvas](#adding-to-the-canvas) |
 | Hold `Shift` + `Q` or `Shift` + `W`, then click | Create a horizontal or vertical [guideline](#guidelines) |
 
 `Esc` works in layers: if a dialog, popover, or menu is open it closes that first, then it restores a maximized window, and only clears your canvas selection once nothing is stacked on top.
@@ -177,9 +179,9 @@ There are several ways to get something onto the canvas:
 
 - Drag a component from the **Component Search** window.
 - Drop a component YAML file straight onto the canvas. Once it passes [validation](#invalid-components), the component is added to the canvas and to your user component library at the same time.
-- Paste a copied selection with `Cmd/Alt` + `V`; it lands in the middle of the visible canvas. See [Copying and pasting nodes](#copying-and-pasting-nodes).
+- Paste a copied selection with `Cmd/Ctrl` + `V`; it lands in the middle of the visible canvas. See [Copying and pasting nodes](#copying-and-pasting-nodes).
 - Drag **Sticky Note**, **Input Node**, or **Output Node** out of the **Component Search** window's browse view — see [Component Search](/docs/user-guide/component-search#the-editor-window).
-- Hold `Cmd/Alt` and drag from a task's port to an empty part of the canvas. Dragging from an input creates a pipeline input, and dragging from an output creates a pipeline output, already connected. A new input takes the port's name and type, and the argument's current value or default.
+- Hold `Cmd/Ctrl` and drag from a task's port to an empty part of the canvas. Dragging from an input creates a pipeline input, and dragging from an output creates a pipeline output, already connected. A new input takes the port's name and type, and the argument's current value or default.
 
 ### Invalid components
 
@@ -218,7 +220,7 @@ With a multiple selection active, the **Properties** window switches to a batch 
 
 ### Copying and pasting nodes
 
-**Copy** — from the floating toolbar or `Cmd/Alt` + `C` — writes the selection to your system clipboard, so it is not confined to the tab you copied from. Paste it with `Cmd/Alt` + `V` into the same pipeline, into a different pipeline, or into an editor open in another browser tab or window. The nodes land in the middle of the visible canvas, and each further paste is offset a little so copies do not stack exactly on top of each other. Copying from a run view works the same way, which is how you lift part of an executed graph back into an editable pipeline — see [Task inspection](/docs/user-guide/run-view#task-inspection).
+**Copy** — from the floating toolbar or `Cmd/Ctrl` + `C` — writes the selection to your system clipboard, so it is not confined to the tab you copied from. Paste it with `Cmd/Ctrl` + `V` into the same pipeline, into a different pipeline, or into an editor open in another browser tab or window. The nodes land in the middle of the visible canvas, and each further paste is offset a little so copies do not stack exactly on top of each other. Copying from a run view works the same way, which is how you lift part of an executed graph back into an editable pipeline — see [Task inspection](/docs/user-guide/run-view#task-inspection).
 
 Where the clipboard holds no copied selection, the editor falls back to the last selection you copied in this tab, so paste still does something sensible after you have copied unrelated text from elsewhere.
 
