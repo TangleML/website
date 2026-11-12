@@ -2,11 +2,11 @@
 
 Tangle is a service and a Web app that allows the users to build and run Machine Learning pipelines using drag and drop without having to set up development environment.
 
-![image](https://github.com/user-attachments/assets/0ce7ccc0-dad7-4f6a-8677-f2adcd83f558)
-<!--
-[![image](https://github.com/user-attachments/assets/0ce7ccc0-dad7-4f6a-8677-f2adcd83f558)](https://tangleml-tangle.hf.space)
+[image](https://github.com/user-attachments/assets/0ce7ccc0-dad7-4f6a-8677-f2adcd83f558)
+!--
+[image](https://github.com/user-attachments/assets/0ce7ccc0-dad7-4f6a-8677-f2adcd83f558)](https://tangleml-tangle.hf.space)
 -->
-<!--
+!--
 ## Video
 
 Please take a look at the short video demonstrating the first version of the visual pipeline editor.
@@ -14,7 +14,7 @@ Please take a look at the short video demonstrating the first version of the vis
 [Cloud Pipelines Editor - Build machine learning pipelines without writing code](https://www.youtube.com/watch?v=7g22nupCDes)
 -->
 
-<!--
+!--
 ## Demo
 
 [Demo](https://cloud-pipelines.net/pipeline-studio-app)
@@ -33,21 +33,13 @@ The app is under active development, so expect some breakages as we work on the 
 1. Install [Docker](https://www.docker.com/get-started/) and [uv](https://docs.astral.sh/uv/getting-started/installation/).
 2. Download the app code (needs to be done once):
 
-```shell
+shell
 git clone https://github.com/TangleML/tangle.git tangle/backend --branch stable
 git clone https://github.com/TangleML/tangle-ui.git tangle/frontend_build --branch gh_pages_stable --single-branch --depth 1
-```
-3. Start the app:
-
-Linux and Mac OS:
-
-```shell
+```3. Start the app:Linux and Mac OS H ``shell
 cd tangle && backend/start_local.sh
-```
-
-Windows:
-
-```bat
+Windows: 
+`bat
 cd tangle && backend\start_local.cmd
 ```
 4. Once the "start_local: Starting the orchestrator" message appears in the terminal, open the [http://localhost:8000](http://localhost:8000) URL in a Web browser and start use the app.
