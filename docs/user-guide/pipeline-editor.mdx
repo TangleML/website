@@ -180,7 +180,7 @@ There are several ways to get something onto the canvas:
 - Drag a component from the **Component Search** window.
 - Drop a component YAML file straight onto the canvas. Once it passes [validation](#invalid-components), the component is added to the canvas and to your user component library at the same time.
 - Paste a copied selection with `Cmd/Ctrl` + `V`; it lands in the middle of the visible canvas. See [Copying and pasting nodes](#copying-and-pasting-nodes).
-- Drag **Sticky Note**, **Input Node**, or **Output Node** out of the **Component Search** window's browse view — see [Component Search](/docs/user-guide/component-search#the-editor-window).
+- Drag **Sticky Note**, **Input Node**, or **Output Node** out of the **Component Search** window's browse view — see [Component Search](/docs/user-guide/component-search#the-editor-window). The [Input Aggregator](#input-aggregator) is only in the older **Components** window.
 - Hold `Cmd/Ctrl` and drag from a task's port to an empty part of the canvas. Dragging from an input creates a pipeline input, and dragging from an output creates a pipeline output, already connected. A new input takes the port's name and type, and the argument's current value or default.
 
 ### Invalid components
@@ -241,6 +241,30 @@ Double-click a note to edit its text in place, and press `Tab` to move between i
 - Read-only **Layout** (size, position, z-index) and **Metadata** (id, created timestamp, author) values, each copyable.
 
 Notes are resizable by dragging their edges.
+
+### Input Aggregator
+
+The **Input Aggregator** combines several values into one output, so a task that expects a list, a keyed object, or a single table can take the outputs of many upstream tasks through one input.
+
+It is listed in the **Inputs & Outputs** folder of the older **Components** window, not in the **Component Search** window. To add one, turn **Component Search** off under **Settings → Beta Features**, then drag **Input Aggregator** from that folder onto the canvas.
+
+An aggregator starts with no inputs of its own. In their place it shows a **+ Add Input** port:
+
+- Drag a connection from any output onto **+ Add Input**. The aggregator gains a new input, named `agg_1`, `agg_2`, and so on, connected to that output. Connecting the same output a second time does nothing.
+- Hold `Cmd/Ctrl` and drag from **+ Add Input** to an empty part of the canvas to create a pipeline input, already connected to a new aggregator input.
+- Delete a connection and the aggregator input it fed is removed with it.
+
+The selector above the aggregator's **Output** port chooses what it produces:
+
+| Option                   | Output                                                                                       |
+| ------------------------ | -------------------------------------------------------------------------------------------- |
+| **JSON Array** (default) | A JSON array of the connected values, ordered by input name                                  |
+| **JSON Object**          | A JSON object whose keys are the input names (`agg_1`, `agg_2`, …) and whose values are the connected values |
+| **CSV Data**             | One CSV table: the first connected value's header, followed by the data rows of every connected value |
+
+Each value reaches the aggregator as text, so a JSON array or object holds strings. In **CSV Data** mode every input's first row is read as its header: the first input's header is kept and the others are dropped, and the task fails if an input has a different number of columns. The task also fails if no input has a value when it runs.
+
+Copying, pasting, or duplicating an aggregator gives you a fresh one with no inputs; its connections are not carried over.
 
 ### Guidelines
 
@@ -327,10 +351,6 @@ A few constraints are worth knowing:
 - **Subgraphs cannot be conditional.** The execution system only honours a run condition on ordinary tasks, so the controls are not offered for subgraph nodes. A pipeline that somehow carries one — imported YAML, for instance — reports **Conditional execution is not supported on subgraphs** as a validation error.
 - **The condition must read as true or false.** Connecting the port to a value the execution system cannot interpret that way is reported as a validation error naming the type it found.
 - **`__is_enabled__` is a reserved input name.** It is how a run condition is expressed in the pipeline definition, so a component declaring an input by that name is flagged during validation.
-
-:::info
-Conditional execution is enabled by default for everyone. You can turn it off under **Settings → Beta Features**, which hides the controls; conditions already set on a pipeline stay in its definition.
-:::
 
 ### Annotations
 

@@ -137,14 +137,14 @@ Some preferences only make sense when the feature they configure is switched on 
 
 Enable or disable features that are still under active development. Beta features are toggled per-browser and do not affect other users.
 
-Not every entry here is off by default. A beta feature that has been released to everyone still appears in this list, switched on, so you can opt out of it if you would rather not have it. [Compare runs](/docs/user-guide/compare-runs) and [conditional execution](/docs/user-guide/pipeline-editor#conditional-execution) are both on by default in this way.
+Not every entry here is off by default. A beta feature that has been released to everyone still appears in this list, switched on, so you can opt out of it if you would rather not have it. [Component Search](/docs/user-guide/component-search) and the [Published Components Library](/docs/component-development/published-components-library) are both on by default in this way.
 
 ### Secrets
 
 Store credentials for use in pipeline component arguments. Secrets are encrypted at rest and resolved at execution time — their values are never stored in the pipeline YAML.
 
-- **Add secret**: Provide a name and value, and optionally a description and an expiry date. The name is used to reference the secret in task arguments.
-- **Replace secret**: Update the value of an existing secret, and its description or expiry date, without changing its name.
+- **Add secret**: Provide a name and value, and optionally a description. The name is used to reference the secret in task arguments.
+- **Replace secret**: Update the value of an existing secret, and its description, without changing its name.
 - **Delete secret**: Remove a secret after confirming it. Any pipeline arguments referencing it will need to be updated.
 
 See [Managing Secrets](/docs/core-concepts/secrets) for the details.
